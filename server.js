@@ -5,6 +5,7 @@ var async = require('async');
 var socketio = require('socket.io');
 var express = require('express');
 
+var qr = require('qr-image');
 
 // Creates a new instance of SimpleServer with the following options:
 //  * `port` - The HTTP port to listen on. If `process.env.PORT` is set, _it overrides this value_.
@@ -15,6 +16,15 @@ var io = socketio.listen(server);
 router.use(express.static(path.resolve(__dirname, 'client')));
 var messages = [];
 var sockets = [];
+
+//Génération du flux correspondant à l'image du QR Code
+router.get('/qr-code', function(req, res) {  
+  //On affiche l'url du site
+  var code = qr.image(req.protocol+'://'+req.headers.host, { type: 'svg' });
+  res.type('svg');
+  code.pipe(res);
+  console.log('qr-code affiché :'+req.protocol+'://'+req.headers.host);
+});
 
 io.on('connection', function (socket) {
     messages.forEach(function (data) {
