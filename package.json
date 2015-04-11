@@ -11,5 +11,8 @@
     "socket.io": "~0.9.14",
     "qr-image": "~3.1.0",
     "room-module": "~0.0.3"
+  },
+ "devDependencies": {
+    "mocha": "~2.1.0"
   }
 }
