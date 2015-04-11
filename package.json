@@ -3,12 +3,13 @@
   "version": "0.0.1",
   "description": "Application de Quizz en ligne",
   "main": "server.js",
-  "repository": "",
+  "repository": "https://github.com/us3soap/quizzjs",
   "author": "kevin valette<kevin.valette@gmail.com>",
   "dependencies": {
     "async": "~0.2.8",
     "express": "~3.2.4",
     "socket.io": "~0.9.14",
-    "qr-image": "~3.1.0"
+    "qr-image": "~3.1.0",
+    "room-module": "~0.0.3"
   }
 }
