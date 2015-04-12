@@ -13,19 +13,26 @@ var router = express();
 var server = http.createServer(router);
 var io = socketio.listen(server);
 
-//Génération du flux correspondant à l'image du QR Code
+/* GET home page. */
 router.get('/', function(req, res) {
+    res.render('index.ejs', {title: "test"});
+});
+
+//Génération du flux correspondant à l'image du QR Code
+router.get('/new-player', function(req, res) {
     //Création d'une nouvelle room
     var token = room.newRoom();
     //On affiche l'url du site
-    var code = qr.image(req.protocol+'://'+req.headers.host+'/?r='+token, { type: 'svg' });
+    var urlQr = req.protocol+'://'+req.headers.host+'/room?r='+token;
+    var code = qr.image(urlQr, { type: 'svg' });
     res.type('svg');
     code.pipe(res);
-    console.log('qr-code affiché :'+req.protocol+'://'+req.headers.host+'/?r='+token);
+    console.log('qr-code affiché :'+urlQr);
 });
 
 
-server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+server.listen(process.env.PORT || 3055, process.env.IP || "0.0.0.0", function(){
     var addr = server.address();
+    router.use(express.static(__dirname + '/public'));
     console.log("QuizzJS run to : [", addr.address + ":" + addr.port+"]");
 });
