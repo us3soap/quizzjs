@@ -15,15 +15,17 @@ var io = socketio.listen(server);
 
 //Génération du flux correspondant à l'image du QR Code
 router.get('/', function(req, res) {
+    //Création d'une nouvelle room
+    var token = room.newRoom();
     //On affiche l'url du site
-    var code = qr.image(req.protocol+'://'+req.headers.host, { type: 'svg' });
+    var code = qr.image(req.protocol+'://'+req.headers.host+'/?r='+token, { type: 'svg' });
     res.type('svg');
     code.pipe(res);
-    console.log('qr-code affiché :'+req.protocol+'://'+req.headers.host);
+    console.log('qr-code affiché :'+req.protocol+'://'+req.headers.host+'/?r='+token);
 });
 
 
-server.listen(process.env.PORT || 3010, process.env.IP || "0.0.0.0", function(){
+server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
     var addr = server.address();
     console.log("QuizzJS run to : [", addr.address + ":" + addr.port+"]");
 });
