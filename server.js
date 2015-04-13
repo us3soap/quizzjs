@@ -23,15 +23,21 @@ router.get('/new-player', function(req, res) {
     //Création d'une nouvelle room
     var token = room.newRoom();
     //On affiche l'url du site
-    var urlQr = req.protocol+'://'+req.headers.host+'/room?r='+token;
+    var urlQr = req.protocol+'://'+req.headers.host+'/room/'+token;
     var code = qr.image(urlQr, { type: 'svg' });
     res.type('svg');
     code.pipe(res);
     console.log('qr-code affiché :'+urlQr);
 });
 
+router.get('/room/:token', function(req, res) {
+    console.log("Welcome to room : ["+req.params.token+"]");
+    room.getRoom(req.params.token).setName("Room : ["+req.params.token+"]");
+    res.render('user.ejs', {title: "test"});
+});
 
-server.listen(process.env.PORT || 3055, process.env.IP || "0.0.0.0", function(){
+
+server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
     var addr = server.address();
     router.use(express.static(__dirname + '/public'));
     console.log("QuizzJS run to : [", addr.address + ":" + addr.port+"]");
