@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css">
     </head>
     <body>
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="modalUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -16,13 +16,13 @@
                         <form>
                             <div class="form-group">
                                 <label for="recipient-name" class="control-label">Pseudonyme</label>
-                                <input type="text" class="form-control" id="recipient-name">
+                                <input id="pseudo" type="text" class="form-control" id="recipient-name">
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <a href="/" class="btn btn-default" data-dismiss="modal">Annuler</a>
-                        <button type="button" class="btn btn-primary">Commencer à jouer</button>
+                        <button id="begin" type="button" class="btn btn-primary">Commencer à jouer</button>
                     </div>
                 </div>
             </div>
@@ -38,9 +38,15 @@
         </div>
         <script src="/js/jquery.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
         <script type="text/javascript">
             $( document ).ready(function() {
-                $('#myModal').modal('show');
+                $('#modalUser').modal('show');
+            });
+            $("#begin").click(function(){
+                var socket = io.connect('http://localhost:<%=port%>');
+                socket.emit('user', $('#pseudo').val());
+                $('#modalUser').modal('hide');
             });
         </script>
     </body>

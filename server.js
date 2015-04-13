@@ -7,18 +7,22 @@ var express = require('express');
 var qr = require('qr-image');
 var room = require('room-module');
 
-// Creates a new instance of SimpleServer with the following options:
-//  * `port` - The HTTP port to listen on. If `process.env.PORT` is set, _it overrides this value_.
 var router = express();
 var server = http.createServer(router);
 var io = socketio.listen(server);
 
-/* GET home page. */
+/** Variable serveur **/
+var port = 5002;
+
+
+/** Gestion des routes **/
+
+/* Home page. */
 router.get('/', function(req, res) {
     res.render('index.ejs', {title: "test"});
 });
 
-//Génération du flux correspondant à l'image du QR Code
+/*Génération du flux correspondant à l'image du QR Code*/
 router.get('/new-player', function(req, res) {
     //Création d'une nouvelle room
     var token = room.newRoom();
@@ -30,14 +34,26 @@ router.get('/new-player', function(req, res) {
     console.log('qr-code affiché :'+urlQr);
 });
 
+/* Page reserve a un utilisateur */
 router.get('/room/:token', function(req, res) {
     console.log("Welcome to room : ["+req.params.token+"]");
     room.getRoom(req.params.token).setName("Room : ["+req.params.token+"]");
-    res.render('user.ejs', {title: "test"});
+    res.render('user.ejs', {port: port});
 });
 
+/** Socket **/
+// Quand on client se connecte, on le note dans la console
+io.sockets.on('connection', function (socket) {
+    console.log('Un utilisateur est connecté !');
 
-server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+    // Quand le serveur reçoit un signal le pseudo on le stocke
+    socket.on('user', function (pseudo) {
+        console.log('Qui est là? C\'est : ' + pseudo);
+    });
+});
+
+/** Serveur **/
+server.listen(process.env.PORT || port, process.env.IP || "0.0.0.0", function(){
     var addr = server.address();
     router.use(express.static(__dirname + '/public'));
     console.log("QuizzJS run to : [", addr.address + ":" + addr.port+"]");
