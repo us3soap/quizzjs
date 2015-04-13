@@ -10,9 +10,11 @@
                 <h1>QuizzJS <small>Scannez pour commencer...</small></h1>
             </div>
             <div class="row">
-                <div class="col-md-6 col-md-offset-4">
+                <div id="user1" class="col-md-3"></div>
+                <div class="col-md-6" style="text-align:center;">
                     <img width="700px" src="/new-player"/>
                 </div>
+                <div id="user2" class="col-md-3"></div>
             </div>
         </div>
         <script src="/js/jquery.min.js"></script>
@@ -21,7 +23,7 @@
         <script>
             var socket = io.connect('http://<%=url%>');
             socket.on('new-user', function(user) {
-                alert('Un nouveau joueur a rejoint : ' + user);
+                $('#user1').append("<div class='row'><div class='col-md-12'><img src='/img/question.png' style='padding:15px' width='50%'/>"+user+"</div></div>")
             })
         </script>
     </body>

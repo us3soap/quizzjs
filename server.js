@@ -40,17 +40,15 @@ router.get('/room/:token', function(req, res) {
 /** Socket **/
 // Quand on client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket) {
-    console.log('Un utilisateur est connecté !');
-
     // Quand le serveur reçoit un signal le pseudo on le stocke
     socket.on('user', function (pseudo) {
-        console.log('Qui est là? C\'est : ' + pseudo);
+        console.log('Inscription de : ' + pseudo);
         socket.broadcast.emit('new-user', pseudo);
     });
 });
 
 /** Serveur **/
-server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+server.listen(process.env.PORT || 3080, process.env.IP || "0.0.0.0", function(){
     var addr = server.address();
     router.use(express.static(__dirname + '/public'));
     console.log("QuizzJS run to : [", addr.address + ":" + addr.port+"]");
