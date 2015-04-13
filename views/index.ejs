@@ -17,5 +17,12 @@
         </div>
         <script src="/js/jquery.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://<%=url%>');
+            socket.on('new-user', function(user) {
+                alert('Un nouveau joueur a rejoint : ' + user);
+            })
+        </script>
     </body>
 </html>

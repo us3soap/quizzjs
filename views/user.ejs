@@ -44,7 +44,7 @@
                 $('#modalUser').modal('show');
             });
             $("#begin").click(function(){
-                var socket = io.connect('http://localhost:<%=port%>');
+                var socket = io.connect('http://<%=url%>');
                 socket.emit('user', $('#pseudo').val());
                 $('#modalUser').modal('hide');
             });

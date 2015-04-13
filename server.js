@@ -11,15 +11,11 @@ var router = express();
 var server = http.createServer(router);
 var io = socketio.listen(server);
 
-/** Variable serveur **/
-var port = 5002;
-
-
 /** Gestion des routes **/
 
 /* Home page. */
 router.get('/', function(req, res) {
-    res.render('index.ejs', {title: "test"});
+    res.render('index.ejs', {url: req.headers.host});
 });
 
 /*Génération du flux correspondant à l'image du QR Code*/
@@ -38,7 +34,7 @@ router.get('/new-player', function(req, res) {
 router.get('/room/:token', function(req, res) {
     console.log("Welcome to room : ["+req.params.token+"]");
     room.getRoom(req.params.token).setName("Room : ["+req.params.token+"]");
-    res.render('user.ejs', {port: port});
+    res.render('user.ejs', {url: req.headers.host});
 });
 
 /** Socket **/
@@ -49,11 +45,12 @@ io.sockets.on('connection', function (socket) {
     // Quand le serveur reçoit un signal le pseudo on le stocke
     socket.on('user', function (pseudo) {
         console.log('Qui est là? C\'est : ' + pseudo);
+        socket.broadcast.emit('new-user', pseudo);
     });
 });
 
 /** Serveur **/
-server.listen(process.env.PORT || port, process.env.IP || "0.0.0.0", function(){
+server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
     var addr = server.address();
     router.use(express.static(__dirname + '/public'));
     console.log("QuizzJS run to : [", addr.address + ":" + addr.port+"]");
