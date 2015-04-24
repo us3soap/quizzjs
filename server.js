@@ -34,7 +34,7 @@ router.get('/new-player', function(req, res) {
 router.get('/room/:token', function(req, res) {
     console.log("Welcome to room : ["+req.params.token+"]");
     room.getRoom(req.params.token).setName("Room : ["+req.params.token+"]");
-    res.render('user.ejs', {url: req.headers.host});
+    res.render('user.ejs', {url: req.headers.host, room: req.params.token});
 });
 
 /** Socket **/
@@ -48,7 +48,7 @@ io.sockets.on('connection', function (socket) {
 });
 
 /** Serveur **/
-server.listen(process.env.PORT || 3080, process.env.IP || "0.0.0.0", function(){
+server.listen(process.env.PORT, process.env.IP, function(){
     var addr = server.address();
     router.use(express.static(__dirname + '/public'));
     console.log("QuizzJS run to : [", addr.address + ":" + addr.port+"]");
