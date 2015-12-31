@@ -1,0 +1,54 @@
+@media (max-width: @screen-xs-min) {
+  .modal-xs { width: @modal-sm; }
+}
+
+/* Layout */
+
+html {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Decoration */
+
+body {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; /* crée un contexte flex pour ses enfants */
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column; /* affichage vertical */
+  min-height: 100vh; /* toute la hauteur du viewport (compatible IE9+) */
+}
+
+.wrapper {
+  display: block; /* IE fix */
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto; /* occupe la hauteur restante */
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; /* crée un contexte flex pour ses enfants */
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row; /* affichage horizontal */
+}
+
+.flex-container{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+}
+
+.btn{
+    flex: 1;
+}
+

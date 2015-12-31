@@ -1,10 +1,14 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>QuizzJS</title>
-        <link rel="stylesheet" href="/css/bootstrap.min.css">
-    </head>
-    <body>
+
+<head>
+    <title>QuizzJS</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/telephone.css">
+</head>
+
+<body>
+    <div class="wrapper">
         <div class="modal fade" id="modalUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -28,26 +32,26 @@
             </div>
         </div>
 
-        <div class="container-fluid">
-            <div class="btn-group-vertical" role="group" aria-label="tool">
-                <button type="button" class="btn btn-success">1</button>
-                <button type="button" class="btn btn-warning">2</button>
-                <button type="button" class="btn btn btn-info">3</button>
-                <button type="button" class="btn btn btn-danger">4</button>
-            </div>
+        <div class="flex-container">
+            <button type="button" class="btn btn-success"></button>
+            <button type="button" class="btn btn-warning"></button>
+            <button type="button" class="btn btn btn-info"></button>
+            <button type="button" class="btn btn btn-danger"></button>
         </div>
-        <script src="/js/jquery.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script type="text/javascript">
-            $( document ).ready(function() {
-                $('#modalUser').modal('show');
-            });
-            $("#begin").click(function(){
-                var socket = io.connect('http://<%=url%>');
-                socket.emit('user', $('#pseudo').val());
-                $('#modalUser').modal('hide');
-            });
-        </script>
-    </body>
+    </div>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#modalUser').modal('show');
+        });
+        $("#begin").click(function() {
+            var socket = io.connect('http://<%=url%>');
+            socket.emit('user', $('#pseudo').val());
+            $('#modalUser').modal('hide');
+        });
+    </script>
+</body>
+
 </html>
