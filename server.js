@@ -15,17 +15,33 @@ var io = socketio.listen(server);
 
 /* Home page. */
 router.get('/', function(req, res) {
-    res.render('index.ejs', {url: req.headers.host});
-});
-
-
-/*Génération du flux correspondant à l'image du QR Code*/
-router.get('/new-room', function(req, res) {
+    
     //Création d'une nouvelle room
     var token = room.newRoom();
     room.getRoom(token).open();
+    room.getRoom(token).setMinNbMembers(2);
+    
+    res.render('index.ejs', {url: req.headers.host, token: token});
+});
+
+
+/* Room page. */
+router.get('/direct/:token', function(req, res) {
+    console.log("token : "+ req.params.token);
+    if(req.params.token != null){
+        if(room.getRoom(req.params.token).isOpen()){
+            res.render('index.ejs', {url: req.headers.host, token: req.params.token});
+        }
+    }
+
+    
+});
+
+/*Génération du flux correspondant à l'image du QR Code*/
+router.get('/new-room/:token', function(req, res) {
+    
     //On affiche l'url du site
-    var urlQr = req.protocol+'://'+req.headers.host+'/room/'+token;
+    var urlQr = req.protocol+'://'+req.headers.host+'/room/'+req.params.token;
     var code = qr.image(urlQr, { type: 'svg' });
     res.type('svg');
     code.pipe(res);
@@ -61,13 +77,20 @@ io.sockets.on('connection', function (socket) {
     socket.on('user', function (data, fn) {
         console.log('Inscription de : ' + data["pseudo"] + ' dans la room ' + data["room"]);
         var userToken = room.getRoom(data["room"]).memberJoin();
+        var go = false;
         // Si le user est valide, on l'ajoute sur la page de la room.
         if(userToken){
-            socket.broadcast.emit('new-user', data["pseudo"]);
+            socket.broadcast.emit('new-user-'+data["room"], data["pseudo"]);
+        }
+        
+        if(! room.getRoom(data["room"]).notEnough()){
+            go = true;
+            socket.broadcast.emit('start-party-users-'+data["room"]);
+            socket.broadcast.emit('start-party-room-'+data["room"]);
         }
         
         //Le token est retourné au client pour identifier les traitements
-        fn(userToken);
+        fn({userToken:userToken, go: go});
     });
 });
 
