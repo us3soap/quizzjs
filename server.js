@@ -40,10 +40,12 @@ router.get('/room/:token', function(req, res) {
 /** Socket **/
 // Quand on client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket) {
+    
     // Quand le serveur reçoit un signal le pseudo on le stocke
-    socket.on('user', function (pseudo) {
-        console.log('Inscription de : ' + pseudo);
-        socket.broadcast.emit('new-user', pseudo);
+    socket.on('user', function (data) {
+        console.log('Inscription de : ' + data["pseudo"] + ' dans la room ' + data["room"]);
+        room.getRoom(data["room"]).memberJoin();
+        socket.broadcast.emit('new-user', data["pseudo"]);
     });
 });
 
