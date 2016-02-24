@@ -57,18 +57,6 @@ router.get('/room/:token', function(req, res) {
     res.render('user.ejs', {url: req.headers.host, room: req.params.token});
 });
 
-/* Page question d'une room */
-router.get('/room/:token/game', function(req, res) {
-    console.log("Game for room : ["+req.params.token+"]");
-    /* On ferme la room, les joueurs ne peuvent plus rejoindre */
-    room.getRoom(req.params.token).close();
-});
-
-/* Page resultat d'une room */
-router.get('/room/:token/result', function(req, res) {
-    console.log("Result for room : ["+req.params.token+"]");
-});
-
 /** Socket **/
 
 // Quand on client se connecte, on le note dans la console
@@ -84,13 +72,19 @@ io.sockets.on('connection', function (socket) {
         }
         
         if(! room.getRoom(data["room"]).notEnough()){
-            go = true;
-            socket.broadcast.emit('start-party-users-'+data["room"]);
             socket.broadcast.emit('start-party-room-'+data["room"]);
         }
         
         //Le token est retourné au client pour identifier les traitements
-        fn({userToken:userToken, go: go});
+        fn({userToken:userToken});
+    });
+    
+    socket.on('start', function (data, fn) {
+        
+        console.log('Debut de la party : '+data["room"]);    
+        socket.broadcast.emit('start-party-users-'+data["room"]);
+        fn(true);
+
     });
 });
 
