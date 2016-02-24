@@ -22,12 +22,13 @@ router.get('/', function(req, res) {
 router.get('/new-room', function(req, res) {
     //Création d'une nouvelle room
     var token = room.newRoom();
+    room.getRoom(token).open();
     //On affiche l'url du site
     var urlQr = req.protocol+'://'+req.headers.host+'/room/'+token;
     var code = qr.image(urlQr, { type: 'svg' });
     res.type('svg');
     code.pipe(res);
-    console.log('qr-code affiché :'+urlQr);
+    console.log('qr-code affiché : '+ urlQr );
 });
 
 /* Page reserve a un utilisateur */
@@ -37,15 +38,32 @@ router.get('/room/:token', function(req, res) {
     res.render('user.ejs', {url: req.headers.host, room: req.params.token});
 });
 
+/* Page question d'une room */
+router.get('/room/:token/game', function(req, res) {
+    console.log("Game for room : ["+req.params.token+"]");
+});
+
+/* Page resultat d'une room */
+router.get('/room/:token/result', function(req, res) {
+    console.log("Result for room : ["+req.params.token+"]");
+});
+
 /** Socket **/
+
 // Quand on client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket) {
     
-    // Quand le serveur reçoit un signal le pseudo on le stocke
-    socket.on('user', function (data) {
+    socket.on('user', function (data, fn) {
         console.log('Inscription de : ' + data["pseudo"] + ' dans la room ' + data["room"]);
-        room.getRoom(data["room"]).memberJoin();
-        socket.broadcast.emit('new-user', data["pseudo"]);
+        var userToken = room.getRoom(data["room"]).memberJoin();
+        // Si le user est valide, on l'ajoute sur la page de la room.
+        if(userToken){
+            socket.broadcast.emit('new-user', data["pseudo"]);
+
+        }
+        
+        //Le token est retourné au client pour identifier les traitements
+        fn(userToken);
     });
 });
 

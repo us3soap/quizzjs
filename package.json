@@ -7,13 +7,14 @@
   "author": "kevin valette<kevin.valette@gmail.com>",
   "dependencies": {
     "async": "~0.2.8",
+    "ejs": "~2.3.1",
     "express": "~3.2.4",
-    "socket.io": "~0.9.14",
+    "moment": "^2.11.2",
     "qr-image": "~3.1.0",
     "room-module": "~0.0.3",
-    "ejs": "~2.3.1"
+    "socket.io": "~0.9.14"
   },
- "devDependencies": {
+  "devDependencies": {
     "mocha": "~2.1.0"
   }
 }
