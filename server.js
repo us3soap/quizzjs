@@ -19,7 +19,7 @@ router.get('/', function(req, res) {
 });
 
 /*Génération du flux correspondant à l'image du QR Code*/
-router.get('/new-player', function(req, res) {
+router.get('/new-room', function(req, res) {
     //Création d'une nouvelle room
     var token = room.newRoom();
     //On affiche l'url du site
