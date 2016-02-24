@@ -18,6 +18,7 @@ router.get('/', function(req, res) {
     res.render('index.ejs', {url: req.headers.host});
 });
 
+
 /*Génération du flux correspondant à l'image du QR Code*/
 router.get('/new-room', function(req, res) {
     //Création d'une nouvelle room
@@ -31,6 +32,8 @@ router.get('/new-room', function(req, res) {
     console.log('qr-code affiché : '+ urlQr );
 });
 
+
+
 /* Page reserve a un utilisateur */
 router.get('/room/:token', function(req, res) {
     console.log("Welcome to room : ["+req.params.token+"]");
@@ -41,6 +44,8 @@ router.get('/room/:token', function(req, res) {
 /* Page question d'une room */
 router.get('/room/:token/game', function(req, res) {
     console.log("Game for room : ["+req.params.token+"]");
+    /* On ferme la room, les joueurs ne peuvent plus rejoindre */
+    room.getRoom(req.params.token).close();
 });
 
 /* Page resultat d'une room */
