@@ -52,9 +52,13 @@ router.get('/new-room/:token', function(req, res) {
 
 /* Page reserve a un utilisateur */
 router.get('/room/:token', function(req, res) {
-    console.log("Welcome to room : ["+req.params.token+"]");
-    room.getRoom(req.params.token).setName("Room : ["+req.params.token+"]");
-    res.render('user.ejs', {url: req.headers.host, room: req.params.token});
+    if(room.getRoom(req.params.token).isOpen()){
+        console.log("Welcome to room : ["+req.params.token+"]");
+        room.getRoom(req.params.token).setName("Room : ["+req.params.token+"]");
+        res.render('user.ejs', {url: req.headers.host, room: req.params.token});
+    }else{
+        res.render('user.ejs', {url: req.headers.host, room: false});
+    }
 });
 
 /** Socket **/
@@ -81,7 +85,8 @@ io.sockets.on('connection', function (socket) {
     
     socket.on('start', function (data, fn) {
         
-        console.log('Debut de la party : '+data["room"]);    
+        console.log('Debut de la party : '+data["room"]);
+        room.getRoom(data["room"]).close();
         socket.broadcast.emit('start-party-users-'+data["room"]);
         fn(true);
 
