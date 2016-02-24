@@ -59,7 +59,6 @@ io.sockets.on('connection', function (socket) {
         // Si le user est valide, on l'ajoute sur la page de la room.
         if(userToken){
             socket.broadcast.emit('new-user', data["pseudo"]);
-
         }
         
         //Le token est retourné au client pour identifier les traitements
