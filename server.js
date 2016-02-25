@@ -19,22 +19,44 @@ router.get('/', function(req, res) {
     //Création d'une nouvelle room
     var token = room.newRoom();
     room.getRoom(token).open();
-    room.getRoom(token).setMinNbMembers(2);
     
-    res.render('index.ejs', {url: req.headers.host, token: token});
+    //Parametrage par défaut.
+    room.getRoom(token).setMinNbMembers(4);
+    
+    res.render('index.ejs', {url: req.headers.host, 
+                            token: token,
+                            nbUsers : room.getRoom(token).getMembers().length,
+                            nbUsersMax : room.getRoom(token).getMinNbMembers()});
 });
 
+
+/* Admin page */
+router.get('/admin', function(req, res) {
+    
+    //Création d'une nouvelle room
+    var token = room.newRoom();
+    room.getRoom(token).open();
+    res.render('admin.ejs', {url: req.headers.host});
+});
+
+/* Access page */
+router.get('/access', function(req, res) {
+    res.render('access.ejs', {url: req.headers.host});
+});
 
 /* Room page. */
 router.get('/direct/:token', function(req, res) {
     console.log("token : "+ req.params.token);
     if(req.params.token != null){
         if(room.getRoom(req.params.token).isOpen()){
-            res.render('index.ejs', {url: req.headers.host, token: req.params.token});
+            res.render('index.ejs', {url: req.headers.host, 
+                                    token: req.params.token,
+                                    nbUsers : room.getRoom(req.params.token).getMembers().length,
+                                    nbUsersMax : room.getRoom(req.params.token).getMinNbMembers()
+
+            });
         }
     }
-
-    
 });
 
 /*Génération du flux correspondant à l'image du QR Code*/
@@ -69,10 +91,9 @@ io.sockets.on('connection', function (socket) {
     socket.on('user', function (data, fn) {
         console.log('Inscription de : ' + data["pseudo"] + ' dans la room ' + data["room"]);
         var userToken = room.getRoom(data["room"]).memberJoin();
-        var go = false;
         // Si le user est valide, on l'ajoute sur la page de la room.
         if(userToken){
-            socket.broadcast.emit('new-user-'+data["room"], data["pseudo"]);
+            socket.broadcast.emit('new-user-'+data["room"], {user : data["pseudo"], nbUsers : room.getRoom( data["room"]).getMembers().length});
         }
         
         if(! room.getRoom(data["room"]).notEnough()){
