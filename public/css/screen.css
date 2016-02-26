@@ -1,0 +1,14 @@
+body{
+    background-color: #000;
+    color: white;
+}
+
+img{
+    background-color: white;
+}
+
+.user{
+    border: white 1px solid;
+    margin: 5px 15px;
+    padding: 5px;
+}

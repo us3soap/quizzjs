@@ -3,6 +3,7 @@
     <head>
         <title>QuizzJS</title>
         <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/screen.css">
     </head>
     <body>
         <div class="container-fluid">
@@ -10,22 +11,73 @@
                 <h1>QuizzJS <small>Scannez pour commencer...</small></h1>
             </div>
             <div class="row">
-                <div class="col-md-12" style="text-align:center;">
-                    <img width="600px" src="/new-player"/>
+                <div class="col-md-3">
+                    <div id="listeUser" class="row">
+                        <div class="col-md-12">
+                            <h3>Liste des participants <span id="quota" class="badge"> <%=nbUsers%> / <%=nbUsersMax%></span></h3>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div id="listeUser" class="row">
+                <div class="col-md-6">
+                    <div id="qr-code" class="col-md-12" style="text-align:center;">
+                        <img width="600px" src="/new-room/<%=token%>"/>
+                    </div>
+                     <div id="question" class="col-md-12" style="text-align:center; display: none;">
+                        <h3>La question ?</h3>
+                        <div class="row">
+                            <div class="col-md-6 btn btn-success"></div>
+                            <div class="col-md-6 btn btn-info"></div>
+                            <div class="col-md-6 btn btn-warning"></div>
+                            <div class="col-md-6 btn btn-danger"></div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="col-md-3">
+                    <div id="listeUser" class="row">
+                        <div class="col-md-12">
+                            <h3>Règle du jeu</h3>
+                        </div>
+                        <div class="col-md-12">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie, magna id convallis pretium, lectus leo condimentum nisl, sit amet interdum massa mi ut nisi. Nullam sed sollicitudin mi, vitae blandit lorem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi elementum malesuada sem a ultricies. Mauris mollis at nunc id dignissim. Ut rhoncus lorem vitae porta mattis. Praesent tincidunt dapibus tellus quis porttitor. Etiam ut ligula vel lacus vulputate molestie. Sed erat leo, ultrices id consequat in, pretium quis turpis. Suspendisse ut erat quis metus tincidunt sollicitudin ornare et ipsum.
+
+                            Praesent sit amet accumsan nulla. Integer a augue in neque molestie hendrerit nec vel est. Donec in lacus vestibulum, varius neque id, scelerisque elit. Praesent tincidunt nulla bibendum ante rutrum consectetur. Nam augue diam, euismod eget accumsan sit amet, tempor ac enim. Curabitur dapibus, urna quis finibus pulvinar, erat diam sagittis lectus, vitae viverra augue nulla ac mi. Curabitur id porttitor sem. Suspendisse aliquam sed metus vitae fermentum.
+
+                        </div>
+                    </div>
+                    
+                </div>
 
             </div>
+
         </div>
         <script src="/js/jquery.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/notify.min.js"></script>
         <script>
+
             var socket = io.connect('http://<%=url%>');
-            socket.on('new-user', function(user) {
-                $('#listeUser').append("<div class='col-md-3'><img src='/img/question.png' style='padding:15px' width='40%'/>"+user+"</div>")
-            })
+            socket.on('new-user-<%=token%>', function(data) {
+                $("#quota").html(data['nbUsers'] + "/ <%=nbUsersMax%>");
+                $.notify("Bienvenue à " + data['user'], "info");
+                $('#listeUser').append("<div class='col-md-12 user'><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"+ data['user']+"</div>").hide().show('slow');
+            });
+            
+            socket.on('start-party-room-<%=token%>', function(user) {
+                
+               $.notify("La partie commence dans 5...");
+               setTimeout (function(){$.notify("La partie commence dans 4...");}, 1000 );
+               setTimeout (function(){$.notify("La partie commence dans 3...");}, 2000 );
+               setTimeout (function(){$.notify("La partie commence dans 2...");}, 3000 );
+               setTimeout (function(){$.notify("La partie commence dans 1...");}, 4000 );
+                
+               setTimeout (function(){
+                    socket.emit('start', {room : '<%=token%>'}, function (data) {
+                         $("#qr-code").hide("slow");
+                         $("#question").show("slow");
+                    });
+               }, 5000);
+            });
         </script>
     </body>
 </html>

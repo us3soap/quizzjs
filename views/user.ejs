@@ -8,31 +8,43 @@
 </head>
 
 <body>
+    <ul id="login" class="pages">
+        <li id="li-login" class="login page">
+          <div class="form">
+            <h3 class="title">Quel est votre pseudo?</h3>
+            <input id="pseudo" class="usernameInput" type="text" maxlength="14" />
+            <br />
+            <br />
+            <button id="begin" type="button" class="btn btn-primary">Commencer à jouer</button>
+          </div>
+        </li>
+        <li id="li-wait" class="login page" style="display: none;">
+          <div class="form">
+            <h3 id="info-header"class="title"></h3>
+            <div id="info-content"></div>
+            <div id="info-debug"></div>
+          </div>
+        </li>
+    </ul>
     <div class="wrapper">
-        <div class="modal fade" id="modalUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+        <div class="modal fade" id="modalInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Veuillez saisir vos informations</h4>
+                        <h4 id="info-header" class="modal-title" id="myModalLabel">Bienvenue</h4>
                     </div>
                     <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="recipient-name" class="control-label">Pseudonyme</label>
-                                <input id="pseudo" type="text" class="form-control" id="recipient-name">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="/" class="btn btn-default" data-dismiss="modal">Annuler</a>
-                        <button id="begin" type="button" class="btn btn-primary">Commencer à jouer</button>
+                        <div id="info-content"></div>
+                        <div id="info-debug"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="flex-container">
+
+        <div id="command-tool" class="flex-container" style="display: none;">
             <button type="button" class="btn btn-success"></button>
             <button type="button" class="btn btn-warning"></button>
             <button type="button" class="btn btn btn-info"></button>
@@ -44,12 +56,37 @@
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#modalUser').modal('show');
-        });
-        $("#begin").click(function() {
+            var userToken = "";
+            var pseudo = "";
+
             var socket = io.connect('http://<%=url%>');
-            socket.emit('user', $('#pseudo').val());
-            $('#modalUser').modal('hide');
+
+            $("#begin").click(function() {
+                pseudo = $('#pseudo').val();
+                socket.emit('user', {pseudo : pseudo, room : '<%=room%>'}, function (data) {
+                      userToken = data['userToken'];
+                      console.log(userToken);
+                      if(userToken != false){
+                        $('#info-debug').html(userToken);
+                      }else{
+                         $('#info-content').html("Désolé, la partie n'est pas accessible."); 
+                      }
+                });
+                
+                $('#info-header').html("Bienvenue "+ pseudo );
+                $('#info-content').html("Veuillez patientez la partie va bientôt commencer.");
+                $('#li-login').hide();
+                $('#li-wait').show();
+                
+            });
+            
+            socket.on('start-party-users-<%=room%>', function() {
+                if(userToken != false){
+                    $('#login').hide();
+                    $('#command-tool').show();
+                }
+            });
+            
         });
     </script>
 </body>
