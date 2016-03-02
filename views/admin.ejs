@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>QuizzJS</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/telephone.css">
+</head>
+
+<body>
+    <ul id="admin" class="pages">
+        <li id="li-nbUsersMax" class="login page">
+          <div class="form">
+            <h3 class="title">Indiquer le nombre d'utilisateurs ?</h3>
+            <input id="nbUsersMax" class="usernameInput" type="text" onkeypress="return saisirQueNombre(this, event)"/>
+            <br />
+            <br />
+            <button id="createRoom" type="button" class="btn btn-primary">Créer le salon</button>
+          </div>
+        </li>
+        <li id="li-wait" class="login page" style="display: none;">
+          <div class="form">
+            <h3 id="info-header"class="title"></h3>
+            <div id="info-content"></div>
+            <div id="info-debug"></div>
+          </div>
+        </li>
+    </ul>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/notify.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var nbUserSaisi = "";
+
+            var socket = io.connect('http://<%=url%>');
+
+            $("#createRoom").click(function() {
+                nbUserSaisi = $("#nbUsersMax").val();
+                
+                if (!$("#nbUsersMax").val().match(/^[0-9]{1,2}$/)) {
+                    $.notify("Veuillez indiquer le nombre de participants.");
+                }else{
+                    
+                    document.location="/" + nbUserSaisi;
+                    
+                    socket.emit('admin', {room : '<%=room%>', nbUsersMax: nbUserSaisi}, function (data) {
+                        //RAF appel server.js
+                    });
+                    
+                    /*$('#info-header').html("Bienvenue.");
+                    $('#info-content').html("Veuillez patientez la partie va bientôt commencer.");
+                    $('#li-login').hide();
+                    $('#li-wait').show();*/
+                }
+            });
+        });
+        
+        //Methode permettant de saisir seulement des nombres
+        function saisirQueNombre(htmlInputElement, event) {
+        	var keyCode = event.which ? event.which : event.keyCode;
+         	//pour autoriser la suppression de caractère avec BACK ou SUPPR
+        	if(keyCode != 8 && keyCode != 46) {
+        		if(!String.fromCharCode(keyCode).match(/^\d+$/)){
+        			return false;
+        	   	}
+        	}
+        }
+
+    </script>
+    
+</body>
+</html>
