@@ -16,6 +16,11 @@ var io = socketio.listen(server);
 /* Home page. */
 router.get('/', function(req, res) {
     
+    if (req.params.length == 0) {
+        console.log("aucun parametre dans / ");
+    }else{
+        console.log("présence de parametres dans / ");
+    }
     //Création d'une nouvelle room
     var token = room.newRoom();
     room.getRoom(token).open();
@@ -36,12 +41,12 @@ router.get('/admin', function(req, res) {
     //Création d'une nouvelle room
     var token = room.newRoom();
     room.getRoom(token).open();
-    res.render('admin.ejs', {url: req.headers.host});
+    res.render('admin.ejs', {url: req.headers.host, token: token});
 });
 
 /* Access page */
 router.get('/access', function(req, res) {
-    res.render('access.ejs', {url: req.headers.host});
+    res.render('access.ejs', {room : true});
 });
 
 /* Room page. */
@@ -74,18 +79,26 @@ router.get('/new-room/:token', function(req, res) {
 
 /* Page reserve a un utilisateur */
 router.get('/room/:token', function(req, res) {
-    if(room.getRoom(req.params.token).isOpen()){
-        console.log("Welcome to room : ["+req.params.token+"]");
-        room.getRoom(req.params.token).setName("Room : ["+req.params.token+"]");
-        res.render('user.ejs', {url: req.headers.host, room: req.params.token});
+    
+    console.log("test existance de la room " + req.params.token);
+    if(room.getRoom(req.params.token) != false) {
+        console.log("La room existe.");
+        if(room.getRoom(req.params.token).isOpen()){
+            console.log("Welcome to room : ["+req.params.token+"]");
+            room.getRoom(req.params.token).setName("Room : ["+req.params.token+"]");
+            res.render('user.ejs', {url: req.headers.host, room: req.params.token});
+        }else{
+            res.render('user.ejs', {room: false});
+        }
     }else{
-        res.render('user.ejs', {url: req.headers.host, room: false});
+        console.log("La room n'existe pas, redirection vers la page access.ejs.");
+        res.render('access.ejs', {room: false});
     }
 });
 
 /** Socket **/
 
-// Quand on client se connecte, on le note dans la console
+// Quand un client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket) {
     
     socket.on('user', function (data, fn) {
