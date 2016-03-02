@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>QuizzJS</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/telephone.css">
+</head>
+
+<body>
+    <ul id="openRoom" class="pages">
+        <li id="li-openRoom" class="login page">
+          <div class="form">
+            <h3 class="title">Quel est l'identifiant de la partie?</h3>
+            <input id="token" class="usernameInput" type="text" value=""/>
+            <br />
+            <br />
+            <button id="enterRoom" type="button" class="btn btn-primary">Acceder</button>
+          </div>
+        </li>
+        <li id="li-wait" class="login page" style="display: none;">
+          <div class="form">
+            <h3 id="info-header"class="title"></h3>
+            <div id="info-debug"></div>
+          </div>
+        </li>
+    </ul>
+   
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/notify.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            
+            var isRoomOpen = <%=room%>;
+            var token = "";
+            
+            $("#enterRoom").click(function() {
+                token = $("#token").val();
+                if (token == "") {
+                    $.notify("Veuillez indiquer l'identifiant de la partie.");
+                }else{
+                    document.location="/room/" + token;
+                }
+            });
+            
+            if (!isRoomOpen) {
+                $.notify("Ce salon n'existe pas.");
+            }
+            
+        });
+    </script>
+</body>
+
+</html>
