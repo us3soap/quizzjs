@@ -16,11 +16,6 @@ var io = socketio.listen(server);
 /* Home page. */
 router.get('/', function(req, res) {
     
-    if (req.params.length == 0) {
-        console.log("aucun parametre dans / ");
-    }else{
-        console.log("présence de parametres dans / ");
-    }
     //Création d'une nouvelle room
     var token = room.newRoom();
     room.getRoom(token).open();
