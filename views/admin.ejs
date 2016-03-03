@@ -44,16 +44,9 @@
                     $.notify("Veuillez indiquer le nombre de participants.");
                 }else{
                     
-                    document.location="/" + nbUserSaisi;
-                    
-                    socket.emit('admin', {room : '<%=room%>', nbUsersMax: nbUserSaisi}, function (data) {
-                        //RAF appel server.js
-                    });
-                    
-                    /*$('#info-header').html("Bienvenue.");
-                    $('#info-content').html("Veuillez patientez la partie va bientôt commencer.");
-                    $('#li-login').hide();
-                    $('#li-wait').show();*/
+                    var parametres = {'nbUsersMax': nbUserSaisi};
+                    document.location="/paramRoom/" + JSON.stringify(parametres);
+                
                 }
             });
         });
