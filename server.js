@@ -33,10 +33,8 @@ router.get('/', function(req, res) {
 /* Admin page */
 router.get('/admin', function(req, res) {
     
-    //Création d'une nouvelle room
-    var token = room.newRoom();
-    room.getRoom(token).open();
-    res.render('admin.ejs', {url: req.headers.host, token: token});
+    //affichage de la page d'administration d'une room.
+    res.render('admin.ejs', {url: req.headers.host});
 });
 
 /* Access page */
@@ -57,6 +55,24 @@ router.get('/direct/:token', function(req, res) {
             });
         }
     }
+});
+
+/* creation d'une room avec les paramètres */
+router.get('/paramRoom/:tabParam', function(req, res) {
+    console.log("tabParam : "+ req.params.tabParam);
+    var tabParam = JSON.parse(req.params.tabParam);
+    console.log("nbUsersMax : " + tabParam.nbUsersMax);
+    
+    //Création d'une nouvelle room
+    var token = room.newRoom();
+    room.getRoom(token).open();
+    
+    res.render('index.ejs', {url: req.headers.host, 
+        token: token,
+        nbUsers : room.getRoom(token).getMembers().length,
+        nbUsersMax : tabParam.nbUsersMax
+
+    });
 });
 
 /*Génération du flux correspondant à l'image du QR Code*/
