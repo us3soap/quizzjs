@@ -32,8 +32,6 @@ router.get('/', function(req, res) {
 
 /* Admin page */
 router.get('/admin', function(req, res) {
-    
-    //affichage de la page d'administration d'une room.
     res.render('admin.ejs', {url: req.headers.host});
 });
 
