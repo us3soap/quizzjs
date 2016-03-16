@@ -1,0 +1,26 @@
+{
+    "name" :  "Fichier de questions",
+    "version" : 0.1,
+    "questions" : [
+        {
+            "id": 1,
+            "question": "Au Moyen-Âge, comment appelait-on les villages fortifiés ?",
+            "reponse1": "Tour",
+            "reponse2": "Bastide",
+            "reponse3": "Château fort",
+            "reponse4": "Rempart",
+            "good": "reponse3",
+            "explication": "Lorem ipsum"
+        },
+        {
+            "id": 2,
+            "question": "Dans quel film un couple en croisière va-t-il recueillir un naufragé qui va les terrifier ?",
+            "reponse1": "Calme blanc",
+            "reponse2": "Tempête en mer",
+            "reponse3": "Le naufragé",
+            "reponse4": "Les disparus",
+            "good": "reponse2",
+            "explication": "Lorem ipsum"
+        }
+    ]
+}
