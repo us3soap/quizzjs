@@ -11,6 +11,8 @@ var router = express();
 var server = http.createServer(router);
 var io = socketio.listen(server);
 
+var questions = require('./resources/questions.json');
+
 /** Gestion des routes **/
 
 /* Home page. */
@@ -134,6 +136,7 @@ io.sockets.on('connection', function (socket) {
         fn(true);
 
     });
+    
 });
 
 /** Serveur **/
