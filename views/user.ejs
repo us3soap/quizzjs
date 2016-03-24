@@ -45,10 +45,10 @@
 
 
         <div id="command-tool" class="flex-container" style="display: none;">
-            <button type="button" class="btn btn-success"></button>
-            <button type="button" class="btn btn-warning"></button>
-            <button type="button" class="btn btn btn-info"></button>
-            <button type="button" class="btn btn btn-danger"></button>
+            <button id="reponse1" type="button" class="btn btn-success"></button>
+            <button id="reponse2" type="button" class="btn btn-warning"></button>
+            <button id="reponse3" type="button" class="btn btn btn-info"></button>
+            <button id="reponse4" type="button" class="btn btn btn-danger"></button>
         </div>
     </div>
     <script src="/js/jquery.min.js"></script>
@@ -80,10 +80,14 @@
                 
             });
             
-            socket.on('start-party-users-<%=room%>', function() {
+            socket.on('start-party-users-<%=room%>', function(data) {
                 if(userToken != false){
                     $('#login').hide();
                     $('#command-tool').show();
+                    $("#reponse1").html(data['reponse1']);
+                    $("#reponse2").html(data['reponse2']);
+                    $("#reponse3").html(data['reponse3']);
+                    $("#reponse4").html(data['reponse4']);
                 }
             });
             
