@@ -129,12 +129,15 @@ io.sockets.on('connection', function (socket) {
     });
     
     socket.on('start', function (data, fn) {
-        
         console.log('Debut de la party : '+data["room"]);
         room.getRoom(data["room"]).close();
-        socket.broadcast.emit('start-party-users-'+data["room"]);
         fn(true);
-
+    });
+    
+    socket.on('recup-question', function (data, fn) {
+        var fluxQuestion = fluxQuestionAlea();
+        socket.broadcast.emit('start-party-users-'+data["room"], fluxQuestion);
+        fn(fluxQuestion);
     });
     
 });
@@ -145,3 +148,11 @@ server.listen(process.env.PORT, process.env.IP, function(){
     router.use(express.static(__dirname + '/public'));
     console.log("QuizzJS run to : [", addr.address + ":" + addr.port+"]");
 });
+
+function fluxQuestionAlea() {
+    var numQuestionRandom = Math.floor((Math.random() * 2) + 1)-1;
+    console.log("Question n°" + numQuestionRandom + " tirée au hasard");
+    var flux = {question:questions.questions[numQuestionRandom].question, reponse1:questions.questions[numQuestionRandom].reponse1, reponse2:questions.questions[numQuestionRandom].reponse2, reponse3:questions.questions[numQuestionRandom].reponse3, reponse4:questions.questions[numQuestionRandom].reponse4};
+    console.log("Flux envoyé au client " + flux.toString());
+    return flux;
+}
