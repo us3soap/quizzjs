@@ -123,7 +123,7 @@ io.sockets.on('connection', function (socket) {
             socket.room = data["room"];
             socket.token = userToken;
             
-            socket.broadcast.emit('new-user-'+data["room"], {user : data["pseudo"], nbUsers : room.getRoom( data["room"]).getMembers().length});
+            socket.broadcast.emit('new-user-'+data["room"], {user : data["pseudo"], usertoken : userToken, nbUsers : room.getRoom( data["room"]).getMembers().length});
         }
         
         if(! room.getRoom(data["room"]).notEnough()){
@@ -154,6 +154,7 @@ io.sockets.on('connection', function (socket) {
         
             socket.broadcast.emit('user-left-'+socket.room, {
                 username: socket.username,
+                usertoken: socket.token,
                 nbUsers : room.getRoom(socket.room).getMembers().length
             });
         }
