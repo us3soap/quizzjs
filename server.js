@@ -117,6 +117,12 @@ io.sockets.on('connection', function (socket) {
         var userToken = room.getRoom(data["room"]).memberJoin();
         // Si le user est valide, on l'ajoute sur la page de la room.
         if(userToken){
+            
+            //Sauvegarde du username et de la room dans la session
+            socket.username = data["pseudo"];
+            socket.room = data["room"];
+            socket.token = userToken;
+            
             socket.broadcast.emit('new-user-'+data["room"], {user : data["pseudo"], nbUsers : room.getRoom( data["room"]).getMembers().length});
         }
         
@@ -140,6 +146,17 @@ io.sockets.on('connection', function (socket) {
         var fluxQuestion = fluxQuestionAlea();
         socket.broadcast.emit('start-party-users-'+data["room"], fluxQuestion);
         fn(fluxQuestion);
+    });
+    
+    socket.on('disconnect', function () {
+        if(room.getRoom(socket.room) != false){
+            room.getRoom(socket.room).memberLeave(socket.token);
+        
+            socket.broadcast.emit('user-left-'+socket.room, {
+                username: socket.username,
+                nbUsers : room.getRoom(socket.room).getMembers().length
+            });
+        }
     });
     
 });
