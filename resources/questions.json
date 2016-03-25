@@ -1,6 +1,7 @@
 {
     "name" :  "Fichier de questions",
     "version" : 0.1,
+    "nombreQuestionsDispo" : 2,
     "questions" : [
         {
             "id": 1,
