@@ -64,7 +64,13 @@
             socket.on('new-user-<%=token%>', function(data) {
                 $("#quota").html(data['nbUsers'] + "/ <%=nbUsersMax%>");
                 $.notify("Bienvenue à " + data['user'], "info");
-                $('#listeUser').append("<div class='col-md-12 user'><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"+ data['user']+"</div>").hide().show('slow');
+                $('#listeUser').append("<div id="+ data['usertoken'] +" class='col-md-12 user'><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"+ data['user']+"</div>").hide().show('slow');
+            });
+            
+            socket.on('user-left-<%=token%>', function(data) {
+                $.notify(data['username'] + " s'est déconnecté.");
+                $("#quota").html(data['nbUsers'] + "/ <%=nbUsersMax%>");
+                $('#'+data['usertoken']).hide();
             });
             
             socket.on('start-party-room-<%=token%>', function(user) {
