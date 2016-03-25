@@ -92,7 +92,7 @@
             function myGame() {
 
                 socket.emit('recup-question', {room : '<%=token%>'}, function (data) {
-
+                    $("#question").hide("slow");
                     $("#affichQuestion").html(data['question']);
                     $("#reponse1").html(data['reponse1']);
                     $("#reponse2").html(data['reponse2']);
