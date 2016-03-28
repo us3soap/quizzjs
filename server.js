@@ -112,6 +112,7 @@ router.get('/room/:token', function(req, res) {
 // Quand un client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket) {
     
+    // Socket de connexion d'un nouveau joueur.
     socket.on('user', function (data, fn) {
         console.log('Inscription de : ' + data["pseudo"] + ' dans la room ' + data["room"]);
         var userToken = room.getRoom(data["room"]).memberJoin();
@@ -134,6 +135,7 @@ io.sockets.on('connection', function (socket) {
         fn({userToken:userToken});
     });
     
+    // Socket permettant le lancement de la partie.
     socket.on('start', function (data, fn) {
         console.log('Debut de la party : '+data["room"]);
         room.getRoom(data["room"]).close();
@@ -148,6 +150,7 @@ io.sockets.on('connection', function (socket) {
         fn(fluxQuestion);
     });
     
+    //socket de deconnexion d'un joueur.
     socket.on('disconnect', function () {
         if(room.getRoom(socket.room) != false){
             room.getRoom(socket.room).memberLeave(socket.token);
