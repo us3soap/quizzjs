@@ -47,9 +47,11 @@ $(function() {
             $.notify(msg, status);
         }else{
             var i;
+            var decount = loop;
+            
             for (i = 0; i < loop; i++) { 
-                var decount = loop - i;
                 setTimeout (function(){$.notify(msg + decount, status);}, i * 1000 );
+                decount--;
             }
         }
     }
@@ -61,7 +63,13 @@ $(function() {
      **/
     function addParticipants(token, username){
         notify("Bienvenue à " + username, 1, "info");
-        $('#listeUser').append("<div id="+token +" class='col-md-12 user'><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"+ username +"</div>").hide().show('slow');
+        $('#listeUser').append("<div id="
+                                + token 
+                                + " class='col-md-12 user'><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"
+                                + username
+                                + "<span id=\" badge-" + token + "\" style=\"display:none\" class=\"badge badge-display\">0</span>"
+                                + "</div>"
+                            ).hide().show('slow');
     }
     
     /**
@@ -87,6 +95,14 @@ $(function() {
         }
     }
     
+    function showScores(bool){
+        if(bool){
+            $(".badge-display").show();
+        } else {
+            $(".badge-display").hide();
+        }
+    }
+    
     /** Event **/
     socket.on('new-user-'+token, function(data) {
         
@@ -109,6 +125,7 @@ $(function() {
         setTimeout (function(){
             socket.emit('start', {room : token}, function (data) {
                 $("#qr-code").hide("slow");
+                showScores(true);
                 //Je lance ma fonction en même temps que l'event
                 //car la première itération de mon event se fait au bon de 10 sec.
                 myGame();
