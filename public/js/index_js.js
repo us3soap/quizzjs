@@ -2,6 +2,7 @@ $(function() {
     
     /** Variable **/
     /* global io*/
+    /* global log*/
     var cptQuestion = 1;
     var eventQuestion = null;
     var url = $("#url").val();
@@ -21,7 +22,7 @@ $(function() {
             $("#reponse2").html(data['reponse2']);
             $("#reponse3").html(data['reponse3']);
             $("#reponse4").html(data['reponse4']);
-            $("#question").show("slow");
+            displayInterface("play");
             notify("Question n° " + cptQuestion, 1, "info");
             cptQuestion = cptQuestion+1;
         });
@@ -103,6 +104,30 @@ $(function() {
         }
     }
     
+    /**
+     * Function permettant la gestion de la vue à afficher.
+     * @arg String la vue à atteindre [wait -> transition -> play -> score]
+     **/
+    function displayInterface(view){
+        if(view == "wait"){
+            $("#qr-code").show("slow");
+        } else if(view == "transition") {
+            $("#qr-code").hide("slow");
+            showScores(true);
+        } else if(view == "play") {
+            $("#question").show("slow");
+        } else if (view == "score"){
+            $("#question").hide("slow");
+            $("#scoring").show("slow");
+        } else {
+            log.error("La vue n'est pas connue");
+        }
+    }
+    
+    function showResultat(){
+        
+    }
+    
     /** Event **/
     socket.on('new-user-'+token, function(data) {
         
@@ -124,8 +149,8 @@ $(function() {
         
         setTimeout (function(){
             socket.emit('start', {room : token}, function (data) {
-                $("#qr-code").hide("slow");
-                showScores(true);
+                displayInterface("transition");
+                
                 //Je lance ma fonction en même temps que l'event
                 //car la première itération de mon event se fait au bon de 10 sec.
                 myGame();
