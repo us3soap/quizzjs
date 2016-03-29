@@ -122,8 +122,11 @@ io.sockets.on('connection', function (socket) {
             socket.username = data["pseudo"];
             socket.room = data["room"];
             socket.token = userToken;
+            socket.score = 0;
             
-            socket.broadcast.emit('new-user-'+data["room"], {user : data["pseudo"], usertoken : userToken, nbUsers : room.getRoom( data["room"]).getMembers().length});
+            socket.broadcast.emit('new-user-'+data["room"], {user : data["pseudo"], 
+                                                                usertoken : userToken, 
+                                                                nbUsers : room.getRoom( data["room"]).getMembers().length});
         }
         
         if(! room.getRoom(data["room"]).notEnough()){
