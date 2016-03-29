@@ -98,6 +98,10 @@ $(function() {
         }
     }
     
+    /**
+     * Function permettant de diffuser les scores à côté du nom de l'utilisateur.
+     * @arg boolean bool : déterminant l'affichage ou non.
+     **/
     function showScores(bool){
         if(bool){
             $(".badge-display").show();
@@ -114,6 +118,7 @@ $(function() {
         if(view == "wait"){
             $("#qr-code").show("slow");
             $("#listeUser").show("slow");
+            showScores(false);
         } else if(view == "transition") {
             $("#qr-code").hide("slow");
             showScores(true);
