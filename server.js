@@ -149,12 +149,11 @@ io.sockets.on('connection', function (socket) {
         fn(fluxQuestion);
     });
     
-<<<<<<< HEAD
     socket.on('recolte-reponse', function (data, fn) {
         console.log("L'utilisateur " + data["pseudo"] + " a repondu : " + data["reponse"]);
         fn(true);
     }); 
-=======
+    
     //socket de deconnexion d'un joueur.
     socket.on('disconnect', function () {
         if(room.getRoom(socket.room) != false){
@@ -168,7 +167,6 @@ io.sockets.on('connection', function (socket) {
         }
     });
     
->>>>>>> 493999ac1e9caeb53f66ccc701cbcefe0f3f16f8
 });
 
 /** Serveur **/
