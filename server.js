@@ -13,6 +13,8 @@ var io = socketio.listen(server);
 
 var questions = require('./resources/questions.json');
 
+var tableauReponse = {};
+
 /** Gestion des routes **/
 
 /* Home page. */
@@ -65,7 +67,9 @@ router.get('/paramRoom/:tabParam', function(req, res) {
     //Création d'une nouvelle room
     var token = room.newRoom();
     room.getRoom(token).open();
-    
+    room.getRoom(token).setMinNbMembers(tabParam.nbUsersMax);
+     room.getRoom(token).setMaxNbMembers(tabParam.nbUsersMax);
+     
     res.render('index.ejs', {url: req.headers.host, 
         token: token,
         nbUsers : room.getRoom(token).getMembers().length,
@@ -127,6 +131,7 @@ io.sockets.on('connection', function (socket) {
         }
         
         if(! room.getRoom(data["room"]).notEnough()){
+            console.log('start');
             socket.broadcast.emit('start-party-room-'+data["room"]);
         }
         
@@ -144,12 +149,21 @@ io.sockets.on('connection', function (socket) {
     
     //socket d'écoute pour renvoyer une question aléa aux clients (index + user).
     socket.on('recup-question', function (data, fn) {
+        //A chaque nouvelle question on analyse les réponses de la question précédente.
+        console.log('tableau non vide ' + Object.keys(tableauReponse).length);
+        if (Object.keys(tableauReponse).length > 0){
+            analyseRéponse();
+            //reset du tableau des réponses.
+            tableauReponse == {};
+        }
+        
         var fluxQuestion = fluxQuestionAlea();
         socket.broadcast.emit('start-party-users-'+data["room"], fluxQuestion);
         fn(fluxQuestion);
     });
     
     socket.on('recolte-reponse', function (data, fn) {
+        tableauReponse[data["pseudo"]] = data["reponse"];
         console.log("L'utilisateur " + data["pseudo"] + " a repondu : " + data["reponse"]);
         fn(true);
     }); 
@@ -185,4 +199,9 @@ function fluxQuestionAlea() {
     console.log("Question n°" + numQuestionRandom + " tirée au hasard");
     var flux = {question:questions.questions[numQuestionRandom].question, reponse1:questions.questions[numQuestionRandom].reponse1, reponse2:questions.questions[numQuestionRandom].reponse2, reponse3:questions.questions[numQuestionRandom].reponse3, reponse4:questions.questions[numQuestionRandom].reponse4};
     return flux;
+}
+
+//methode permettant de comptabiliser les scores.
+function analyseRéponse() {
+    return true;
 }
