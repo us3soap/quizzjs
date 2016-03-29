@@ -45,20 +45,23 @@
 
 
         <div id="command-tool" class="flex-container" style="display: none;">
-            <button id="reponse1" type="button" class="btn btn-success"></button>
-            <button id="reponse2" type="button" class="btn btn-warning"></button>
-            <button id="reponse3" type="button" class="btn btn btn-info"></button>
-            <button id="reponse4" type="button" class="btn btn btn-danger"></button>
+            <button id="reponse1" type="button" onclick="enregistrerRep('reponse1');" class="btn btn-success"></button>
+            <button id="reponse2" type="button" onclick="enregistrerRep('reponse2');" class="btn btn-warning"></button>
+            <button id="reponse3" type="button" onclick="enregistrerRep('reponse3');" class="btn btn btn-info"></button>
+            <button id="reponse4" type="button" onclick="enregistrerRep('reponse4');" class="btn btn btn-danger"></button>
         </div>
     </div>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
+        var maReponse = "";
+        
         $(document).ready(function() {
             var userToken = "";
             var pseudo = "";
-
+            
+            
             var socket = io.connect('http://<%=url%>');
 
             $("#begin").click(function() {
@@ -83,15 +86,28 @@
             socket.on('start-party-users-<%=room%>', function(data) {
                 if(userToken != false){
                     $('#login').hide();
-                    $('#command-tool').show();
+                    maReponse = "";
+                    $('#command-tool').show("slow");
                     $("#reponse1").html(data['reponse1']);
                     $("#reponse2").html(data['reponse2']);
                     $("#reponse3").html(data['reponse3']);
                     $("#reponse4").html(data['reponse4']);
                 }
+                
+                setTimeout (function(){
+                    socket.emit('recolte-reponse', {pseudo : pseudo, reponse : maReponse }, function (data) {
+                        
+                    });
+                }, 9999 );
             });
             
+            
         });
+        
+        function enregistrerRep(nameReponse) {
+            maReponse = nameReponse;
+            alert(maReponse);
+        }
     </script>
 </body>
 
