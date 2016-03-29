@@ -54,23 +54,52 @@ $(function() {
         }
     }
     
-    /** Event **/
-    socket.on('new-user-'+token, function(data) {
-        $("#quota").html(data['nbUsers'] + "/" + nbUsersMax);
-        notify("Bienvenue à " + data['user'], 1, "info");
-        $('#listeUser').append("<div id="+ data['usertoken'] +" class='col-md-12 user'><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"+ data['user']+"</div>").hide().show('slow');
-        
-        if(nbUsersMax == data['nbUsers']){
+    /**
+     * Function permettant l'ajout d'un joueur.
+     * @arg String token : la clé référençant l'utilisateur.
+     * @arg String username : le nom d'utilisateur.
+     **/
+    function addParticipants(token, username){
+        notify("Bienvenue à " + username, 1, "info");
+        $('#listeUser').append("<div id="+token +" class='col-md-12 user'><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"+ username +"</div>").hide().show('slow');
+    }
+    
+    /**
+     * Function permettant la suppression d'un joueur.
+     * @arg String token : la clé référençant l'utilisateur.
+     * @arg String username : le nom d'utilisateur.
+     **/
+    function removeParticipant(token, username){
+        notify(username + " s'est déconnecté.", 1, "error");
+        $('#'+token).remove();
+    }
+    
+    /**
+     * Function permettant la gestion du quota de joueur.
+     * @arg int nbUsersActuels : le nombre d'utilisateur connecté.
+     **/
+    function gererUsersMax(nbUsersActuels){
+        $("#quota").html(nbUsersActuels + "/" + nbUsersMax);
+        if(nbUsersMax == nbUsersActuels){
             $("#quota").addClass( "label-success" );
         }else{
             $("#quota").removeClass( "label-success" );
         }
+    }
+    
+    /** Event **/
+    socket.on('new-user-'+token, function(data) {
+        
+        addParticipants(data['usertoken'], data['user']);
+        gererUsersMax(data['nbUsers']);
+        
     });
     
     socket.on('user-left-'+token, function(data) {
-        notify(data['username'] + " s'est déconnecté.", 1, "error");
-        $("#quota").html(data['nbUsers'] + "/" + nbUsersMax);
-        $('#'+data['usertoken']).hide();
+
+        removeParticipant(data['usertoken'], data['username']);
+        gererUsersMax(data['nbUsers']);
+
     });
     
     socket.on('start-party-room-'+token, function(user) {
