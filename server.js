@@ -111,12 +111,19 @@ router.get('/room/:token', function(req, res) {
 // Quand un client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket) {
     
+    // Socket de connexion d'un nouveau joueur.
     socket.on('user', function (data, fn) {
         console.log('Inscription de : ' + data["pseudo"] + ' dans la room ' + data["room"]);
         var userToken = room.getRoom(data["room"]).memberJoin();
         // Si le user est valide, on l'ajoute sur la page de la room.
         if(userToken){
-            socket.broadcast.emit('new-user-'+data["room"], {user : data["pseudo"], nbUsers : room.getRoom( data["room"]).getMembers().length});
+            
+            //Sauvegarde du username et de la room dans la session
+            socket.username = data["pseudo"];
+            socket.room = data["room"];
+            socket.token = userToken;
+            
+            socket.broadcast.emit('new-user-'+data["room"], {user : data["pseudo"], usertoken : userToken, nbUsers : room.getRoom( data["room"]).getMembers().length});
         }
         
         if(! room.getRoom(data["room"]).notEnough()){
@@ -127,6 +134,7 @@ io.sockets.on('connection', function (socket) {
         fn({userToken:userToken});
     });
     
+    // Socket permettant le lancement de la partie.
     socket.on('start', function (data, fn) {
         console.log('Debut de la party : '+data["room"]);
         room.getRoom(data["room"]).close();
@@ -141,10 +149,26 @@ io.sockets.on('connection', function (socket) {
         fn(fluxQuestion);
     });
     
+<<<<<<< HEAD
     socket.on('recolte-reponse', function (data, fn) {
         console.log("L'utilisateur " + data["pseudo"] + " a repondu : " + data["reponse"]);
         fn(true);
     }); 
+=======
+    //socket de deconnexion d'un joueur.
+    socket.on('disconnect', function () {
+        if(room.getRoom(socket.room) != false){
+            room.getRoom(socket.room).memberLeave(socket.token);
+        
+            socket.broadcast.emit('user-left-'+socket.room, {
+                username: socket.username,
+                usertoken: socket.token,
+                nbUsers : room.getRoom(socket.room).getMembers().length
+            });
+        }
+    });
+    
+>>>>>>> 493999ac1e9caeb53f66ccc701cbcefe0f3f16f8
 });
 
 /** Serveur **/

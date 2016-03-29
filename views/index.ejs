@@ -7,6 +7,10 @@
     </head>
     <body>
         <div class="container-fluid">
+            <input type="hidden" id="url" value="<%=url%>" />
+            <input type="hidden" id="token" value="<%=token%>" />
+            <input type="hidden" id="nbUsersMax" value="<%=nbUsersMax%>" />
+            
             <div class="page-header">
                 <h1>QuizzJS <small>Scannez pour commencer...</small></h1>
             </div>
@@ -14,7 +18,7 @@
                 <div class="col-md-3">
                     <div id="listeUser" class="row">
                         <div class="col-md-12">
-                            <h3>Liste des participants <span id="quota" class="badge"> <%=nbUsers%> / <%=nbUsersMax%></span></h3>
+                            <h3>Liste des participants <span id="quota" class="label label-primary"> <%=nbUsers%> / <%=nbUsersMax%></span></h3>
                         </div>
                     </div>
                 </div>
@@ -54,6 +58,7 @@
         <script src="/js/bootstrap.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="/js/notify.min.js"></script>
+<<<<<<< HEAD
         <script>
             
             var cptQuestion = 1;
@@ -113,5 +118,9 @@
                 }
             }
         </script>
+=======
+        <script src="/js/console.js"></script>
+
+>>>>>>> 493999ac1e9caeb53f66ccc701cbcefe0f3f16f8
     </body>
 </html>
