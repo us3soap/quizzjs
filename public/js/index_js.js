@@ -22,7 +22,7 @@ $(function() {
             $("#reponse3").html(data['reponse3']);
             $("#reponse4").html(data['reponse4']);
             $("#question").show("slow");
-            $.notify("Question n° " + cptQuestion);
+            notify("Question n° " + cptQuestion, 1, "info");
             cptQuestion = cptQuestion+1;
         });
         
@@ -35,6 +35,13 @@ $(function() {
         }
     }    
     
+    /**
+     * Fonction permettant de gerer les notifications sur l'écran.
+     * 
+     * @arg String msg : Le message à afficher
+     * @arg int loop : le nombre d'occurence à afficher avec un délais d'une seconde.
+     * @arg String status : le style à appliquer [success, info, warn, error]
+     **/ 
     function notify(msg, loop, status){
         if(loop == 1){
             $.notify(msg, status);
@@ -61,18 +68,14 @@ $(function() {
     });
     
     socket.on('user-left-'+token, function(data) {
-        notify(data['username'] + " s'est déconnecté.", 1, "danger");
+        notify(data['username'] + " s'est déconnecté.", 1, "error");
         $("#quota").html(data['nbUsers'] + "/" + nbUsersMax);
         $('#'+data['usertoken']).hide();
     });
     
     socket.on('start-party-room-'+token, function(user) {
+        notify("La partie commence dans ", 5, "warn");
         
-        $.notify("La partie commence dans 5...");
-        setTimeout (function(){$.notify("La partie commence dans 4...");}, 1000 );
-        setTimeout (function(){$.notify("La partie commence dans 3...");}, 2000 );
-        setTimeout (function(){$.notify("La partie commence dans 2...");}, 3000 );
-        setTimeout (function(){$.notify("La partie commence dans 1...");}, 4000 );
         
         setTimeout (function(){
             socket.emit('start', {room : token}, function (data) {
