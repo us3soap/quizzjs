@@ -1,6 +1,7 @@
 $(function() {
     
     /** Variable **/
+    /* global io*/
     var cptQuestion = 1;
     var eventQuestion = null;
     var url = $("#url").val();
@@ -34,10 +35,22 @@ $(function() {
         }
     }    
     
+    function notify(msg, loop, status){
+        if(loop == 1){
+            $.notify(msg, status);
+        }else{
+            var i;
+            for (i = 0; i < loop; i++) { 
+                var decount = loop - i;
+                setTimeout (function(){$.notify(msg + decount, status);}, i * 1000 );
+            }
+        }
+    }
+    
     /** Event **/
     socket.on('new-user-'+token, function(data) {
         $("#quota").html(data['nbUsers'] + "/" + nbUsersMax);
-        $.notify("Bienvenue à " + data['user'], "info");
+        notify("Bienvenue à " + data['user'], 1, "info");
         $('#listeUser').append("<div id="+ data['usertoken'] +" class='col-md-12 user'><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"+ data['user']+"</div>").hide().show('slow');
         
         if(nbUsersMax == data['nbUsers']){
@@ -48,7 +61,7 @@ $(function() {
     });
     
     socket.on('user-left-'+token, function(data) {
-        $.notify(data['username'] + " s'est déconnecté.");
+        notify(data['username'] + " s'est déconnecté.", 1, "danger");
         $("#quota").html(data['nbUsers'] + "/" + nbUsersMax);
         $('#'+data['usertoken']).hide();
     });
