@@ -51,7 +51,6 @@ router.get('/direct/:token', function(req, res) {
                                     token: req.params.token,
                                     nbUsers : room.getRoom(req.params.token).getMembers().length,
                                     nbUsersMax : room.getRoom(req.params.token).getMinNbMembers()
-
             });
         }
     }
@@ -142,6 +141,10 @@ io.sockets.on('connection', function (socket) {
         fn(fluxQuestion);
     });
     
+    socket.on('recolte-reponse', function (data, fn) {
+        console.log("L'utilisateur " + data["pseudo"] + " a repondu : " + data["reponse"]);
+        fn(true);
+    }); 
 });
 
 /** Serveur **/
