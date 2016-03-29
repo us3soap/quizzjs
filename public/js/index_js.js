@@ -66,13 +66,14 @@ $(function() {
         notify("Bienvenue à " + username, 1, "info");
         $('#listeUser').append("<div id="
                                 + token 
-                                + " class='col-md-12 user'><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"
+                                + " class='col-md-12 user' style=\"display: none\"><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"
                                 + "<span class=\"username\">"
                                 + username
                                 + "</ span>"
                                 + "<span id=\" badge-" + token + "\" style=\"display:none\" class=\"badge badge-display\">0</span>"
                                 + "</div>"
-                            ).hide().show('slow');
+                            );
+        $("#"+token).show("slow");
     }
     
     /**
