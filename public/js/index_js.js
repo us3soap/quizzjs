@@ -1,7 +1,7 @@
 $(function() {
     
     /** Variable **/
-    var cptQuestion = 1;
+    var cptQuestion = 0;
     var eventQuestion = null;
     var url = $("#url").val();
     var token = $("#token").val();
@@ -12,25 +12,29 @@ $(function() {
     /** Functions **/
     //cycle de vie de la question.            
     function myGame() {
-
-        socket.emit('recup-question', {room : token}, function (data) {
-
-            $("#affichQuestion").html(data['question']);
-            $("#reponse1").html(data['reponse1']);
-            $("#reponse2").html(data['reponse2']);
-            $("#reponse3").html(data['reponse3']);
-            $("#reponse4").html(data['reponse4']);
-            $("#question").show("slow");
-            $.notify("Question n° " + cptQuestion);
-            cptQuestion = cptQuestion+1;
-        });
-        
-        setTimeout (function(){$.notify("Attention ! il reste 5 secondes.");}, 5000 );
         
         //arret de l'event au bout de 3 questions.
         //TODO nb question à paramètrer.
-        if (cptQuestion==3) {
+        if (cptQuestion==1) {
             clearInterval(eventQuestion);
+            //récupération à la fin de la dernière question.
+            setTimeout (function(){
+                socket.emit('afficher-resultat', {room : token}, function (data) {
+                });
+            }, 10000 );
+        } else {
+            socket.emit('recup-question', {room : token}, function (data) {
+                $("#affichQuestion").html(data['question']);
+                $("#reponse1").html(data['reponse1']);
+                $("#reponse2").html(data['reponse2']);
+                $("#reponse3").html(data['reponse3']);
+                $("#reponse4").html(data['reponse4']);
+                $("#question").show("slow");
+                cptQuestion = cptQuestion+1;
+                $.notify("Question n° " + cptQuestion);
+            });
+            
+            setTimeout (function(){$.notify("Attention ! il reste 5 secondes.");}, 5000 );
         }
     }    
     

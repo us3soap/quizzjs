@@ -56,14 +56,12 @@
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
         var maReponse = "";
+        var socket = io.connect('http://<%=url%>');
+        var pseudo = "";
         
         $(document).ready(function() {
             var userToken = "";
-            var pseudo = "";
             
-            
-            var socket = io.connect('http://<%=url%>');
-
             $("#begin").click(function() {
                 pseudo = $('#pseudo').val();
                 socket.emit('user', {pseudo : pseudo, room : '<%=room%>'}, function (data) {
@@ -93,20 +91,13 @@
                     $("#reponse3").html(data['reponse3']);
                     $("#reponse4").html(data['reponse4']);
                 }
-                
-                setTimeout (function(){
-                    socket.emit('recolte-reponse', {pseudo : pseudo, reponse : maReponse }, function (data) {
-                        
-                    });
-                }, 9999 );
             });
             
             
         });
         
         function enregistrerRep(nameReponse) {
-            maReponse = nameReponse;
-            alert(maReponse);
+            socket.emit('recolte-reponse', {pseudo : pseudo, reponse : nameReponse }, function (data) {});
         }
     </script>
 </body>
