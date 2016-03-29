@@ -92,13 +92,14 @@
             function myGame() {
 
                 socket.emit('recup-question', {room : '<%=token%>'}, function (data) {
-                    $("#question").hide("slow");
+                    $("#question").hide("slow"); //esthetisme
                     $("#affichQuestion").html(data['question']);
                     $("#reponse1").html(data['reponse1']);
                     $("#reponse2").html(data['reponse2']);
                     $("#reponse3").html(data['reponse3']);
                     $("#reponse4").html(data['reponse4']);
-                    $("#question").show("slow");
+                    $("#question").show("slow"); //esthetisme
+                    
                     $.notify("Question n° " + cptQuestion);
                     cptQuestion = cptQuestion+1;
                 });
@@ -110,7 +111,7 @@
                 if (cptQuestion==3) {
                     clearInterval(eventQuestion);
                 }
-            }    
+            }
         </script>
     </body>
 </html>
