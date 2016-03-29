@@ -8,6 +8,7 @@ $(function() {
     var url = $("#url").val();
     var token = $("#token").val();
     var nbUsersMax = $("#nbUsersMax").val();
+    var nbQuestions = $("#nbQuestions").val();
             
     var socket = io.connect('http://'+ url);
 
@@ -29,9 +30,7 @@ $(function() {
         
         setTimeout (function(){$.notify("Attention ! il reste 5 secondes.");}, 5000 );
         
-        //arret de l'event au bout de 3 questions.
-        //TODO nb question à paramètrer.
-        if (cptQuestion==3) {
+        if (cptQuestion == nbQuestions) {
             clearInterval(eventQuestion);
         }
     }    
@@ -69,8 +68,8 @@ $(function() {
                                 + " class='col-md-12 user' style=\"display: none\"><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"
                                 + "<span class=\"username\">"
                                 + username
-                                + "</ span>"
-                                + "<span id=\" badge-" + token + "\" style=\"display:none\" class=\"badge badge-display\">0</span>"
+                                + "</span>"
+                                + "<span id=\" badge-" + token + "\" style=\"display:none\" class=\"badge badge-display\">1</span>"
                                 + "</div>"
                             );
         $("#"+token).show("slow");
@@ -126,7 +125,7 @@ $(function() {
         } else if(view == "play") {
             $("#question").show("slow");
         } else if (view == "score"){
-            $("#listeUser").hide("slow");
+            //$("#listeUser").hide("slow");
             $("#question").hide("slow");
             $("#scoring").show("slow");
             showResultat();
@@ -142,12 +141,17 @@ $(function() {
         $( ".user" ).each(function( index ) {
             $("#scoring").append(
                 "<div class=\"progress\">"
-                +   "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%;\">"
-                +       $(this).attr('id')
+                +   "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\""
+                +       $(this).find('.badge-display').html() / nbQuestions * 100
+                +       "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: "
+                +       $(this).find('.badge-display').html() / nbQuestions * 100
+                +       "%;\">"
+                +       $(this).find('.username').html()
                 +   "</div>"
                 + "</div>"
                 );
         });
+        
     }
     
     /** Event **/
@@ -170,7 +174,7 @@ $(function() {
         
         
         setTimeout (function(){
-            socket.emit('start', {room : token}, function (data) {
+           socket.emit('start', {room : token}, function (data) {
                 displayInterface("transition");
                 
                 //Je lance ma fonction en même temps que l'event
@@ -180,9 +184,8 @@ $(function() {
                 //TODO paramétrer la durée de réponse d'une question.
                 eventQuestion = setInterval(myGame, 10000);
             });
-/*            displayInterface("transition");
-            displayInterface("play");
-            displayInterface("score");*/
+            //-- Une fois les questions finis, il faut juste que tu appelles displayInterface("score");
+
         }, 5000);
     });
     
