@@ -67,7 +67,9 @@ $(function() {
         $('#listeUser').append("<div id="
                                 + token 
                                 + " class='col-md-12 user'><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"
+                                + "<span class=\"username\">"
                                 + username
+                                + "</ span>"
                                 + "<span id=\" badge-" + token + "\" style=\"display:none\" class=\"badge badge-display\">0</span>"
                                 + "</div>"
                             ).hide().show('slow');
@@ -111,21 +113,35 @@ $(function() {
     function displayInterface(view){
         if(view == "wait"){
             $("#qr-code").show("slow");
+            $("#listeUser").show("slow");
         } else if(view == "transition") {
             $("#qr-code").hide("slow");
             showScores(true);
         } else if(view == "play") {
             $("#question").show("slow");
         } else if (view == "score"){
+            $("#listeUser").hide("slow");
             $("#question").hide("slow");
             $("#scoring").show("slow");
+            showResultat();
         } else {
             log.error("La vue n'est pas connue");
         }
     }
     
+    /**
+     * Function gérant l'animation des scores.
+     **/
     function showResultat(){
-        
+        $( ".user" ).each(function( index ) {
+            $("#scoring").append(
+                "<div class=\"progress\">"
+                +   "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"60\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 60%;\">"
+                +       $(this).attr('id')
+                +   "</div>"
+                + "</div>"
+                );
+        });
     }
     
     /** Event **/
@@ -158,6 +174,9 @@ $(function() {
                 //TODO paramétrer la durée de réponse d'une question.
                 eventQuestion = setInterval(myGame, 10000);
             });
+/*            displayInterface("transition");
+            displayInterface("play");
+            displayInterface("score");*/
         }, 5000);
     });
     
