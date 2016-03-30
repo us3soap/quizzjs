@@ -222,7 +222,7 @@ server.listen(process.env.PORT, process.env.IP, function(){
 //methode de création du flux "Question" à envoyer aux clients.
 function fluxQuestionAlea() {
     //recupération du nombre de questions dispo dans le JSON.
-    var nbQuestions = questions.nombreQuestionsDispo;
+    var nbQuestions = questions.questions.length;
     //nombre aléatoire pour l'id de la question.
     var numQuestionRandom = Math.floor((Math.random() * nbQuestions) + 1)-1;
     console.log("Question n°" + numQuestionRandom + " tirée au hasard");
