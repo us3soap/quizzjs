@@ -5,11 +5,13 @@ $(function() {
     /* global log*/
     var cptQuestion = 0;
     var eventQuestion = null;
+    var eventChrono = null;
     var url = $("#url").val();
     var token = $("#token").val();
     var nbUsersMax = $("#nbUsersMax").val();
     var nbQuestions = $("#nbQuestions").val();
-            
+    var tempsParQuestion = 10;
+    
     var socket = io.connect('http://'+ url);
 
     /** Functions **/
@@ -18,27 +20,36 @@ $(function() {
         
         if (cptQuestion == nbQuestions) {
             clearInterval(eventQuestion);
+            clearInterval(eventChrono);
             //récupération à la fin de la dernière question.
             setTimeout (function(){
                 socket.emit('afficher-resultat', {room : token}, function (data) {
                 });
-            }, 10000 );
+            }, (tempsParQuestion * 1000) );
         } else {
             socket.emit('recup-question', {room : token}, function (data) {
+                clearInterval(eventChrono);
                 cptQuestion = cptQuestion+1;
                 $("#affichQuestion").html(data['question']);
                 $("#reponse1").html(data['reponse1']);
                 $("#reponse2").html(data['reponse2']);
                 $("#reponse3").html(data['reponse3']);
                 $("#reponse4").html(data['reponse4']);
+                $("#tempsRestant").html(tempsParQuestion);
                 displayInterface("play");
                 notify("Question n° " + cptQuestion, 1, "info");
+                
+                eventChrono = setInterval(chrono, 1000 ); //timer mise a jour du chrono.
             });
             
             setTimeout (function(){$.notify("Attention ! il reste 5 secondes.");}, 5000 );
         }
     }    
     
+    function chrono(){
+        var tmp = parseFloat($("#tempsRestant").html());
+        $("#tempsRestant").html(tmp-1);
+    }
     /**
      * Fonction permettant de gerer les notifications sur l'écran.
      * 
@@ -186,7 +197,7 @@ $(function() {
                 myGame();
                 //ici, une question durera 10 sec
                 //TODO paramétrer la durée de réponse d'une question.
-                eventQuestion = setInterval(myGame, 10000);
+                eventQuestion = setInterval(myGame, (tempsParQuestion * 1000 ) );
             });
             //-- Une fois les questions finis, il faut juste que tu appelles displayInterface("score");
 
