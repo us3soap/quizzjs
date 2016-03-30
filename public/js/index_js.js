@@ -3,7 +3,7 @@ $(function() {
     /** Variable **/
     /* global io*/
     /* global log*/
-    var cptQuestion = 1;
+    var cptQuestion = 0;
     var eventQuestion = null;
     var url = $("#url").val();
     var token = $("#token").val();
@@ -25,6 +25,7 @@ $(function() {
             }, 10000 );
         } else {
             socket.emit('recup-question', {room : token}, function (data) {
+                cptQuestion = cptQuestion+1;
                 $("#affichQuestion").html(data['question']);
                 $("#reponse1").html(data['reponse1']);
                 $("#reponse2").html(data['reponse2']);
@@ -32,7 +33,6 @@ $(function() {
                 $("#reponse4").html(data['reponse4']);
                 displayInterface("play");
                 notify("Question n° " + cptQuestion, 1, "info");
-                cptQuestion = cptQuestion+1;
             });
             
             setTimeout (function(){$.notify("Attention ! il reste 5 secondes.");}, 5000 );
