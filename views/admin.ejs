@@ -15,6 +15,10 @@
             <input id="nbUsersMax" class="usernameInput" type="text" onkeypress="return saisirQueNombre(this, event)"/>
             <br />
             <br />
+            <h3 class="title">Indiquer le nombre de questions ?</h3>
+            <input id="nbQuestions" class="usernameInput" type="text" onkeypress="return saisirQueNombre(this, event)"/>
+            <br />
+            <br />
             <button id="createRoom" type="button" class="btn btn-primary">Créer le salon</button>
           </div>
         </li>
@@ -39,14 +43,15 @@
 
             $("#createRoom").click(function() {
                 nbUserSaisi = $("#nbUsersMax").val();
+                nbQuestionsSaisi = $("#nbQuestions").val();
                 
                 if (!$("#nbUsersMax").val().match(/^[0-9]{1,2}$/)) {
                     $.notify("Veuillez indiquer le nombre de participants.");
+                }else if(!$("#nbQuestions").val().match(/^[0-9]{1,2}$/)){
+                    $.notify("Veuillez indiquer le nombre de questions.");
                 }else{
-                    
-                    var parametres = {'nbUsersMax': nbUserSaisi};
+                    var parametres = {'nbUsersMax': nbUserSaisi, 'nbQuestions' : nbQuestionsSaisi};
                     document.location="/paramRoom/" + JSON.stringify(parametres);
-                
                 }
             });
         });

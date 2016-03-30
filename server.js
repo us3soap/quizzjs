@@ -31,7 +31,9 @@ router.get('/', function(req, res) {
     res.render('index.ejs', {url: req.headers.host, 
                             token: token,
                             nbUsers : room.getRoom(token).getMembers().length,
-                            nbUsersMax : room.getRoom(token).getMinNbMembers()});
+                            nbUsersMax : room.getRoom(token).getMinNbMembers(),
+                            nbQuestions : 10
+    });
 });
 
 
@@ -53,7 +55,8 @@ router.get('/direct/:token', function(req, res) {
             res.render('index.ejs', {url: req.headers.host, 
                                     token: req.params.token,
                                     nbUsers : room.getRoom(req.params.token).getMembers().length,
-                                    nbUsersMax : room.getRoom(req.params.token).getMinNbMembers()
+                                    nbUsersMax : room.getRoom(req.params.token).getMinNbMembers(),
+                                    nbQuestions : 10
             });
         }
     }
@@ -64,6 +67,7 @@ router.get('/paramRoom/:tabParam', function(req, res) {
     console.log("tabParam : "+ req.params.tabParam);
     var tabParam = JSON.parse(req.params.tabParam);
     console.log("nbUsersMax : " + tabParam.nbUsersMax);
+    console.log("nbQuestions : " + tabParam.nbQuestions);
     
     //Création d'une nouvelle room
     var token = room.newRoom();
@@ -74,7 +78,8 @@ router.get('/paramRoom/:tabParam', function(req, res) {
     res.render('index.ejs', {url: req.headers.host, 
         token: token,
         nbUsers : room.getRoom(token).getMembers().length,
-        nbUsersMax : tabParam.nbUsersMax
+        nbUsersMax : tabParam.nbUsersMax,
+        nbQuestions : tabParam.nbQuestions
 
     });
 });
