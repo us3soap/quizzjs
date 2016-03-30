@@ -4,7 +4,7 @@
     "nombreQuestionsDispo" : 2,
     "questions" : [
         {
-            "id": 1,
+            "id": 0,
             "question": "Au Moyen-Âge, comment appelait-on les villages fortifiés ?",
             "reponse1": "Tour",
             "reponse2": "Bastide",
@@ -14,7 +14,7 @@
             "explication": "Lorem ipsum"
         },
         {
-            "id": 2,
+            "id": 1,
             "question": "Dans quel film un couple en croisière va-t-il recueillir un naufragé qui va les terrifier ?",
             "reponse1": "Calme blanc",
             "reponse2": "Tempête en mer",

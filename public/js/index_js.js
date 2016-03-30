@@ -193,6 +193,10 @@ $(function() {
         }, 5000);
     });
     
+    socket.on('maj-party-users-'+token, function(data) {
+        $("#badge-"+ data['usertoken']).html(data["score"]);
+    });
+    
     socket.on('add-bonne-reponse', function(data) {
         alert('ok');
         alert("badge-"+data["token"]);
