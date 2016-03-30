@@ -158,12 +158,12 @@ io.sockets.on('connection', function (socket) {
     //socket d'écoute pour renvoyer une question aléa aux clients (index + user).
     socket.on('recup-question', function (data, fn) {
         //A chaque nouvelle question on analyse les réponses de la question précédente.
-        console.log('tableau non vide ' + Object.keys(tableauReponse).length);
+       /* console.log('tableau non vide ' + Object.keys(tableauReponse).length);
         if (Object.keys(tableauReponse).length > 0){
             analyseRéponse(socket);
             //reset du tableau des réponses.
             tableauReponse = {};
-        }
+        }*/
         
         var fluxQuestion = fluxQuestionAlea();
         socket.broadcast.emit('start-party-users-'+data["room"], fluxQuestion);
@@ -171,8 +171,17 @@ io.sockets.on('connection', function (socket) {
     });
     
     socket.on('recolte-reponse', function (data, fn) {
-        tableauReponse[data["token"]] = data["reponse"];
-        console.log("L'utilisateur " + data["token"] + " a repondu : " + data["reponse"]);
+        console.log("L'utilisateur " + data["token"] + " a repondu : " + data["reponse"] + " à la question  "+ data["id"]);
+        if(questions.questions[data["id"]].good == data["reponse"]){
+            console.log("L'utilisateur " + data["token"] + " a repondu juste!");
+            socket.score++;
+            
+            socket.broadcast.emit('maj-party-users-'+socket.room, {score : socket.score, 
+                                                                    usertoken : socket.token
+                                                                    });
+        }else{
+            console.log("L'utilisateur " + data["token"] + " a repondu faux!");
+        }
         fn(true);
     }); 
 
@@ -190,7 +199,7 @@ io.sockets.on('connection', function (socket) {
     });
     
     //methode permettant de comptabiliser les scores.
-    function analyseRéponse(socket) {
+/*    function analyseRéponse(socket) {
         for(var key in tableauReponse) {
             var value = tableauReponse[key];
             if (value == reponseQuestionEnCours) {
@@ -199,7 +208,7 @@ io.sockets.on('connection', function (socket) {
             }
         }
         return true;
-    }
+    }*/
     
 });
 
@@ -213,11 +222,11 @@ server.listen(process.env.PORT, process.env.IP, function(){
 //methode de création du flux "Question" à envoyer aux clients.
 function fluxQuestionAlea() {
     //recupération du nombre de questions dispo dans le JSON.
-    var nbQuestions = questions.nombreQuestionsDispo;
+    var nbQuestions = questions.questions.length;
     //nombre aléatoire pour l'id de la question.
     var numQuestionRandom = Math.floor((Math.random() * nbQuestions) + 1)-1;
     console.log("Question n°" + numQuestionRandom + " tirée au hasard");
-    var flux = {question:questions.questions[numQuestionRandom].question, reponse1:questions.questions[numQuestionRandom].reponse1, reponse2:questions.questions[numQuestionRandom].reponse2, reponse3:questions.questions[numQuestionRandom].reponse3, reponse4:questions.questions[numQuestionRandom].reponse4};
+    var flux = {idquestion: questions.questions[numQuestionRandom].id, question:questions.questions[numQuestionRandom].question, reponse1:questions.questions[numQuestionRandom].reponse1, reponse2:questions.questions[numQuestionRandom].reponse2, reponse3:questions.questions[numQuestionRandom].reponse3, reponse4:questions.questions[numQuestionRandom].reponse4};
     reponseQuestionEnCours = questions.questions[numQuestionRandom].good;
     return flux;
 }

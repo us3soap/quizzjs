@@ -45,6 +45,7 @@
 
 
         <div id="command-tool" class="flex-container" style="display: none;">
+            <input type="hidden" id="idquestion" />
             <button id="reponse1" type="button" onclick="enregistrerRep('reponse1');" class="btn btn-success"></button>
             <button id="reponse2" type="button" onclick="enregistrerRep('reponse2');" class="btn btn-warning"></button>
             <button id="reponse3" type="button" onclick="enregistrerRep('reponse3');" class="btn btn btn-info"></button>
@@ -85,10 +86,10 @@
             socket.on('start-party-users-<%=room%>', function(data) {
                 if(userToken != false){
                     $('#login').hide();
-                    //reset de la réponse.
-                    maReponse = "";
-                    
-                    $('#command-tool').hide("slow");  //effet de style
+                    var maReponse = "";
+                    $("#idquestion").val(data['idquestion']);
+                    $('#command-tool').show("slow");
+
                     $("#reponse1").html(data['reponse1']);
                     $("#reponse2").html(data['reponse2']);
                     $("#reponse3").html(data['reponse3']);
@@ -101,7 +102,10 @@
         });
         
         function enregistrerRep(nameReponse) {
-            socket.emit('recolte-reponse', {token : userToken, reponse : nameReponse }, function (data) {});
+            socket.emit('recolte-reponse', {token : userToken, 
+                                            reponse : nameReponse,
+                                            id: $("#idquestion").val()
+            },function (data) {});
         }
     </script>
 </body>
