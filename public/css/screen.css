@@ -12,3 +12,10 @@ img{
     margin: 5px 15px;
     padding: 5px;
 }
+
+.badge-display{
+    float: right;
+    font-size: 24px;
+    padding: 5px 10px;
+    margin-top: 2px;
+}

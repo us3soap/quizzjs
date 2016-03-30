@@ -14,6 +14,7 @@ var io = socketio.listen(server);
 var questions = require('./resources/questions.json');
 
 var tableauReponse = {};
+var reponseQuestionEnCours = "";
 
 /** Gestion des routes **/
 
@@ -126,12 +127,14 @@ io.sockets.on('connection', function (socket) {
             socket.username = data["pseudo"];
             socket.room = data["room"];
             socket.token = userToken;
+            socket.score = 0;
             
-            socket.broadcast.emit('new-user-'+data["room"], {user : data["pseudo"], usertoken : userToken, nbUsers : room.getRoom( data["room"]).getMembers().length});
+            socket.broadcast.emit('new-user-'+data["room"], {user : data["pseudo"], 
+                                                                usertoken : userToken, 
+                                                                nbUsers : room.getRoom( data["room"]).getMembers().length});
         }
         
         if(! room.getRoom(data["room"]).notEnough()){
-            console.log('start');
             socket.broadcast.emit('start-party-room-'+data["room"]);
         }
         
@@ -152,9 +155,9 @@ io.sockets.on('connection', function (socket) {
         //A chaque nouvelle question on analyse les réponses de la question précédente.
         console.log('tableau non vide ' + Object.keys(tableauReponse).length);
         if (Object.keys(tableauReponse).length > 0){
-            analyseRéponse();
+            analyseRéponse(socket);
             //reset du tableau des réponses.
-            tableauReponse == {};
+            tableauReponse = {};
         }
         
         var fluxQuestion = fluxQuestionAlea();
@@ -163,11 +166,11 @@ io.sockets.on('connection', function (socket) {
     });
     
     socket.on('recolte-reponse', function (data, fn) {
-        tableauReponse[data["pseudo"]] = data["reponse"];
-        console.log("L'utilisateur " + data["pseudo"] + " a repondu : " + data["reponse"]);
+        tableauReponse[data["token"]] = data["reponse"];
+        console.log("L'utilisateur " + data["token"] + " a repondu : " + data["reponse"]);
         fn(true);
     }); 
-    
+
     //socket de deconnexion d'un joueur.
     socket.on('disconnect', function () {
         if(room.getRoom(socket.room) != false){
@@ -180,6 +183,18 @@ io.sockets.on('connection', function (socket) {
             });
         }
     });
+    
+    //methode permettant de comptabiliser les scores.
+    function analyseRéponse(socket) {
+        for(var key in tableauReponse) {
+            var value = tableauReponse[key];
+            if (value == reponseQuestionEnCours) {
+                console.log("L'utilisateur " + key + " à la bonne réponse.");
+                socket.broadcast.emit('add-bonne-reponse', {token : key});
+            }
+        }
+        return true;
+    }
     
 });
 
@@ -198,10 +213,6 @@ function fluxQuestionAlea() {
     var numQuestionRandom = Math.floor((Math.random() * nbQuestions) + 1)-1;
     console.log("Question n°" + numQuestionRandom + " tirée au hasard");
     var flux = {question:questions.questions[numQuestionRandom].question, reponse1:questions.questions[numQuestionRandom].reponse1, reponse2:questions.questions[numQuestionRandom].reponse2, reponse3:questions.questions[numQuestionRandom].reponse3, reponse4:questions.questions[numQuestionRandom].reponse4};
+    reponseQuestionEnCours = questions.questions[numQuestionRandom].good;
     return flux;
-}
-
-//methode permettant de comptabiliser les scores.
-function analyseRéponse() {
-    return true;
 }
