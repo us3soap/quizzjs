@@ -58,9 +58,10 @@
         var maReponse = "";
         var socket = io.connect('http://<%=url%>');
         var pseudo = "";
+        var userToken = "";
         
         $(document).ready(function() {
-            var userToken = "";
+            
             
             $("#begin").click(function() {
                 pseudo = $('#pseudo').val();
@@ -97,7 +98,7 @@
         });
         
         function enregistrerRep(nameReponse) {
-            socket.emit('recolte-reponse', {pseudo : pseudo, reponse : nameReponse }, function (data) {});
+            socket.emit('recolte-reponse', {token : userToken, reponse : nameReponse }, function (data) {});
         }
     </script>
 </body>
