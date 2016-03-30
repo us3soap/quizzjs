@@ -16,13 +16,7 @@ $(function() {
     //cycle de vie de la question.            
     function myGame() {
         
-<<<<<<< HEAD
-        //arret de l'event au bout de 3 questions.
-        //TODO nb question à paramètrer.
-        if (cptQuestion>3) {
-=======
         if (cptQuestion == nbQuestions) {
->>>>>>> b9556aaf2fa45bfc0259356a419111d25b687a7d
             clearInterval(eventQuestion);
             //récupération à la fin de la dernière question.
             setTimeout (function(){
@@ -78,13 +72,8 @@ $(function() {
                                 + " class='col-md-12 user' style=\"display: none\"><img src='/img/question.png' style='margin-right: 15px;' width='10%'/>"
                                 + "<span class=\"username\">"
                                 + username
-<<<<<<< HEAD
                                 + "</ span>"
                                 + "<span id=\"badge-" + token + "\" style=\"display:none\" class=\"badge badge-display\">0</span>"
-=======
-                                + "</span>"
-                                + "<span id=\" badge-" + token + "\" style=\"display:none\" class=\"badge badge-display\">1</span>"
->>>>>>> b9556aaf2fa45bfc0259356a419111d25b687a7d
                                 + "</div>"
                             );
         $("#"+token).show("slow");
