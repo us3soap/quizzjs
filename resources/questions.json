@@ -1,6 +1,7 @@
 {
     "name" :  "Fichier de questions",
     "version" : 0.1,
+    "token": "123456",
     "questions" : [
         {
             "id": 0,
