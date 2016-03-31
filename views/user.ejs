@@ -51,6 +51,14 @@
             <button id="reponse3" type="button" onclick="enregistrerRep('reponse3');" class="btn btn btn-info"></button>
             <button id="reponse4" type="button" onclick="enregistrerRep('reponse4');" class="btn btn btn-danger"></button>
         </div>
+        <div id="recapReponse" style="display: none;">
+            <ul id="login" class="pages">
+                <li id="li-login" class="login page">
+                    <h3 class="title">Vous avez répondu :</h3>
+                    <h3 class="title" id="reponseSaisie"></h3>
+                </li>
+            </ul>
+        </div>
     </div>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
@@ -88,8 +96,10 @@
                     $('#login').hide();
                     var maReponse = "";
                     $("#idquestion").val(data['idquestion']);
+                    $('#recapReponse').hide("slow");
                     $('#command-tool').show("slow");
-
+                    $('#reponseSaisie').html("");
+                    
                     $("#reponse1").html(data['reponse1']);
                     $("#reponse2").html(data['reponse2']);
                     $("#reponse3").html(data['reponse3']);
@@ -102,6 +112,10 @@
         });
         
         function enregistrerRep(nameReponse) {
+            $('#reponseSaisie').html($("#"+nameReponse).html());
+            $('#command-tool').hide("slow");
+            $('#recapReponse').show("slow");
+            
             socket.emit('recolte-reponse', {token : userToken, 
                                             reponse : nameReponse,
                                             id: $("#idquestion").val()
