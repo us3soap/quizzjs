@@ -13,9 +13,6 @@ var io = socketio.listen(server);
 
 var questions = require('./resources/questions.json');
 
-var tableauReponse = {};
-var reponseQuestionEnCours = "";
-
 /** Gestion des routes **/
 
 /* Home page. */
@@ -73,6 +70,7 @@ router.get('/paramRoom/:tabParam', function(req, res) {
     
     //Création d'une nouvelle room
     var token = room.newRoom();
+    questionnaire.loadQuestionnaire(questions, token);
     room.getRoom(token).open();
     room.getRoom(token).setMinNbMembers(tabParam.nbUsersMax);
     room.getRoom(token).setMaxNbMembers(tabParam.nbUsersMax);
