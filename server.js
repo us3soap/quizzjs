@@ -107,7 +107,7 @@ router.get('/room/:token', function(req, res) {
             room.getRoom(req.params.token).setName("Room : ["+req.params.token+"]");
             res.render('user.ejs', {url: req.headers.host, room: req.params.token});
         }else{
-            res.render('user.ejs', {room: false});
+            res.render('user.ejs', {url: req.headers.host, room: false});
         }
     }else{
         console.log("La room n'existe pas, redirection vers la page access.ejs.");

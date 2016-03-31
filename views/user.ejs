@@ -1,132 +1,82 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    <title>QuizzJS</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/telephone.css">
-</head>
+    <head>
+        <title>QuizzJS</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/telephone.css">
+    </head>
 
-<body>
-    <ul id="login" class="pages">
-        <li id="li-login" class="login page">
-          <div class="form">
-            <h3 class="title">Quel est votre pseudo?</h3>
-            <input id="pseudo" class="usernameInput" type="text" maxlength="14" />
-            <br />
-            <br />
-            <button id="begin" type="button" class="btn btn-primary">Commencer à jouer</button>
-          </div>
-        </li>
-        <li id="li-wait" class="login page" style="display: none;">
-          <div class="form">
-            <h3 id="info-header"class="title"></h3>
-            <div id="info-content"></div>
-            <div id="info-debug"></div>
-          </div>
-        </li>
-    </ul>
-    <div class="wrapper">
-
-        <div class="modal fade" id="modalInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 id="info-header" class="modal-title" id="myModalLabel">Bienvenue</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div id="info-content"></div>
-                        <div id="info-debug"></div>
+    <body>
+        <input type="hidden" id="url" value="<%=url%>" />
+        <input type="hidden" id="token" value="<%=room%>" />
+        
+        <ul id="login" class="pages">
+            
+            <li id="li-login" class="login page">
+              <div class="form">
+                <h3 class="title">Quel est votre pseudo?</h3>
+                <input id="pseudo" class="usernameInput" type="text" maxlength="14" />
+                <br />
+                <br />
+                <button id="begin" type="button" class="btn btn-primary">Commencer à jouer</button>
+              </div>
+            </li>
+            
+            <li id="li-wait" class="login page" style="display: none;">
+              <div class="form">
+                <h3 id="info-header"class="title"></h3>
+                <div id="info-content"></div>
+                <div id="info-debug"></div>
+              </div>
+            </li>
+            
+        </ul>
+        
+        <div class="wrapper">
+    
+            <div class="modal fade" id="modalInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 id="info-header" class="modal-title" id="myModalLabel">Bienvenue</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="info-content"></div>
+                            <div id="info-debug"></div>
+                        </div>
                     </div>
                 </div>
             </div>
+    
+    
+            <div id="command-tool" class="flex-container" style="display: none;">
+                <input type="hidden" id="idquestion" />
+                <button id="reponse1" type="button" onclick="enregistrerRep('reponse1');" class="btn btn-success"></button>
+                <button id="reponse2" type="button" onclick="enregistrerRep('reponse2');" class="btn btn-info"></button>
+                <button id="reponse3" type="button" onclick="enregistrerRep('reponse3');" class="btn btn btn-warning"></button>
+                <button id="reponse4" type="button" onclick="enregistrerRep('reponse4');" class="btn btn btn-danger"></button>
+            </div>
+            
+            
+            <div id="recapReponse" style="display: none;">
+                <ul id="login" class="pages">
+                    <li id="li-login" class="login page">
+                        <div class="form">
+                            <h3 class="title">Vous avez répondu :</h3>
+                            <h3 class="title" id="reponseSaisie"></h3>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
         </div>
-
-
-        <div id="command-tool" class="flex-container" style="display: none;">
-            <input type="hidden" id="idquestion" />
-            <button id="reponse1" type="button" onclick="enregistrerRep('reponse1');" class="btn btn-success"></button>
-            <button id="reponse2" type="button" onclick="enregistrerRep('reponse2');" class="btn btn-info"></button>
-            <button id="reponse3" type="button" onclick="enregistrerRep('reponse3');" class="btn btn btn-warning"></button>
-            <button id="reponse4" type="button" onclick="enregistrerRep('reponse4');" class="btn btn btn-danger"></button>
-        </div>
         
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/user_js.js"></script>
         
-        <div id="recapReponse" style="display: none;">
-            <ul id="login" class="pages">
-                <li id="li-login" class="login page">
-                    <div class="form">
-                        <h3 class="title">Vous avez répondu :</h3>
-                        <h3 class="title" id="reponseSaisie"></h3>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        
-    </div>
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript">
-        var maReponse = "";
-        var socket = io.connect('http://<%=url%>');
-        var pseudo = "";
-        var userToken = "";
-        
-        $(document).ready(function() {
-            
-            
-            $("#begin").click(function() {
-                pseudo = $('#pseudo').val();
-                socket.emit('user', {pseudo : pseudo, room : '<%=room%>'}, function (data) {
-                      userToken = data['userToken'];
-                      console.log(userToken);
-                      if(userToken != false){
-                        $('#info-debug').html(userToken);
-                      }else{
-                         $('#info-content').html("Désolé, la partie n'est pas accessible."); 
-                      }
-                });
-                
-                $('#info-header').html("Bienvenue "+ pseudo );
-                $('#info-content').html("Veuillez patientez la partie va bientôt commencer.");
-                $('#li-login').hide();
-                $('#li-wait').show();
-                
-            });
-            
-            socket.on('start-party-users-<%=room%>', function(data) {
-                if(userToken != false){
-                    $('#login').hide();
-                    var maReponse = "";
-                    $("#idquestion").val(data['idquestion']);
-                    $('#recapReponse').hide("slow");
-                    $('#command-tool').show("slow");
-                    $('#reponseSaisie').html("");
-                    
-                    $("#reponse1").html(data['reponse1']);
-                    $("#reponse2").html(data['reponse2']);
-                    $("#reponse3").html(data['reponse3']);
-                    $("#reponse4").html(data['reponse4']);
-                    $('#command-tool').show("slow");  //effet de style
-                }
-            });
-            
-            
-        });
-        
-        function enregistrerRep(nameReponse) {
-            $('#command-tool').hide();
-            $('#reponseSaisie').html($("#"+nameReponse).html());
-            $('#recapReponse').show("slow");
-            
-            socket.emit('recolte-reponse', {token : userToken, 
-                                            reponse : nameReponse,
-                                            id: $("#idquestion").val()
-            },function (data) {});
-        }
-    </script>
-</body>
-
+    </body>
 </html>
