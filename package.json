@@ -9,9 +9,10 @@
     "ejs": "~2.3.1",
     "express": "~3.2.4",
     "moment": "^2.11.2",
+    "mongodb": "^2.1.14",
     "qr-image": "~3.1.0",
-    "socket.io": "~0.9.14",
-    "rand-token" : "~0.2.1"
+    "rand-token": "~0.2.1",
+    "socket.io": "~0.9.14"
   },
   "devDependencies": {
     "mocha": "~2.1.0"
