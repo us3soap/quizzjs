@@ -1,11 +1,10 @@
 var http = require('http');
 var path = require('path');
 
-var async = require('async');
 var socketio = require('socket.io');
 var express = require('express');
 var qr = require('qr-image');
-var room = require('room-module');
+var room = require('./quizzjs/room/index.js');
 
 var router = express();
 var server = http.createServer(router);
