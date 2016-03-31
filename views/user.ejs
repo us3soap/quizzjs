@@ -51,6 +51,8 @@
             <button id="reponse3" type="button" onclick="enregistrerRep('reponse3');" class="btn btn btn-warning"></button>
             <button id="reponse4" type="button" onclick="enregistrerRep('reponse4');" class="btn btn btn-danger"></button>
         </div>
+        
+        
         <div id="recapReponse" style="display: none;">
             <ul id="login" class="pages">
                 <li id="li-login" class="login page">
@@ -61,6 +63,7 @@
                 </li>
             </ul>
         </div>
+        
     </div>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
@@ -114,8 +117,8 @@
         });
         
         function enregistrerRep(nameReponse) {
+            $('#command-tool').hide();
             $('#reponseSaisie').html($("#"+nameReponse).html());
-            $('#command-tool').hide("slow");
             $('#recapReponse').show("slow");
             
             socket.emit('recolte-reponse', {token : userToken, 

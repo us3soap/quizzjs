@@ -10,7 +10,7 @@ $(function() {
     var token = $("#token").val();
     var nbUsersMax = $("#nbUsersMax").val();
     var nbQuestions = $("#nbQuestions").val();
-    var tempsParQuestion = 10;
+    var tempsParQuestion = 15;
     
     var socket = io.connect('http://'+ url);
 
@@ -42,7 +42,7 @@ $(function() {
                 eventChrono = setInterval(chrono, 1000 ); //timer mise a jour du chrono.
             });
             
-            setTimeout (function(){$.notify("Attention ! il reste 5 secondes.");}, 5000 );
+            setTimeout (function(){$.notify("Attention ! il reste 5 secondes.");}, ((tempsParQuestion * 1000) - 5000) );
         }
     }    
     
