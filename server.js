@@ -5,6 +5,7 @@ var socketio = require('socket.io');
 var express = require('express');
 var qr = require('qr-image');
 var room = require('./quizzjs/room/index.js');
+var questionnaire = require("./quizzjs/questionnaire/index.js");
 
 var router = express();
 var server = http.createServer(router);
@@ -23,6 +24,8 @@ router.get('/', function(req, res) {
     //Création d'une nouvelle room
     var token = room.newRoom();
     room.getRoom(token).open();
+    questionnaire.loadQuestionnaire(questions, token);
+    
     
     //Parametrage par défaut.
     room.getRoom(token).setMinNbMembers(4);
@@ -72,7 +75,7 @@ router.get('/paramRoom/:tabParam', function(req, res) {
     var token = room.newRoom();
     room.getRoom(token).open();
     room.getRoom(token).setMinNbMembers(tabParam.nbUsersMax);
-     room.getRoom(token).setMaxNbMembers(tabParam.nbUsersMax);
+    room.getRoom(token).setMaxNbMembers(tabParam.nbUsersMax);
      
     res.render('index.ejs', {url: req.headers.host, 
         token: token,
@@ -156,22 +159,17 @@ io.sockets.on('connection', function (socket) {
     
     //socket d'écoute pour renvoyer une question aléa aux clients (index + user).
     socket.on('recup-question', function (data, fn) {
-        var fluxQuestion = fluxQuestionAlea();
+        var fluxQuestion = questionnaire.getQuestionnaire(data["room"]).getFluxQuestionAleatoire();
         socket.broadcast.emit('start-party-users-'+data["room"], fluxQuestion);
         fn(fluxQuestion);
     });
     
     socket.on('recolte-reponse', function (data, fn) {
-        console.log("L'utilisateur " + data["token"] + " a repondu : " + data["reponse"] + " à la question  "+ data["id"]);
-        if(questions.questions[data["id"]].good == data["reponse"]){
-            console.log("L'utilisateur " + data["token"] + " a repondu juste!");
+        if(questionnaire.getQuestionnaire(socket.room).checkResponse(data["id"], data["reponse"])){
             socket.score++;
-            
             socket.broadcast.emit('maj-party-users-'+socket.room, {score : socket.score, 
-                                                                    usertoken : socket.token
-                                                                    });
-        }else{
-            console.log("L'utilisateur " + data["token"] + " a repondu faux!");
+                                                                   usertoken : socket.token
+                                                                   });
         }
         fn(true);
     }); 
@@ -197,15 +195,3 @@ server.listen(process.env.PORT, process.env.IP, function(){
     router.use(express.static(__dirname + '/public'));
     console.log("QuizzJS run to : [", addr.address + ":" + addr.port+"]");
 });
-
-//methode de création du flux "Question" à envoyer aux clients.
-function fluxQuestionAlea() {
-    //recupération du nombre de questions dispo dans le JSON.
-    var nbQuestions = questions.questions.length;
-    //nombre aléatoire pour l'id de la question.
-    var numQuestionRandom = Math.floor((Math.random() * nbQuestions) + 1)-1;
-    console.log("Question n°" + numQuestionRandom + " tirée au hasard");
-    var flux = {idquestion: questions.questions[numQuestionRandom].id, question:questions.questions[numQuestionRandom].question, reponse1:questions.questions[numQuestionRandom].reponse1, reponse2:questions.questions[numQuestionRandom].reponse2, reponse3:questions.questions[numQuestionRandom].reponse3, reponse4:questions.questions[numQuestionRandom].reponse4};
-    reponseQuestionEnCours = questions.questions[numQuestionRandom].good;
-    return flux;
-}
