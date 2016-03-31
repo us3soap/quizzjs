@@ -10,7 +10,7 @@ $(function() {
     var token = $("#token").val();
     var nbUsersMax = $("#nbUsersMax").val();
     var nbQuestions = $("#nbQuestions").val();
-    var tempsParQuestion = 15;
+    var tempsParQuestion = 10;
     
     var socket = io.connect('http://'+ url);
 
@@ -64,11 +64,25 @@ $(function() {
             var i;
             var decount = loop;
             
-            for (i = 0; i < loop; i++) { 
-                setTimeout (function(){$.notify(msg + decount, status);}, i * 1000 );
+            for (i = 0; i < loop; i++) {
+                var messageEntier = msg + decount;
+                setTimeout (onTimeout(msg,decount,status), i * 1000 );
                 decount--;
             }
         }
+    }
+    
+    /**
+     * fonction appelé par le decompte
+     * passage par une autre fonction qui va créer une nouvelle fermeture
+     * @arg String msg : Le message à afficher
+     * @arg String decount : la fin du message
+     * @arg String status : le style à appliquer [success, info, warn, error]
+     **/
+    function onTimeout(msg, decount, status) {
+        return function(){
+                    $.notify(msg + decount, status);
+                };
     }
     
     /**
@@ -207,11 +221,4 @@ $(function() {
     socket.on('maj-party-users-'+token, function(data) {
         $("#badge-"+ data['usertoken']).html(data["score"]);
     });
-    
-    socket.on('add-bonne-reponse', function(data) {
-        alert('ok');
-        alert("badge-"+data["token"]);
-        alert($("#badge-"+data["token"]).html());
-        $("#badge-"+data["token"]).html(parseFloat($("#badge-"+data["token"]).html()) + 1);
-    }); 
 });

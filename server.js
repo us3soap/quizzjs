@@ -156,14 +156,6 @@ io.sockets.on('connection', function (socket) {
     
     //socket d'écoute pour renvoyer une question aléa aux clients (index + user).
     socket.on('recup-question', function (data, fn) {
-        //A chaque nouvelle question on analyse les réponses de la question précédente.
-       /* console.log('tableau non vide ' + Object.keys(tableauReponse).length);
-        if (Object.keys(tableauReponse).length > 0){
-            analyseRéponse(socket);
-            //reset du tableau des réponses.
-            tableauReponse = {};
-        }*/
-        
         var fluxQuestion = fluxQuestionAlea();
         socket.broadcast.emit('start-party-users-'+data["room"], fluxQuestion);
         fn(fluxQuestion);
@@ -196,18 +188,6 @@ io.sockets.on('connection', function (socket) {
             });
         }
     });
-    
-    //methode permettant de comptabiliser les scores.
-/*    function analyseRéponse(socket) {
-        for(var key in tableauReponse) {
-            var value = tableauReponse[key];
-            if (value == reponseQuestionEnCours) {
-                console.log("L'utilisateur " + key + " à la bonne réponse.");
-                socket.broadcast.emit('add-bonne-reponse', {token : key});
-            }
-        }
-        return true;
-    }*/
     
 });
 
