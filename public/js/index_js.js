@@ -10,7 +10,7 @@ $(function() {
     var token = $("#token").val();
     var nbUsersMax = $("#nbUsersMax").val();
     var nbQuestions = $("#nbQuestions").val();
-    var tempsParQuestion = 10;
+    var tempsParQuestion = $("#timerQuestion").val();;
     
     var socket = io.connect('http://'+ url);
 

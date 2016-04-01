@@ -31,7 +31,8 @@ router.get('/', function(req, res) {
                             token: token,
                             nbUsers : room.getRoom(token).getMembers().length,
                             nbUsersMax : room.getRoom(token).getMinNbMembers(),
-                            nbQuestions : 10
+                            nbQuestions : 10,
+                            timerQuestion : 10
     });
 });
 
@@ -55,7 +56,8 @@ router.get('/direct/:token', function(req, res) {
                                     token: req.params.token,
                                     nbUsers : room.getRoom(req.params.token).getMembers().length,
                                     nbUsersMax : room.getRoom(req.params.token).getMinNbMembers(),
-                                    nbQuestions : 10
+                                    nbQuestions : 10,
+                                    timerQuestion : 10
             });
         }
     }
@@ -79,8 +81,8 @@ router.get('/paramRoom/:tabParam', function(req, res) {
         token: token,
         nbUsers : room.getRoom(token).getMembers().length,
         nbUsersMax : tabParam.nbUsersMax,
-        nbQuestions : tabParam.nbQuestions
-
+        nbQuestions : tabParam.nbQuestions,
+        timerQuestion : tabParam.timerQuestion
     });
 });
 

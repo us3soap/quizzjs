@@ -19,6 +19,10 @@
             <input id="nbQuestions" class="usernameInput" type="text" onkeypress="return saisirQueNombre(this, event)"/>
             <br />
             <br />
+            <h3 class="title">Indiquer le temps de réponse autorisé ?</h3>
+            <input id="timerQuestion" class="usernameInput" type="text" onkeypress="return saisirQueNombre(this, event)"/>
+            <br />
+            <br />
             <button id="createRoom" type="button" class="btn btn-primary">Créer le salon</button>
           </div>
         </li>
@@ -44,13 +48,16 @@
             $("#createRoom").click(function() {
                 nbUserSaisi = $("#nbUsersMax").val();
                 nbQuestionsSaisi = $("#nbQuestions").val();
+                timerQuestion = $("#timerQuestion").val();
                 
                 if (!$("#nbUsersMax").val().match(/^[0-9]{1,2}$/)) {
                     $.notify("Veuillez indiquer le nombre de participants.");
                 }else if(!$("#nbQuestions").val().match(/^[0-9]{1,2}$/)){
                     $.notify("Veuillez indiquer le nombre de questions.");
+                }else if(!$("#timerQuestion").val().match(/^[0-9]{1,2}$/)){
+                    $.notify("Veuillez indiquer le temps de réponse autorisé.");
                 }else{
-                    var parametres = {'nbUsersMax': nbUserSaisi, 'nbQuestions' : nbQuestionsSaisi};
+                    var parametres = {'nbUsersMax': nbUserSaisi, 'nbQuestions' : nbQuestionsSaisi, 'timerQuestion' : timerQuestion};
                     document.location="/paramRoom/" + JSON.stringify(parametres);
                 }
             });
