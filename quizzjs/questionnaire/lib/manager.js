@@ -10,7 +10,7 @@ exports.QuestionnaireManager = {
 
 		for(var i=0; i<this.questionnaires.length; i++)
 		{
-			if(this.questionnaires.getToken() == data.token){
+			if(this.questionnaires[i].getToken() == data.token){
 			    return this.questionnaires[i];
 			} 
 				
