@@ -21,11 +21,10 @@ $(function() {
         if (cptQuestion == nbQuestions) {
             clearInterval(eventQuestion);
             clearInterval(eventChrono);
-            //récupération à la fin de la dernière question.
-            setTimeout (function(){
-                socket.emit('afficher-resultat', {room : token}, function (data) {
-                });
-            }, (tempsParQuestion * 1000) );
+            
+            //Afficahge des scores.
+            displayInterface("score");
+            
         } else {
             socket.emit('recup-question', {room : token}, function (data) {
                 clearInterval(eventChrono);
