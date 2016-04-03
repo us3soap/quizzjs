@@ -39,6 +39,7 @@ body {
   -webkit-flex-direction: row;
       -ms-flex-direction: row;
           flex-direction: row; /* affichage horizontal */
+    height: 100%;
 }
 
 .flex-container{
@@ -50,6 +51,7 @@ body {
 
 .btn{
     flex: 1;
+    border-radius: 0;
 }
 
 /* Login Page */
