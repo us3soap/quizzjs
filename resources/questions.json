@@ -24,6 +24,61 @@
             "reponse4": "Les disparus",
             "good": "reponse2",
             "explication": "Lorem ipsum"
+        },
+        {
+            "id": 2,
+            "question": "Dans la trilogie du Seigneur des Anneaux, combien d'aventuriers composent la Communauté de l'Anneau ?",
+            "type": "question",
+            "reponse1": "7",
+            "reponse2": "8",
+            "reponse3": "9",
+            "reponse4": "10",
+            "good": "reponse3",
+            "explication": "La Compagnie de l'Anneau sera de Neuf; et les Neuf Marcheurs seront opposés aux Neuf Cavaliers qui sont mauvais."
+        },
+        {
+            "id": 3,
+            "question": "En quelle année a été commercialisé le premier iPhone ?",
+            "type": "question",
+            "reponse1": "2005",
+            "reponse2": "2006",
+            "reponse3": "2007",
+            "reponse4": "2008",
+            "good": "reponse3",
+            "explication": ""
+        },
+        {
+            "id": 4,
+            "question": "Quelle société a fondé Mark Zuckerberg ?",
+            "type": "question",
+            "reponse1": "Apple",
+            "reponse2": "Microsoft",
+            "reponse3": "Twitter",
+            "reponse4": "Facebook",
+            "good": "reponse4",
+            "explication": ""
+        },
+        {
+            "id": 5,
+            "question": "Que signifie l'acronyme PHP ?",
+            "type": "question",
+            "reponse1": "PHP: Hypertext Preprocessor",
+            "reponse2": "Programing Hypertext Preprocessor",
+            "reponse3": "Plain Hype Progaming",
+            "reponse4": "PHP: High Productivity",
+            "good": "reponse1",
+            "explication": ""
+        },
+        {
+            "id": 6,
+            "question": "Dans le film - culte - Highlander, pourquoi les protagonistes se tranchent la tête ?",
+            "type": "question",
+            "reponse1": "Pour passer le temps",
+            "reponse2": "Pour ne pas se la prendre",
+            "reponse3": "Parce qu'il ne peut en rester qu'un",
+            "reponse4": "Pour économiser des munitions",
+            "good": "reponse1",
+            "explication": ""
         }
     ]
 }
