@@ -10,7 +10,7 @@ $(function() {
     var token = $("#token").val();
     var nbUsersMax = $("#nbUsersMax").val();
     var nbQuestions = $("#nbQuestions").val();
-    var tempsParQuestion = 10;
+    var tempsParQuestion = $("#timerQuestion").val();;
     
     var socket = io.connect('http://'+ url);
 
@@ -21,11 +21,10 @@ $(function() {
         if (cptQuestion == nbQuestions) {
             clearInterval(eventQuestion);
             clearInterval(eventChrono);
-            //récupération à la fin de la dernière question.
-            setTimeout (function(){
-                socket.emit('afficher-resultat', {room : token}, function (data) {
-                });
-            }, (tempsParQuestion * 1000) );
+            
+            //Afficahge des scores.
+            displayInterface("score");
+            
         } else {
             socket.emit('recup-question', {room : token}, function (data) {
                 clearInterval(eventChrono);
