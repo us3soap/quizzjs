@@ -8,8 +8,15 @@
     var UserView = React.createClass({
         displayName: 'UserView',
 
+        getDefaultProps: function () {
+            return {
+                url: '',
+                token: ''
+            };
+        },
         getInitialState: function () {
             return {
+                socket: null,
                 partyStarted: false,
                 userToken: '',
                 pseudo: '',
@@ -20,8 +27,12 @@
         * pose écouteur sur le socket pour démarrer la partie
         */
         componentDidMount: function () {
-            var that = this;
-            this.props.socket.on('start-party-users-' + this.props.token, function (data) {
+            var that = this,
+                _socket = io.connect('http://' + this.props.url);
+
+            this.setState({ socket: _socket });
+
+            _socket.on('start-party-users-' + this.props.token, function (data) {
                 that.setState({ question: data });
                 that.setState({ partyStarted: true });
             });
@@ -39,13 +50,13 @@
         render: function () {
             if (this.state.partyStarted) {
                 return React.createElement(UserPadView, {
-                    socket: this.props.socket,
+                    socket: this.state.socket,
                     userToken: this.state.userToken,
                     pseudo: this.state.pseudo,
                     question: this.state.question });
             } else {
                 return React.createElement(UserLoginView, {
-                    socket: this.props.socket,
+                    socket: this.state.socket,
                     token: this.props.token,
                     loginHandler: this.loginHandler });
             }
@@ -315,9 +326,5 @@
         }
     });
 
-    var url = document.querySelector("#url").value,
-        socket = io.connect('http://' + url),
-        token = document.querySelector("#token").value;
-
-    ReactDOM.render(React.createElement(UserView, { url: url, socket: socket, token: token }), document.querySelector('#user-view'));
+    ReactDOM.render(React.createElement(UserView, { url: GLOBAL.url, token: GLOBAL.token }), document.querySelector('#user-view'));
 })();

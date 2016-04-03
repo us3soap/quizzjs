@@ -7,10 +7,14 @@
     <link rel="stylesheet" href="/css/telephone.css">
 </head>
     <body>
-        <input type="hidden" id="url" value="<%=url%>" />
-        <input type="hidden" id="token" value="<%=room%>" />
-        
         <div id="user-view" class="pages"></div>
+        
+        <script>
+            var GLOBAL = {
+                url : '<%= url %>',
+                token: '<%= room %>',
+            };
+        </script>
         
         <script src="/socket.io/socket.io.js"></script>
         <script src="/js/libs/react.js"></script>

@@ -6,8 +6,15 @@
      * composant principal
      */
     var UserView = React.createClass({
+        getDefaultProps: function () {
+            return {
+                url: '',
+                token: '',                
+            };
+        },
         getInitialState: function () {
             return {
+                socket: null,
                 partyStarted: false,
                 userToken: '',
                 pseudo: '',
@@ -18,8 +25,12 @@
         * pose écouteur sur le socket pour démarrer la partie
         */
         componentDidMount: function () {
-            var that = this;
-            this.props.socket.on('start-party-users-' + this.props.token, function(data) {
+            var that = this,
+                _socket = io.connect('http://'+ this.props.url);
+                
+            this.setState({socket: _socket});
+            
+            _socket.on('start-party-users-' + this.props.token, function(data) {
                  that.setState({question: data});
                  that.setState({partyStarted : true});
             });
@@ -38,7 +49,7 @@
             if (this.state.partyStarted) {
                 return (
                     <UserPadView 
-                        socket={this.props.socket} 
+                        socket={this.state.socket} 
                         userToken={this.state.userToken} 
                         pseudo={this.state.pseudo}
                         question={this.state.question} />
@@ -46,7 +57,7 @@
             } else {
                 return (
                     <UserLoginView 
-                        socket={this.props.socket} 
+                        socket={this.state.socket} 
                         token={this.props.token} 
                         loginHandler={this.loginHandler} />
                 );
@@ -249,13 +260,8 @@
     });
     
     
-    var url    = document.querySelector("#url").value,
-        socket = io.connect('http://'+ url),
-        token  = document.querySelector("#token").value;
-
-    
     ReactDOM.render(
-        <UserView url={url} socket={socket} token={token} />,
+        <UserView url={GLOBAL.url} token={GLOBAL.token} />,
         document.querySelector('#user-view')
     );
     
