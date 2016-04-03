@@ -81,11 +81,10 @@
                     that.props.loginHandler(_userToken, that.state.pseudo);
 
                     that.setState({ msgDebug: _userToken });
+                    that.setState({ alreadyLogged: true });
                 } else {
                     that.setState({ msgInfo: "Désolé, la partie n'est pas accessible." });
                 }
-
-                that.setState({ alreadyLogged: true });
             });
         },
         render: function () {
