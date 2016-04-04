@@ -15,11 +15,13 @@ $(function() {
     });
     
     
+    //Bouton Créer salon
     $("#createRoom").click(function() {
         var nbUserSaisi = $("#nbUsersMax").val();
         var nbQuestionsSaisi = $("#nbQuestions").val();
         var timerQuestion = $("#timerQuestion").val();
         
+        //controle de surface, return "" si pas d'erreur.
         var messageErreur = controleDeSurface();
         
         if (messageErreur != "") {
@@ -31,11 +33,13 @@ $(function() {
     });
     
     
+    //bouton Ajouter une question
     $("#createQuestion").click(function() {
         $("#ajoutQuestion").append(recupDivAjoutQuestion());
     });
     
     
+    //bouton Supprimer dernière question.
     $("#deleteQuestion").click(function() {
         $("#divQuestion" + cptQuestion).remove();
         cptQuestion--;
@@ -46,6 +50,7 @@ $(function() {
     
     
     /** Fonctions **/
+    //Recupère l'html à injecter pour ajouter une question.
     function recupDivAjoutQuestion() {
         cptQuestion++;
         if (cptQuestion > 0 ) {
@@ -62,9 +67,11 @@ $(function() {
                             + "</div>";
     }
     
+    //Récupère l'ensemble des messages d'erreurs.
     function controleDeSurface() {
         var erreur = "";
         
+        //verif des 3 champs number
         if (!$("#nbUsersMax").val().match(/^[0-9]{1,2}$/)) {
             erreur += "Veuillez indiquer le nombre de participants.\n";
         }
