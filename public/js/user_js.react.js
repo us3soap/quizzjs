@@ -239,16 +239,20 @@
                     if (this.state.showRecapReponse) {
                         return React.createElement(
                             'div',
-                            null,
+                            { className: 'recap-wrapper' },
                             React.createElement(
-                                'h3',
+                                'div',
                                 null,
-                                'Vous avez répondu :'
-                            ),
-                            React.createElement(
-                                'h3',
-                                null,
-                                this.state.reponseDonneeText
+                                React.createElement(
+                                    'h3',
+                                    null,
+                                    'Vous avez répondu :'
+                                ),
+                                React.createElement(
+                                    'h3',
+                                    null,
+                                    this.state.reponseDonneeText
+                                )
                             )
                         );
                     }

@@ -206,9 +206,11 @@
                         (() => {
                             if (this.state.showRecapReponse) {
                                 return (
-                                    <div>
-                                        <h3>Vous avez répondu :</h3>
-                                        <h3>{this.state.reponseDonneeText}</h3>
+                                    <div className="recap-wrapper">
+                                        <div>
+                                            <h3>Vous avez répondu :</h3>
+                                            <h3>{this.state.reponseDonneeText}</h3>
+                                        </div>
                                     </div>
                                 );
                             }
