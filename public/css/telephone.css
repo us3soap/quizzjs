@@ -13,14 +13,52 @@ input,textarea {
 html, body {
     margin: 0;
     height: 100%;    
+    font-family: sans-serif;
 }
 
-
-.wrapper {
+.login-wrapper {
     height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+.login-form button{
+    font-size: 20px;
+    width: 80%;
+    border: none;
+    height: 50px;
+    margin-top: 20px;
+    background-color: #8BB600;
+    color: #fff;
+}
+
+.login-form button:active{opacity: .8;}
+
+.login-form input[type='text']{
+    width: 80%;
+    font-size: 20px;
+    padding: 10px;
+    text-align: center;
 }
 
 /* login form */
+#user-view{height: 100%;}
+
+#user-view .wrapper{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
 
 
 /* pad */
@@ -36,7 +74,6 @@ html, body {
     align-items: center;
     justify-content: center;
     color: #FFF;
-    font-family: sans-serif;
     font-size: 18px;
 }
 

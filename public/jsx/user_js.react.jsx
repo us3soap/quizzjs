@@ -101,7 +101,8 @@
         render: function () {
             if (this.state.alreadyLogged === false) {
                 return (
-                    <div className="wrapper">
+                    <div className="login-wrapper">
+                        <div className="login-form">
                             <h3>Quel est votre pseudo?</h3>
                             <input 
                                 type="text"
@@ -111,11 +112,10 @@
                                 onChange={this.pseudoOnChange}
                                 value={this.state.pseudo}
                             />
-                            <button 
-                                type="button"
-                                onClick={this.beginOnClick} >
+                            <button onClick={this.beginOnClick}>
                                 Commencer à jouer
                             </button>
+                        </div>
                     </div>
                 );                
             } else {

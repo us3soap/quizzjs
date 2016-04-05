@@ -102,26 +102,28 @@
             if (this.state.alreadyLogged === false) {
                 return React.createElement(
                     'div',
-                    { className: 'wrapper' },
+                    { className: 'login-wrapper' },
                     React.createElement(
-                        'h3',
-                        null,
-                        'Quel est votre pseudo?'
-                    ),
-                    React.createElement('input', {
-                        type: 'text',
-                        maxLength: '14',
-                        autoComplete: 'off',
-                        autoFocus: 'true',
-                        onChange: this.pseudoOnChange,
-                        value: this.state.pseudo
-                    }),
-                    React.createElement(
-                        'button',
-                        {
-                            type: 'button',
-                            onClick: this.beginOnClick },
-                        'Commencer à jouer'
+                        'div',
+                        { className: 'login-form' },
+                        React.createElement(
+                            'h3',
+                            null,
+                            'Quel est votre pseudo?'
+                        ),
+                        React.createElement('input', {
+                            type: 'text',
+                            maxLength: '14',
+                            autoComplete: 'off',
+                            autoFocus: 'true',
+                            onChange: this.pseudoOnChange,
+                            value: this.state.pseudo
+                        }),
+                        React.createElement(
+                            'button',
+                            { onClick: this.beginOnClick },
+                            'Commencer à jouer'
+                        )
                     )
                 );
             } else {
