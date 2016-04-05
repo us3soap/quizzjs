@@ -1,141 +1,48 @@
-@media (max-width: @screen-xs-min) {
-  .modal-xs { width: @modal-sm; }
-}
-
-/* Layout */
-
-html {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Decoration */
-
-body {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex; /* crée un contexte flex pour ses enfants */
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column; /* affichage vertical */
-  min-height: 100vh; /* toute la hauteur du viewport (compatible IE9+) */
-}
-
-.wrapper {
-  display: block; /* IE fix */
-  -webkit-box-flex: 1;
-  -webkit-flex: 1 1 auto;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto; /* occupe la hauteur restante */
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex; /* crée un contexte flex pour ses enfants */
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row; /* affichage horizontal */
-    height: 100%;
-}
-
-.flex-container{
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-}
-
-.btn{
-    flex: 1;
-    border-radius: 0;
-}
-
-/* Login Page */
-
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-html {
-  font-weight: 300;
-  -webkit-font-smoothing: antialiased;
-}
-
-html, input {
-  font-family:
-    "HelveticaNeue-Light",
-    "Helvetica Neue Light",
-    "Helvetica Neue",
-    Helvetica,
-    Arial,
-    "Lucida Grande",
-    sans-serif;
+input,textarea {
+    -webkit-touch-callout: default !important;
+    -webkit-user-select: text !important;
 }
 
 html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    height: 100%;    
 }
 
-ul {
-  list-style: none;
-  word-wrap: break-word;
+
+.wrapper {
+    height: 100%;
 }
 
-/* Pages */
+/* login form */
 
-.pages {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  width: 100%;
+
+/* pad */
+.btn-wrapper{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-.page {
-  height: 100%;
-  position: absolute;
-  width: 100%;
+.btn-wrapper .btn{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    color: #FFF;
+    font-family: sans-serif;
+    font-size: 18px;
 }
 
-.login.page {
-  background-color: #000;
-}
+.btn-wrapper .btn:active{opacity: .8;}
 
-.login.page .form {
-  height: 100px;
-  margin-top: -100px;
-  position: absolute;
-
-  text-align: center;
-  top: 50%;
-  width: 100%;
-}
-
-.login.page .form .usernameInput {
-  background-color: transparent;
-  border: none;
-  border-bottom: 2px solid #fff;
-  outline: none;
-  padding-bottom: 15px;
-  text-align: center;
-  width: 400px;
-}
-
-.login.page .title {
-  font-size: 200%;
-}
-
-.login.page .usernameInput {
-  font-size: 200%;
-  letter-spacing: 3px;
-}
-
-.login.page .title, .login.page .usernameInput {
-  color: #fff;
-  font-weight: 100;
-}
+.btn-wrapper .btn:first-child{background-color: #8BB600;}
+.btn-wrapper .btn:nth-child(2){background-color: #D1167B;}
+.btn-wrapper .btn:nth-child(3){background-color: #F6BA00;}
+.btn-wrapper .btn:nth-child(4){background-color: #00A3E7;}

@@ -101,67 +101,47 @@
         render: function () {
             if (this.state.alreadyLogged === false) {
                 return React.createElement(
-                    'ul',
-                    { className: 'pages' },
+                    'div',
+                    { className: 'wrapper' },
                     React.createElement(
-                        'li',
-                        { className: 'login page' },
-                        React.createElement(
-                            'div',
-                            { className: 'form' },
-                            React.createElement(
-                                'h3',
-                                { className: 'title' },
-                                'Quel est votre pseudo?'
-                            ),
-                            React.createElement('input', {
-                                className: 'usernameInput',
-                                type: 'text',
-                                maxLength: '14',
-                                autoComplete: 'off',
-                                autoFocus: 'true',
-                                onChange: this.pseudoOnChange,
-                                value: this.state.pseudo
-                            }),
-                            React.createElement('br', null),
-                            React.createElement('br', null),
-                            React.createElement(
-                                'button',
-                                {
-                                    type: 'button',
-                                    className: 'btn btn-primary',
-                                    onClick: this.beginOnClick },
-                                'Commencer à jouer'
-                            )
-                        )
+                        'h3',
+                        null,
+                        'Quel est votre pseudo?'
+                    ),
+                    React.createElement('input', {
+                        type: 'text',
+                        maxLength: '14',
+                        autoComplete: 'off',
+                        autoFocus: 'true',
+                        onChange: this.pseudoOnChange,
+                        value: this.state.pseudo
+                    }),
+                    React.createElement(
+                        'button',
+                        {
+                            type: 'button',
+                            onClick: this.beginOnClick },
+                        'Commencer à jouer'
                     )
                 );
             } else {
                 return React.createElement(
-                    'ul',
-                    { className: 'pages' },
+                    'div',
+                    { className: 'wrapper' },
                     React.createElement(
-                        'li',
-                        { className: 'login page' },
-                        React.createElement(
-                            'div',
-                            { className: 'form' },
-                            React.createElement(
-                                'h3',
-                                { className: 'title' },
-                                this.state.pseudo
-                            ),
-                            React.createElement(
-                                'div',
-                                null,
-                                this.state.msgInfo
-                            ),
-                            React.createElement(
-                                'div',
-                                null,
-                                this.state.msgDebug
-                            )
-                        )
+                        'h3',
+                        null,
+                        this.state.pseudo
+                    ),
+                    React.createElement(
+                        'div',
+                        null,
+                        this.state.msgInfo
+                    ),
+                    React.createElement(
+                        'div',
+                        null,
+                        this.state.msgDebug
                     )
                 );
             }
@@ -214,41 +194,10 @@
                 (() => {
                     if (this.state.showModalInfo) {
                         return React.createElement(
-                            'div',
-                            { id: 'modalInfo', tabIndex: '-1', role: 'dialog', ariaLabelledby: 'myModalLabel', ariaHidden: 'true' },
-                            React.createElement(
-                                'div',
-                                { className: 'modal-dialog' },
-                                React.createElement(
-                                    'div',
-                                    { className: 'modal-content' },
-                                    React.createElement(
-                                        'div',
-                                        { className: 'modal-header' },
-                                        React.createElement(
-                                            'button',
-                                            { type: 'button', className: 'close', dataDismiss: 'modal', ariaLabel: 'Close' },
-                                            React.createElement(
-                                                'span',
-                                                { ariaHidden: 'true' },
-                                                '×'
-                                            )
-                                        ),
-                                        React.createElement(
-                                            'h4',
-                                            { id: 'info-header', className: 'modal-title', id: 'myModalLabel' },
-                                            'Bienvenue ',
-                                            this.props.pseudo
-                                        )
-                                    ),
-                                    React.createElement(
-                                        'div',
-                                        { className: 'modal-body' },
-                                        React.createElement('div', { id: 'info-content' }),
-                                        React.createElement('div', { id: 'info-debug' })
-                                    )
-                                )
-                            )
+                            'h4',
+                            null,
+                            'Bienvenue ',
+                            this.props.pseudo
                         );
                     }
                 })(),
@@ -256,37 +205,25 @@
                     if (this.state.showCommandTool) {
                         return React.createElement(
                             'div',
-                            { id: 'command-tool', className: 'flex-container' },
+                            { className: 'btn-wrapper' },
                             React.createElement(
-                                'button',
-                                {
-                                    type: 'button',
-                                    className: 'btn btn-success',
-                                    onClick: this.reponseOnclick.bind(this, 1) },
+                                'div',
+                                { className: 'btn', onClick: this.reponseOnclick.bind(this, 1) },
                                 this.props.question.reponse1
                             ),
                             React.createElement(
-                                'button',
-                                {
-                                    type: 'button',
-                                    className: 'btn btn-info',
-                                    onClick: this.reponseOnclick.bind(this, 2) },
+                                'div',
+                                { className: 'btn', onClick: this.reponseOnclick.bind(this, 2) },
                                 this.props.question.reponse2
                             ),
                             React.createElement(
-                                'button',
-                                {
-                                    type: 'button',
-                                    className: 'btn btn btn-warning',
-                                    onClick: this.reponseOnclick.bind(this, 3) },
+                                'div',
+                                { className: 'btn', onClick: this.reponseOnclick.bind(this, 3) },
                                 this.props.question.reponse3
                             ),
                             React.createElement(
-                                'button',
-                                {
-                                    type: 'button',
-                                    className: 'btn btn btn-danger',
-                                    onClick: this.reponseOnclick.bind(this, 4) },
+                                'div',
+                                { className: 'btn', onClick: this.reponseOnclick.bind(this, 4) },
                                 this.props.question.reponse4
                             )
                         );
@@ -296,28 +233,16 @@
                     if (this.state.showRecapReponse) {
                         return React.createElement(
                             'div',
-                            { id: 'recapReponse' },
+                            null,
                             React.createElement(
-                                'ul',
-                                { id: 'login', className: 'pages' },
-                                React.createElement(
-                                    'li',
-                                    { id: 'li-login', className: 'login page' },
-                                    React.createElement(
-                                        'div',
-                                        { className: 'form' },
-                                        React.createElement(
-                                            'h3',
-                                            { className: 'title' },
-                                            'Vous avez répondu :'
-                                        ),
-                                        React.createElement(
-                                            'h3',
-                                            { className: 'title' },
-                                            this.state.reponseDonneeText
-                                        )
-                                    )
-                                )
+                                'h3',
+                                null,
+                                'Vous avez répondu :'
+                            ),
+                            React.createElement(
+                                'h3',
+                                null,
+                                this.state.reponseDonneeText
                             )
                         );
                     }
