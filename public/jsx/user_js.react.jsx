@@ -120,10 +120,12 @@
                 );                
             } else {
                 return (
-                    <div className="wrapper">
-                        <h3>{this.state.pseudo}</h3>
-                        <div>{this.state.msgInfo}</div>
-                        <div>{this.state.msgDebug}</div>
+                    <div className="login-wrapper">
+                        <div>
+                            <h3>{this.state.pseudo}</h3>
+                            <div>{this.state.msgInfo}</div>
+                            <div>{this.state.msgDebug}</div>
+                        </div>
                     </div>
                 );
             }
@@ -174,7 +176,7 @@
         },
         render: function () {
             return (
-                <div className="wrapper">
+                <div className="pad-wrapper">
                     {
                        (() => {
                             if (this.state.showModalInfo) {

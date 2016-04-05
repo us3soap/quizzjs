@@ -129,21 +129,25 @@
             } else {
                 return React.createElement(
                     'div',
-                    { className: 'wrapper' },
-                    React.createElement(
-                        'h3',
-                        null,
-                        this.state.pseudo
-                    ),
+                    { className: 'login-wrapper' },
                     React.createElement(
                         'div',
                         null,
-                        this.state.msgInfo
-                    ),
-                    React.createElement(
-                        'div',
-                        null,
-                        this.state.msgDebug
+                        React.createElement(
+                            'h3',
+                            null,
+                            this.state.pseudo
+                        ),
+                        React.createElement(
+                            'div',
+                            null,
+                            this.state.msgInfo
+                        ),
+                        React.createElement(
+                            'div',
+                            null,
+                            this.state.msgDebug
+                        )
                     )
                 );
             }
@@ -192,7 +196,7 @@
         render: function () {
             return React.createElement(
                 'div',
-                { className: 'wrapper' },
+                { className: 'pad-wrapper' },
                 (() => {
                     if (this.state.showModalInfo) {
                         return React.createElement(

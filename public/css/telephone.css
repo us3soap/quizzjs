@@ -16,6 +16,9 @@ html, body {
     font-family: sans-serif;
 }
 
+#user-view{height: 100%;}
+
+/* login form */
 .login-wrapper {
     height: 100%;
     display: flex;
@@ -49,19 +52,12 @@ html, body {
     text-align: center;
 }
 
-/* login form */
-#user-view{height: 100%;}
-
-#user-view .wrapper{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-
 
 
 /* pad */
+
+.pad-wrapper{height: 100%;}
+
 .btn-wrapper{
     height: 100%;
     display: flex;
