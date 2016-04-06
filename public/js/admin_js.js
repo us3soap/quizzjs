@@ -1,7 +1,7 @@
 $(function() {
 
     var cptQuestion = 0;
-    
+
     /** Events **/
     //Methode permettant de saisir seulement des nombres
     $("#nbUsersMax,#nbQuestions,#timerQuestion").keypress(function(event) {
@@ -56,15 +56,18 @@ $(function() {
         if (cptQuestion > 0 ) {
             $("#deleteQuestion").show();
         }
-        return "<div id=\"divQuestion" + cptQuestion + "\">"
-                            + "</br>"
-                            + "<textarea id=\"question_" + cptQuestion +"\" placeholder=\"Question\" style=\"width: 456px; height: 66px;text-align: center;\"></textarea></br></br>"
-                            + "<input id=\"reponse1_" + cptQuestion +"\" type=\"text\" placeholder=\"Reponse1\" style=\"text-align: center;\" />"
-                            + "<input id=\"reponse2_" + cptQuestion +"\" type=\"text\" placeholder=\"Reponse2\" style=\"text-align: center;\" /> </br></br>"
-                            + "<input id=\"reponse3_" + cptQuestion +"\" type=\"text\" placeholder=\"Reponse3\" style=\"text-align: center;\" />"
-                            + "<input id=\"reponse4_" + cptQuestion +"\" type=\"text\" placeholder=\"Reponse4\" style=\"text-align: center;\" /> </br></br>"
-                            + "<textarea id=\"explication_" + cptQuestion +"\" placeholder=\"Explication\" style=\"width: 456px; height: 44px;text-align: center;\"></textarea></br></br>"
-                            + "</div>";
+        return "<div id=\"divQuestion" + cptQuestion + "\"></br>"
+                    + "<textarea id=\"question_" + cptQuestion +"\" placeholder=\"Question\" style=\"width: 456px; height: 66px;text-align: center;\"></textarea></br></br>"
+                    + "<input id=\"reponse1_" + cptQuestion +"\" type=\"text\" placeholder=\"Réponse 1\" style=\"text-align: center;\" />"
+                        + "<input type=\"checkbox\" id=\"bonne_reponse_reponse1_" + cptQuestion + "\" />"
+                    + "<input id=\"reponse2_" + cptQuestion +"\" type=\"text\" placeholder=\"Réponse 2\" style=\"text-align: center;\" />"
+                        + "<input type=\"checkbox\" id=\"bonne_reponse_reponse2_" + cptQuestion + "\"></br></br>"
+                    + "<input id=\"reponse3_" + cptQuestion +"\" type=\"text\" placeholder=\"Réponse 3\" style=\"text-align: center;\" />"
+                        + "<input type=\"checkbox\" id=\"bonne_reponse_reponse3_" + cptQuestion + "\">"
+                    + "<input id=\"reponse4_" + cptQuestion +"\" type=\"text\" placeholder=\"Réponse 4\" style=\"text-align: center;\" />"
+                        + "<input type=\"checkbox\" id=\"bonne_reponse_reponse4_" + cptQuestion + "\"></br></br>"
+                    + "<textarea id=\"explication_" + cptQuestion +"\" placeholder=\"Explication\" style=\"width: 456px; height: 44px;text-align: center;\"></textarea></br></br>"
+                + "</div>";
     }
     
     //Récupère l'ensemble des messages d'erreurs.
@@ -88,16 +91,16 @@ $(function() {
                 erreur += "Veuillez indiquer la question " + i + "\n";
             }
             if ($("#reponse1_" + i).val() == "") {
-                erreur += "Veuillez indiquer la reponse 1 de la question " + i + "\n";
+                erreur += "Veuillez indiquer la reponse 1 à la question " + i + "\n";
             }
             if ($("#reponse2_" + i).val() == "") {
-                erreur += "Veuillez indiquer la reponse 2 de la question " + i + "\n";
+                erreur += "Veuillez indiquer la reponse 2 à la question " + i + "\n";
             }
             if ($("#reponse3_" + i).val() == "") {
-                erreur += "Veuillez indiquer la reponse 3 de la question " + i + "\n";
+                erreur += "Veuillez indiquer la reponse 3 à la question " + i + "\n";
             }
             if ($("#reponse4_" + i).val() == "") {
-                erreur += "Veuillez indiquer la reponse 4 de la question " + i + "\n";
+                erreur += "Veuillez indiquer la reponse 4 à la question " + i + "\n";
             }
             if ($("#explication_" + i).val() == "") {
                 erreur += "Veuillez indiquer l'explication de la question " + i + "\n";
@@ -106,4 +109,8 @@ $(function() {
         
         return erreur;
     }
+    
+    $('input:checkbox[id^="bonne_reponse_"]').click(function() {
+       alert("toto");
+    });
 });
