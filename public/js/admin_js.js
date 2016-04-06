@@ -59,13 +59,13 @@ $(function() {
         return "<div id=\"divQuestion" + cptQuestion + "\"></br>"
                     + "<textarea id=\"question_" + cptQuestion +"\" placeholder=\"Question\" style=\"width: 456px; height: 66px;text-align: center;\"></textarea></br></br>"
                     + "<input id=\"reponse1_" + cptQuestion +"\" type=\"text\" placeholder=\"Réponse 1\" style=\"text-align: center;\" />"
-                        + "<input type=\"checkbox\" id=\"bonne_reponse_reponse1_" + cptQuestion + "\" />"
+                        + "<input name=\"reponseQuestion_" + cptQuestion + "\" type=\"radio\" id=\"bonne_reponse_reponse1_" + cptQuestion + "\" />"
                     + "<input id=\"reponse2_" + cptQuestion +"\" type=\"text\" placeholder=\"Réponse 2\" style=\"text-align: center;\" />"
-                        + "<input type=\"checkbox\" id=\"bonne_reponse_reponse2_" + cptQuestion + "\"></br></br>"
+                        + "<input name=\"reponseQuestion_" + cptQuestion + "\" type=\"radio\" id=\"bonne_reponse_reponse2_" + cptQuestion + "\"></br></br>"
                     + "<input id=\"reponse3_" + cptQuestion +"\" type=\"text\" placeholder=\"Réponse 3\" style=\"text-align: center;\" />"
-                        + "<input type=\"checkbox\" id=\"bonne_reponse_reponse3_" + cptQuestion + "\">"
+                        + "<input name=\"reponseQuestion_" + cptQuestion + "\" type=\"radio\" id=\"bonne_reponse_reponse3_" + cptQuestion + "\">"
                     + "<input id=\"reponse4_" + cptQuestion +"\" type=\"text\" placeholder=\"Réponse 4\" style=\"text-align: center;\" />"
-                        + "<input type=\"checkbox\" id=\"bonne_reponse_reponse4_" + cptQuestion + "\"></br></br>"
+                        + "<input name=\"reponseQuestion_" + cptQuestion + "\" type=\"radio\" id=\"bonne_reponse_reponse4_" + cptQuestion + "\"></br></br>"
                     + "<textarea id=\"explication_" + cptQuestion +"\" placeholder=\"Explication\" style=\"width: 456px; height: 44px;text-align: center;\"></textarea></br></br>"
                 + "</div>";
     }
