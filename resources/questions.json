@@ -79,7 +79,7 @@
             "reponse4": "Pour économiser des munitions",
             "good": "reponse1",
             "explication": ""
-        }
+        },
         {
             "id": 7,
             "question": "Qui était le premier président de la république ?",
@@ -90,7 +90,7 @@
             "reponse4": "Louis-Napoléon Bonaparte",
             "good": "reponse4",
             "explication": ""
-        }
+        },
         {
             "id": 8,
             "question": "En quelle année le film Bambi est-il sorti ?",
@@ -101,7 +101,7 @@
             "reponse4": "1970",
             "good": "reponse1",
             "explication": ""
-        }
+        },
         {
             "id": 9,
             "question": "Quel est le titre anglais de Cendrillon ?",
@@ -112,7 +112,7 @@
             "reponse4": "Snow White and the Seven Dwarfs",
             "good": "reponse3",
             "explication": ""
-        }
+        },
         {
             "id": 10,
             "question": "Dans Le Roi Lion, que veut dire \"Hakuna matata\" (en langue swahilie) ?",
@@ -123,7 +123,7 @@
             "reponse4": "Toujours bien",
             "good": "reponse3",
             "explication": ""
-        }
+        },
         {
             "id": 11,
             "question": "Qu’est-ce que la triskaïdekaphobie ?",
@@ -134,7 +134,7 @@
             "reponse4": "La peur d’avoir peur",
             "good": "reponse2",
             "explication": ""
-        }
+        },
         {
             "id": 12,
             "question": "Comment appelle-t-on la peur de la mort ?",
@@ -145,7 +145,7 @@
             "reponse4": "L’entomophobie",
             "good": "reponse1",
             "explication": ""
-        }
+        },
         {
             "id": 13,
             "question": "Quel est le pourcentage estimé de gens qui souffrent de phobies ?",
@@ -156,7 +156,7 @@
             "reponse4": "45 à 65 % de la population",
             "good": "reponse1",
             "explication": ""
-        }
+        },
         {
             "id": 14,
             "question": "Lequel de ces animaux trompette ?",
@@ -167,7 +167,7 @@
             "reponse4": "Le martin pêcheur",
             "good": "reponse2",
             "explication": ""
-        }
+        },
         {
             "id": 15,
             "question": "Quel animal grince ?",
@@ -178,7 +178,7 @@
             "reponse4": "Le blaireau",
             "good": "reponse2",
             "explication": ""
-        }
+        },
         {
             "id": 16,
             "question": "Lequel de ces animaux ricane ?",
@@ -189,7 +189,7 @@
             "reponse4": "La blonde",
             "good": "reponse1",
             "explication": ""
-        }
+        },
         {
             "id": 17,
             "question": "Quelle est l’orthographe correcte ?",
@@ -200,7 +200,7 @@
             "reponse4": "Aucun des 3",
             "good": "reponse3",
             "explication": ""
-        }
+        },
         {
             "id": 18,
             "question": "Quelle est l’orthographe correcte ?",
@@ -211,7 +211,7 @@
             "reponse4": "Aucun des 3",
             "good": "reponse3",
             "explication": ""
-        }
+        },
         {
             "id": 19,
             "question": "Qui a dit \"Le cœur a ses raisons que la raison ne connaît point\" ?",
@@ -222,7 +222,7 @@
             "reponse4": "Molière",
             "good": "reponse3",
             "explication": ""
-        }
+        },
         {
             "id": 20,
             "question": "Qui a dit \"Tout ce que je sais, c’est que je ne sais rien\" ?",
@@ -233,7 +233,7 @@
             "reponse4": "Voltaire",
             "good": "reponse3",
             "explication": ""
-        }
+        },
         {
             "id": 21,
             "question": "Quelle est la capitale du Danemark ?",
@@ -244,7 +244,7 @@
             "reponse4": "Helsinki",
             "good": "reponse1",
             "explication": ""
-        }
+        },
         {
             "id": 22,
             "question": "Quelle est la capitale de l’Irlande ?",
@@ -255,7 +255,7 @@
             "reponse4": "Cardiff",
             "good": "reponse3",
             "explication": ""
-        }
+        },
         {
             "id": 23,
             "question": "Dans le corps d’un adulte il y a une quantité de sang égale en moyenne à :",
@@ -266,7 +266,7 @@
             "reponse4": "11/12 litres",
             "good": "reponse2",
             "explication": ""
-        }
+        },
         {
             "id": 24,
             "question": "Quelle est la somme des angles d’un triangle ?",
@@ -277,7 +277,7 @@
             "reponse4": "360°",
             "good": "reponse2",
             "explication": ""
-        }
+        },
         {
             "id": 25,
             "question": "À combien de secondes correspondent 1 heure et 10 minutes ?",
@@ -288,7 +288,7 @@
             "reponse4": "3700",
             "good": "reponse1",
             "explication": ""
-        }
+        },
         {
             "id": 26,
             "question": "À combien est égal 10 puissance -3 ?",
@@ -299,7 +299,7 @@
             "reponse4": "0,01",
             "good": "reponse2",
             "explication": "10 puissance n, il y a n décimales."
-        }
+        },
         {
             "id": 27,
             "question": "Quel est le nom du théorème suivant : \"dans un triangle rectangle, le carré de l’hypoténuse est égal à la somme des carrés des deux autres côtés\" ?",
@@ -310,7 +310,7 @@
             "reponse4": "Théorème de Thalès",
             "good": "reponse3",
             "explication": ""
-        }
+        },
         {
             "id": 28,
             "question": "Quel est le plus important festival européen de bande dessinée ?",
@@ -321,7 +321,7 @@
             "reponse4": "Le festival d’Angoulême (France)",
             "good": "reponse4",
             "explication": ""
-        }
+        },
         {
             "id": 29,
             "question": "Quel est le vrai nom de Batman ?",
@@ -332,7 +332,7 @@
             "reponse4": "Tony Stark",
             "good": "reponse1",
             "explication": ""
-        }
+        },
         {
             "id": 30,
             "question": "De quelle race de chiens est Milou, le chien de Tintin ?",
