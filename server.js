@@ -70,6 +70,11 @@ router.get('/paramRoom/:tabParam', function(req, res) {
     console.log("nbUsersMax : " + tabParam.nbUsersMax);
     console.log("nbQuestions : " + tabParam.nbQuestions);
     
+    console.log("nbNouvellesQuestions : " + tabParam.nbNouvellesQuestions);
+    console.log("NouvellesQuestions JSON : " + tabParam.nouvellesQuestions);
+    var tabNouvellesQuestions = JSON.parse(tabParam.nouvellesQuestions);
+    console.log("Question 1 : " + tabNouvellesQuestions.question1);
+    
     //Création d'une nouvelle room
     var token = room.newRoom();
     questionnaire.loadQuestionnaire(questions, token);
