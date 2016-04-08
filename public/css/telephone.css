@@ -26,6 +26,8 @@ html, body {
     align-items: center;
 }
 
+.login-wrapper h3{text-align: center;}
+
 .login-form{
     display: flex;
     flex-direction: column;
@@ -75,14 +77,16 @@ html, body {
 
 .btn-wrapper .btn:active{opacity: .8;}
 
-.btn-wrapper .btn:first-child{background-color: #8BB600;}
-.btn-wrapper .btn:nth-child(2){background-color: #D1167B;}
-.btn-wrapper .btn:nth-child(3){background-color: #F6BA00;}
-.btn-wrapper .btn:nth-child(4){background-color: #00A3E7;}
+.btn-wrapper .btn:first-child{background-color: #69B854;}
+.btn-wrapper .btn:nth-child(2){background-color: #6AC0E0;}
+.btn-wrapper .btn:nth-child(3){background-color: #EBAD41;}
+.btn-wrapper .btn:nth-child(4){background-color: #D1534C;}
 
 .recap-wrapper{
     display: flex;
-    flex-direction: column;
     width: 100%;
+    height: 100%;
     align-items: center;
+    justify-content: center;
+    text-align: center;
 }

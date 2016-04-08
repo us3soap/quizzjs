@@ -122,7 +122,7 @@
                 return (
                     <div className="login-wrapper">
                         <div>
-                            <h3>{this.state.pseudo}</h3>
+                            <h3>Bienvenue {this.state.pseudo}</h3>
                             <div>{this.state.msgInfo}</div>
                             <div>{this.state.msgDebug}</div>
                         </div>

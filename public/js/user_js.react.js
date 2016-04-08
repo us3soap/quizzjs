@@ -136,6 +136,7 @@
                         React.createElement(
                             'h3',
                             null,
+                            'Bienvenue ',
                             this.state.pseudo
                         ),
                         React.createElement(
