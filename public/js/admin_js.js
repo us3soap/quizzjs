@@ -115,6 +115,8 @@ $(function() {
         return erreur;
     }
     
+    
+    //retourne le flux (String) a envoyer au server.js
     function recupFluxNouvellesQuestions() {
         var flux = '{';
         
