@@ -32,9 +32,10 @@
 
         .player{
             height: 100px;
-            width: 90px;
+            width: 140px;
             background-image: url(img/player.png);
             background-repeat: no-repeat;
+            background-position: top;
             position: relative;
         }
 
@@ -130,18 +131,6 @@ display: none;
 <body>
     <div class="content">
         <div class="players">
-            <div class="player">
-                <div class="pseudo">attente</div>
-            </div>
-            <div class="player">
-                <div class="pseudo">attente</div>
-            </div>
-            <div class="player">
-                <div class="pseudo">attente</div>
-            </div>
-            <div class="player">
-                <div class="pseudo">attente</div>
-            </div>
         </div>
         <div class="instruction">
             Scanne ce QR Code pour rejoindre la partie
@@ -160,12 +149,12 @@ display: none;
             </div>
             <div class="reponses">
                 <div class="reponses-row">
-                    <div class="reponse">reponse 1</div>
-                    <div class="reponse">reponse 2</div>
+                    <div class="reponse" id="reponse1">reponse 1</div>
+                    <div class="reponse" id="reponse2">reponse 2</div>
                 </div>
                 <div class="reponses-row">
-                    <div class="reponse">reponse 3</div>
-                    <div class="reponse">reponse 4</div>
+                    <div class="reponse" id="reponse3">reponse 3</div>
+                    <div class="reponse" id="reponse4">reponse 4</div>
                 </div>
             </div>
         </div>
@@ -185,15 +174,28 @@ display: none;
     <script>
         (function () {
             var $players = document.querySelector('.players'),
-                $questionWrapper = document.querySelector('.question-wrapper'),
                 $instruction = document.querySelector('.instruction'),
-                $howto = document.querySelector('.howto');
+                $howto = document.querySelector('.howto'),
+                $questionWrapper = document.querySelector('.question-wrapper'),
+                $question = $questionWrapper.querySelector('.question'),
+                $reponse1 = $questionWrapper.querySelector('#reponse1'),
+                $reponse2 = $questionWrapper.querySelector('#reponse2'),
+                $reponse3 = $questionWrapper.querySelector('#reponse3'),
+                $reponse4 = $questionWrapper.querySelector('#reponse4');
             
             var cptQuestion = 0,
                 eventQuestion = null,
                 eventChrono = null;
             
             var socket = io.connect('http://'+ GLOBAL.url);
+           
+            // ajout des emplacements des joueurs
+            var playerAvatars = '';
+            for( var i = 0; i < GLOBAL.nbUsersMax; i++) {
+                playerAvatars += '<div class="player"><div class="pseudo">attente</div></div>';
+            }
+           
+            $players.innerHTML = playerAvatars;
            
             /**
             * Function permettant l'ajout d'un joueur.
@@ -242,7 +244,7 @@ display: none;
              * @arg String la vue à atteindre [wait -> transition -> play -> score]
              **/
             function displayInterface(view){
-                console.log('displayInterface');
+                console.log('displayInterface, view = ' + view);
                 // if(view == "wait"){
                 //     $("#qr-code").show("slow");
                 //     $("#listeUser").show("slow");
@@ -260,6 +262,26 @@ display: none;
                 // } else {
                 //     log.error("La vue n'est pas connue");
                 // }
+                switch(view){
+                    case 'wait':
+                    break;
+                    
+                    case 'transition':
+                        $howto.style.display = 'none';
+                        $instruction.style.display = 'none';
+                    break;
+                    
+                    case 'play':
+                        $questionWrapper.style.display = 'flex';
+                    break;
+                    
+                    case 'score':
+                        $questionWrapper.style.display = 'none';
+                    break;
+                    
+                    default:
+                        console.log('Erreur, la vue "' + view + '" n\'est pas connue');
+                }
             }
      
      
@@ -274,7 +296,7 @@ display: none;
             //cycle de vie de la question.            
             function myGame() {
                 
-                if (cptQuestion == nbQuestions) {
+                if (cptQuestion == GLOBAL.nbQuestions) {
                     clearInterval(eventQuestion);
                     clearInterval(eventChrono);
                     
@@ -290,6 +312,12 @@ display: none;
                         // $("#reponse3").html(data['reponse3']);
                         // $("#reponse4").html(data['reponse4']);
                         // $("#tempsRestant").html(tempsParQuestion);
+                        $question.innerHTML = data['question'];
+                        $reponse1.innerHTML = data['reponse1'];
+                        $reponse2.innerHTML = data['reponse2'];
+                        $reponse3.innerHTML = data['reponse3'];
+                        $reponse4.innerHTML = data['reponse4'];
+                        
                         displayInterface("play");
                         
                         //notify("Question n° " + cptQuestion, 1, "info");
@@ -297,10 +325,12 @@ display: none;
                         eventChrono = setInterval(chrono, 1000 ); //timer mise a jour du chrono.
                     });
                     
-                    setTimeout (function(){
-                        $.notify("Attention ! il reste 5 secondes.");
+                    setTimeout (
+                        function(){
+                            //$.notify("Attention ! il reste 5 secondes.");
+                            console.log('plus que 5 secondes');
                         },
-                        ((tempsParQuestion * 1000) - 5000)
+                        ((GLOBAL.timerQuestion * 1000) - 5000)
                     );
                 }
             }  
@@ -316,11 +346,11 @@ display: none;
                     removeParticipant(data['usertoken'], data['username']);
                     gererUsersMax(data['nbUsers']);
                 })
-                .on('start-party-room-'+token, function(user) {
+                .on('start-party-room-' + GLOBAL.token, function(user) {
                     //notify("La partie commence dans ", 5, "warn");
                     
                     setTimeout (function(){
-                        socket.emit('start', {room : token}, function (data) {
+                        socket.emit('start', {room : GLOBAL.token}, function (data) {
                                 displayInterface("transition");
         
                             //Je lance ma fonction en même temps que l'event
@@ -328,12 +358,13 @@ display: none;
                                 myGame();
                             //ici, une question durera 10 sec
                             //TODO paramétrer la durée de réponse d'une question.
-                                eventQuestion = setInterval(myGame, (tempsParQuestion * 1000 ) );
+                                //eventQuestion = setInterval(myGame, (tempsParQuestion * 1000 ) );
+                                eventQuestion = setInterval(myGame, (GLOBAL.timerQuestion * 1000 ) );
                             });
                             //-- Une fois les questions finis, il faut juste que tu appelles displayInterface("score");
                         }, 5000);
                 })
-                .on('maj-party-users-'+token, function(data) {
+                .on('maj-party-users-' + GLOBAL.token, function(data) {
                     //$("#badge-"+ data['usertoken']).html(data["score"]);
                     console.log('maj-party-users');
                     console.log(data);
