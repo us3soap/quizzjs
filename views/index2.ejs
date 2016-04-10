@@ -83,8 +83,48 @@
 
         .howto .qrcode .qrcode-img{
             width: 90%;
+            background-color: #fff;
+        }
+        
+        .question-wrapper{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+            height: 100%;
+display: none;            
+        }
+        
+        .question{
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
             color: #fff;
-        }        
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 2em;
+            text-align: center;
+            padding : 0 10px;
+        }
+        
+        .reponses{
+            display: flex;
+            flex-grow: 2;
+            flex-direction: column;
+            width: 100%;
+            justify-content: space-around;
+            padding-bottom: 2em;
+        }
+        
+        .reponses-row{
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .reponse{
+            color: #fff;
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 1.4em;
+        }
     </style>
 </head>
 <body>
@@ -114,6 +154,21 @@
                 <img class="qrcode-img" src="/new-room/<%=token%>"/>
             </div>
         </div>
+        <div class="question-wrapper">
+            <div class="question">
+                <div>Dans la trilogie du Seigneur des Anneaux, combien d'aventuriers composent la Communauté de l'Anneau ?</div>
+            </div>
+            <div class="reponses">
+                <div class="reponses-row">
+                    <div class="reponse">reponse 1</div>
+                    <div class="reponse">reponse 2</div>
+                </div>
+                <div class="reponses-row">
+                    <div class="reponse">reponse 3</div>
+                    <div class="reponse">reponse 4</div>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -129,14 +184,17 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         (function () {
-            var $players = document.querySelector('.players');
+            var $players = document.querySelector('.players'),
+                $questionWrapper = document.querySelector('.question-wrapper'),
+                $instruction = document.querySelector('.instruction'),
+                $howto = document.querySelector('.howto');
             
-            var cptQuestion = 0;
-            var eventQuestion = null;
-            var eventChrono = null;
+            var cptQuestion = 0,
+                eventQuestion = null,
+                eventChrono = null;
             
             var socket = io.connect('http://'+ GLOBAL.url);
-            
+           
             /**
             * Function permettant l'ajout d'un joueur.
             * @arg String token : la clé référençant l'utilisateur.
