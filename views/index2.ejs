@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Quizzjs</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body{
+            margin:0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .content{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            background-color: #6699ff;
+        }
+
+        .players{
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 1%;
+            min-height: 125px;
+        }
+
+        .player{
+            height: 100px;
+            width: 140px;
+            background-image: url(img/player.png);
+            background-repeat: no-repeat;
+            background-position: top;
+            position: relative;
+        }
+
+        .player .pseudo{
+            position: absolute;
+            bottom: -28px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: Verdana, Arial, sans-serif;
+            color: #bfbfbf;
+            font-size: 1.6em;
+        }
+
+        .player.active{background-position: bottom;}
+        .player.active .pseudo{color: #fff;}
+
+        .instruction{
+            color: #FFF;
+            text-align: center;
+            font-size: 2em;
+            font-family: Verdana, Ariel, sans-serif;
+        }
+        .howto{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .howto .picture{
+            height: 33%;
+            width: 25%;
+            max-width: 250px;
+        }
+
+        .howto .picture img{
+            width: 90%;
+        }
+
+        .howto .qrcode{
+            max-width: 350px;
+            width: 33%;
+            height: 33%;
+        }
+
+        .howto .qrcode .qrcode-img{
+            width: 90%;
+            background-color: #fff;
+        }
+        
+        .question-wrapper{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+            height: 100%;
+display: none;            
+        }
+        
+        .question{
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            color: #fff;
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 2em;
+            text-align: center;
+            padding : 0 10px;
+        }
+        
+        .reponses{
+            display: flex;
+            flex-grow: 2;
+            flex-direction: column;
+            width: 100%;
+            justify-content: space-around;
+            padding-bottom: 2em;
+        }
+        
+        .reponses-row{
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .reponse{
+            color: #fff;
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 1.4em;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="players">
+        </div>
+        <div class="instruction">
+            Scanne ce QR Code pour rejoindre la partie
+        </div>
+        <div class="howto">
+            <div class="picture">
+                <img src="img/hand-device.png">
+            </div>
+            <div class="qrcode">
+                <img class="qrcode-img" src="/new-room/<%=token%>"/>
+            </div>
+        </div>
+        <div class="question-wrapper">
+            <div class="question">
+                <div>Dans la trilogie du Seigneur des Anneaux, combien d'aventuriers composent la Communauté de l'Anneau ?</div>
+            </div>
+            <div class="reponses">
+                <div class="reponses-row">
+                    <div class="reponse" id="reponse1">reponse 1</div>
+                    <div class="reponse" id="reponse2">reponse 2</div>
+                </div>
+                <div class="reponses-row">
+                    <div class="reponse" id="reponse3">reponse 3</div>
+                    <div class="reponse" id="reponse4">reponse 4</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        var GLOBAL = {
+            url: '<%= url %>',
+            token: '<%= token %>',
+            nbUsersMax: <%= nbUsersMax %>,
+            nbQuestions : <%= nbQuestions %>,
+            timerQuestion: <%= timerQuestion %>
+        };
+    </script>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        (function () {
+            var $players = document.querySelector('.players'),
+                $instruction = document.querySelector('.instruction'),
+                $howto = document.querySelector('.howto'),
+                $questionWrapper = document.querySelector('.question-wrapper'),
+                $question = $questionWrapper.querySelector('.question'),
+                $reponse1 = $questionWrapper.querySelector('#reponse1'),
+                $reponse2 = $questionWrapper.querySelector('#reponse2'),
+                $reponse3 = $questionWrapper.querySelector('#reponse3'),
+                $reponse4 = $questionWrapper.querySelector('#reponse4');
+            
+            var cptQuestion = 0,
+                eventQuestion = null,
+                eventChrono = null;
+            
+            var socket = io.connect('http://'+ GLOBAL.url);
+           
+            // ajout des emplacements des joueurs
+            var playerAvatars = '';
+            for( var i = 0; i < GLOBAL.nbUsersMax; i++) {
+                playerAvatars += '<div class="player"><div class="pseudo">attente</div></div>';
+            }
+           
+            $players.innerHTML = playerAvatars;
+           
+            /**
+            * Function permettant l'ajout d'un joueur.
+            * @arg String token : la clé référençant l'utilisateur.
+            * @arg String username : le nom d'utilisateur.
+            **/
+            function addParticipants(token, username){
+                var players = $players.querySelectorAll('.player');
+                for(var i = 0, l = players.length, player; i < l; i++) {
+                    player = players[i];
+                    if (!player.classList.contains('active')) {
+                        player.classList.add('active');
+                        player.querySelector('.pseudo').innerHTML = username;
+                        player.id = token;
+                        break;
+                    }
+                }
+            }
+            
+             /**
+             * Function permettant la suppression d'un joueur.
+             * @arg String token : la clé référençant l'utilisateur.
+             * @arg String username : le nom d'utilisateur.
+             **/
+            function removeParticipant(token, username){
+                var player = $players.querySelector('#' + token);
+                player.classList.remove('active');
+                player.id = '';
+                player.querySelector('.pseudo').innerHTML = 'attente';
+            }
+            
+             /**
+             * Function permettant la gestion du quota de joueur.
+             * @arg int nbUsersActuels : le nombre d'utilisateur connecté.
+             **/
+            function gererUsersMax(nbUsersActuels){
+                if(GLOBAL.nbUsersMax == nbUsersActuels){
+                    console.log('nb joueurs atteint');
+                }else{
+                    console.log('manque encore des joueurs');
+                }
+            }
+
+            /**
+             * Function permettant la gestion de la vue à afficher.
+             * @arg String la vue à atteindre [wait -> transition -> play -> score]
+             **/
+            function displayInterface(view){
+                console.log('displayInterface, view = ' + view);
+                // if(view == "wait"){
+                //     $("#qr-code").show("slow");
+                //     $("#listeUser").show("slow");
+                //     showScores(false);
+                // } else if(view == "transition") {
+                //     $("#qr-code").hide("slow");
+                //     showScores(true);
+                // } else if(view == "play") {
+                //     $("#question").show("slow");
+                // } else if (view == "score"){
+                //     //$("#listeUser").hide("slow");
+                //     $("#question").hide("slow");
+                //     $("#scoring").show("slow");
+                //     showResultat();
+                // } else {
+                //     log.error("La vue n'est pas connue");
+                // }
+                switch(view){
+                    case 'wait':
+                    break;
+                    
+                    case 'transition':
+                        $howto.style.display = 'none';
+                        $instruction.style.display = 'none';
+                    break;
+                    
+                    case 'play':
+                        $questionWrapper.style.display = 'flex';
+                    break;
+                    
+                    case 'score':
+                        $questionWrapper.style.display = 'none';
+                    break;
+                    
+                    default:
+                        console.log('Erreur, la vue "' + view + '" n\'est pas connue');
+                }
+            }
+     
+     
+            function chrono(){
+                console.log('chrono');
+                // var tmp = parseFloat($("#tempsRestant").html());
+                // $("#tempsRestant").html(tmp-1);
+            }
+            
+            
+            /** Functions **/
+            //cycle de vie de la question.            
+            function myGame() {
+                
+                if (cptQuestion == GLOBAL.nbQuestions) {
+                    clearInterval(eventQuestion);
+                    clearInterval(eventChrono);
+                    
+                    //Afficahge des scores.
+                    displayInterface("score");
+                } else {
+                    socket.emit('recup-question', {room : GLOBAL.token}, function (data) {
+                        clearInterval(eventChrono);
+                        cptQuestion = cptQuestion + 1;
+                        // $("#affichQuestion").html(data['question']);
+                        // $("#reponse1").html(data['reponse1']);
+                        // $("#reponse2").html(data['reponse2']);
+                        // $("#reponse3").html(data['reponse3']);
+                        // $("#reponse4").html(data['reponse4']);
+                        // $("#tempsRestant").html(tempsParQuestion);
+                        $question.innerHTML = data['question'];
+                        $reponse1.innerHTML = data['reponse1'];
+                        $reponse2.innerHTML = data['reponse2'];
+                        $reponse3.innerHTML = data['reponse3'];
+                        $reponse4.innerHTML = data['reponse4'];
+                        
+                        displayInterface("play");
+                        
+                        //notify("Question n° " + cptQuestion, 1, "info");
+                        
+                        eventChrono = setInterval(chrono, 1000 ); //timer mise a jour du chrono.
+                    });
+                    
+                    setTimeout (
+                        function(){
+                            //$.notify("Attention ! il reste 5 secondes.");
+                            console.log('plus que 5 secondes');
+                        },
+                        ((GLOBAL.timerQuestion * 1000) - 5000)
+                    );
+                }
+            }  
+            
+            // gestion du socket
+            socket
+                .on('new-user-' + GLOBAL.token, function(data) { 
+                    addParticipants(data['usertoken'], data['user']);
+                    gererUsersMax(data['nbUsers']);
+                    
+                })
+                .on('user-left-' + GLOBAL.token, function(data) {
+                    removeParticipant(data['usertoken'], data['username']);
+                    gererUsersMax(data['nbUsers']);
+                })
+                .on('start-party-room-' + GLOBAL.token, function(user) {
+                    //notify("La partie commence dans ", 5, "warn");
+                    
+                    setTimeout (function(){
+                        socket.emit('start', {room : GLOBAL.token}, function (data) {
+                                displayInterface("transition");
+        
+                            //Je lance ma fonction en même temps que l'event
+                            //car la première itération de mon event se fait au bon de 10 sec.
+                                myGame();
+                            //ici, une question durera 10 sec
+                            //TODO paramétrer la durée de réponse d'une question.
+                                //eventQuestion = setInterval(myGame, (tempsParQuestion * 1000 ) );
+                                eventQuestion = setInterval(myGame, (GLOBAL.timerQuestion * 1000 ) );
+                            });
+                            //-- Une fois les questions finis, il faut juste que tu appelles displayInterface("score");
+                        }, 5000);
+                })
+                .on('maj-party-users-' + GLOBAL.token, function(data) {
+                    //$("#badge-"+ data['usertoken']).html(data["score"]);
+                    console.log('maj-party-users');
+                    console.log(data);
+                });
+        }());
+    </script>
+</body>
+</html>

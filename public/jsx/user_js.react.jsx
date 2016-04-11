@@ -101,12 +101,10 @@
         render: function () {
             if (this.state.alreadyLogged === false) {
                 return (
-                    <ul className="pages">
-                    <li className="login page">
-                        <div className="form">
-                            <h3 className="title">Quel est votre pseudo?</h3>
+                    <div className="login-wrapper">
+                        <div className="login-form">
+                            <h3>Quel est votre pseudo?</h3>
                             <input 
-                                className="usernameInput"
                                 type="text"
                                 maxLength="14"
                                 autoComplete="off"
@@ -114,28 +112,21 @@
                                 onChange={this.pseudoOnChange}
                                 value={this.state.pseudo}
                             />
-                            <br /><br />
-                            <button 
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={this.beginOnClick} >
+                            <button onClick={this.beginOnClick}>
                                 Commencer à jouer
                             </button>
                         </div>
-                    </li>
-                    </ul>
+                    </div>
                 );                
             } else {
                 return (
-                    <ul className="pages">
-                    <li className="login page">
-                        <div className="form">
-                            <h3 className="title">{this.state.pseudo}</h3>
+                    <div className="login-wrapper">
+                        <div>
+                            <h3>Bienvenue {this.state.pseudo}</h3>
                             <div>{this.state.msgInfo}</div>
                             <div>{this.state.msgDebug}</div>
                         </div>
-                    </li>
-                    </ul>
+                    </div>
                 );
             }
         } 
@@ -185,25 +176,12 @@
         },
         render: function () {
             return (
-                <div className="wrapper">
+                <div className="pad-wrapper">
                     {
-                        (() => {
+                       (() => {
                             if (this.state.showModalInfo) {
                                 return (
-                                    <div id="modalInfo" tabIndex="-1" role="dialog" ariaLabelledby="myModalLabel" ariaHidden="true">
-                                        <div className="modal-dialog">
-                                            <div className="modal-content">
-                                                <div className="modal-header">
-                                                    <button type="button" className="close" dataDismiss="modal" ariaLabel="Close"><span ariaHidden="true">&times;</span></button>
-                                                    <h4 id="info-header" className="modal-title" id="myModalLabel">Bienvenue {this.props.pseudo}</h4>
-                                                </div>
-                                                <div className="modal-body">
-                                                    <div id="info-content"></div>
-                                                    <div id="info-debug"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <h4>Bienvenue {this.props.pseudo}</h4>
                                 );
                             }
                         })()
@@ -213,23 +191,11 @@
                         (() => {
                             if (this.state.showCommandTool) {
                                 return (
-                                    <div id="command-tool" className="flex-container">
-                                        <button 
-                                            type="button" 
-                                            className="btn btn-success" 
-                                            onClick={this.reponseOnclick.bind(this, 1)}>{this.props.question.reponse1}</button>
-                                        <button 
-                                            type="button" 
-                                            className="btn btn-info" 
-                                            onClick={this.reponseOnclick.bind(this, 2)}>{this.props.question.reponse2}</button>
-                                        <button 
-                                            type="button" 
-                                            className="btn btn btn-warning" 
-                                            onClick={this.reponseOnclick.bind(this, 3)}>{this.props.question.reponse3}</button>
-                                        <button 
-                                            type="button" 
-                                            className="btn btn btn-danger" 
-                                            onClick={this.reponseOnclick.bind(this, 4)}>{this.props.question.reponse4}</button>
+                                    <div className="btn-wrapper">
+                                        <div className="btn" onClick={this.reponseOnclick.bind(this, 1)}>{this.props.question.reponse1}</div>
+                                        <div className="btn" onClick={this.reponseOnclick.bind(this, 2)}>{this.props.question.reponse2}</div>
+                                        <div className="btn" onClick={this.reponseOnclick.bind(this, 3)}>{this.props.question.reponse3}</div>
+                                        <div className="btn" onClick={this.reponseOnclick.bind(this, 4)}>{this.props.question.reponse4}</div>
                                     </div>
                                 );
                             }
@@ -240,15 +206,11 @@
                         (() => {
                             if (this.state.showRecapReponse) {
                                 return (
-                                    <div id="recapReponse">
-                                        <ul id="login" className="pages">
-                                            <li id="li-login" className="login page">
-                                                <div className="form">
-                                                    <h3 className="title">Vous avez répondu :</h3>
-                                                    <h3 className="title">{this.state.reponseDonneeText}</h3>
-                                                </div>
-                                            </li>
-                                        </ul>
+                                    <div className="recap-wrapper">
+                                        <div>
+                                            <h3>Vous avez répondu :</h3>
+                                            <h3>{this.state.reponseDonneeText}</h3>
+                                        </div>
                                     </div>
                                 );
                             }
