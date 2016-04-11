@@ -19,3 +19,36 @@ img{
     padding: 5px 10px;
     margin-top: 2px;
 }
+
+.clignotement{
+    padding: 10px;
+    border-radius: 10px;
+    -webkit-animation: ombre ease-in infinite alternate 500ms;
+    -moz-animation: ombre ease-in infinite alternate 500ms;
+    animation: ombre ease-in infinite alternate 500ms;
+}
+
+@-webkit-keyframes ombre {
+  0% {
+    box-shadow: 0 0 15px red;
+  }
+  100% {
+    box-shadow: 0 0 15px yellow;
+  }
+}
+@-moz-keyframes ombre {
+  0% {
+    box-shadow: 0 0 15px red;
+  }
+  100% {
+    box-shadow: 0 0 15px yellow;
+  }
+}
+@keyframes ombre {
+  0% {
+    box-shadow: 0 0 15px red;
+  }
+  100% {
+    box-shadow: 0 0 15px yellow;
+  }
+}

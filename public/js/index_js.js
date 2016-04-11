@@ -29,7 +29,8 @@ $(function() {
         } else {
             socket.emit('recup-question', {room : token}, function (data) {
                 nbReponseRecu = 0;
-                clearInterval(eventChrono);
+                
+                $("#tempsRestant").attr("class","");
                 cptQuestion = cptQuestion+1;
                 $("#affichQuestion").html(data['question']);
                 $("#reponse1").html(data['reponse1']);
@@ -47,7 +48,15 @@ $(function() {
     
     function chrono(){
         var tmp = parseFloat($("#tempsRestant").html());
-        $("#tempsRestant").html(tmp-1);
+        if (tmp == 0) {
+            displayInterface("score");
+            clearInterval(eventChrono);
+        } else {
+            $("#tempsRestant").html(tmp-1);
+            if (tmp-1 == 5) {
+                $("#tempsRestant").attr("class","clignotement");
+            }
+        }
     }
     /**
      * Fonction permettant de gerer les notifications sur l'écran.
@@ -151,6 +160,7 @@ $(function() {
             $("#qr-code").hide("slow");
             showScores(true);
         } else if(view == "play") {
+            $("#scoring").hide("slow");
             $("#question").show("slow");
         } else if (view == "score"){
             //$("#listeUser").hide("slow");
@@ -166,9 +176,10 @@ $(function() {
      * Function gérant l'animation des scores.
      **/
     function showResultat(){
+        $("#classement").remove();
         $( ".user" ).each(function( index ) {
             $("#scoring").append(
-                "<div class=\"progress\">"
+                "<div id=\"classement\" class=\"progress\">"
                 +   "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\""
                 +       $(this).find('.badge-display').html() / nbQuestions * 100
                 +       "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: "
@@ -208,7 +219,7 @@ $(function() {
                 //car la première itération de mon event se fait au bon de 10 sec.
                 myGame();
                 //ici, une question durera xx secondes, paramétré par l'utilisateur, 10 secondes par défaut.
-                eventQuestion = setInterval(myGame, (tempsParQuestion * 1000 ) );
+                eventQuestion = setInterval(myGame, ((tempsParQuestion * 1000) + 4000 ) );
             });
 
         }, 5000);
@@ -218,12 +229,17 @@ $(function() {
         $("#badge-"+ data['usertoken']).html(data["score"]);
         nbReponseRecu++;
         
-        //si tout le monde a repondu alors on passe à la question suivante.
+        //si tout le monde a repondu alors transition de 4 secondes et on passe à la question suivante.
         if (nbUsersMax==nbReponseRecu && cptQuestion < nbQuestions) {
             clearInterval(eventQuestion);
             clearInterval(eventChrono);
-            myGame();
-            eventQuestion = setInterval(myGame, (tempsParQuestion * 1000 ) );
+            displayInterface("score");
+            
+            //relance question dans 4 secondes (après le recap des scores)
+            setTimeout (function(){
+                myGame();
+                eventQuestion = setInterval(myGame, ((tempsParQuestion * 1000) + 4000 ) );
+            },4000);
         }
     });
 });
