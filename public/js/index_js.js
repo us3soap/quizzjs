@@ -11,6 +11,7 @@ $(function() {
     var nbUsersMax = $("#nbUsersMax").val();
     var nbQuestions = $("#nbQuestions").val();
     var tempsParQuestion = $("#timerQuestion").val();;
+    var nbReponseRecu = 0;
     
     var socket = io.connect('http://'+ url);
 
@@ -22,11 +23,12 @@ $(function() {
             clearInterval(eventQuestion);
             clearInterval(eventChrono);
             
-            //Afficahge des scores.
+            //Affichage des scores.
             displayInterface("score");
             
         } else {
             socket.emit('recup-question', {room : token}, function (data) {
+                nbReponseRecu = 0;
                 clearInterval(eventChrono);
                 cptQuestion = cptQuestion+1;
                 $("#affichQuestion").html(data['question']);
@@ -38,10 +40,8 @@ $(function() {
                 displayInterface("play");
                 notify("Question n° " + cptQuestion, 1, "info");
                 
-                eventChrono = setInterval(chrono, 1000 ); //timer mise a jour du chrono.
+                eventChrono = setInterval(chrono, 1000 ); //timer, mise a jour du chrono.
             });
-            
-            setTimeout (function(){$.notify("Attention ! il reste 5 secondes.");}, ((tempsParQuestion * 1000) - 5000) );
         }
     }    
     
@@ -200,7 +200,6 @@ $(function() {
     socket.on('start-party-room-'+token, function(user) {
         notify("La partie commence dans ", 5, "warn");
         
-        
         setTimeout (function(){
            socket.emit('start', {room : token}, function (data) {
                 displayInterface("transition");
@@ -208,16 +207,23 @@ $(function() {
                 //Je lance ma fonction en même temps que l'event
                 //car la première itération de mon event se fait au bon de 10 sec.
                 myGame();
-                //ici, une question durera 10 sec
-                //TODO paramétrer la durée de réponse d'une question.
+                //ici, une question durera xx secondes, paramétré par l'utilisateur, 10 secondes par défaut.
                 eventQuestion = setInterval(myGame, (tempsParQuestion * 1000 ) );
             });
-            //-- Une fois les questions finis, il faut juste que tu appelles displayInterface("score");
 
         }, 5000);
     });
     
     socket.on('maj-party-users-'+token, function(data) {
         $("#badge-"+ data['usertoken']).html(data["score"]);
+        nbReponseRecu++;
+        
+        //si tout le monde a repondu alors on passe à la question suivante.
+        if (nbUsersMax==nbReponseRecu && cptQuestion < nbQuestions) {
+            clearInterval(eventQuestion);
+            clearInterval(eventChrono);
+            myGame();
+            eventQuestion = setInterval(myGame, (tempsParQuestion * 1000 ) );
+        }
     });
 });

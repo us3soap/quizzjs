@@ -175,10 +175,10 @@ io.sockets.on('connection', function (socket) {
     socket.on('recolte-reponse', function (data, fn) {
         if(questionnaire.getQuestionnaire(socket.room).checkResponse(data["id"], data["reponse"])){
             socket.score++;
-            socket.broadcast.emit('maj-party-users-'+socket.room, {score : socket.score, 
+        }
+        socket.broadcast.emit('maj-party-users-'+socket.room, {score : socket.score, 
                                                                    usertoken : socket.token
                                                                    });
-        }
         fn(true);
     }); 
 
