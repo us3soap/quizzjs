@@ -91,8 +91,8 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            align-items: center;
             height: 100%;
+            align-items: center;    
 display: none;            
         }
         
@@ -111,20 +111,31 @@ display: none;
             display: flex;
             flex-grow: 2;
             flex-direction: column;
-            width: 100%;
+            width: 50%;
             justify-content: space-around;
-            padding-bottom: 2em;
+            padding: 0 0 2em 2em;
+            
+        }
+                
+        .reponse-square{
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            margin-right: 1em;
+            vertical-align: middle;    
         }
         
-        .reponses-row{
-            display: flex;
-            justify-content: space-around;
-        }
+        .square1{background-color: #69B854;}
+        .square2{background-color: #6AC0E0;}
+        .square3{background-color: #EBAD41;}
+        .square4{background-color: #D1534C;}
         
         .reponse{
             color: #fff;
             font-family: Verdana, Arial, sans-serif;
             font-size: 1.4em;
+            display: inline-flex;
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -148,13 +159,17 @@ display: none;
                 <div>Dans la trilogie du Seigneur des Anneaux, combien d'aventuriers composent la Communauté de l'Anneau ?</div>
             </div>
             <div class="reponses">
-                <div class="reponses-row">
-                    <div class="reponse" id="reponse1">reponse 1</div>
-                    <div class="reponse" id="reponse2">reponse 2</div>
+                <div>
+                    <span class="reponse-square square1"></span><div class="reponse" id="reponse1">reponse dazazhj dzakhldza 1</div>
                 </div>
-                <div class="reponses-row">
-                    <div class="reponse" id="reponse3">reponse 3</div>
-                    <div class="reponse" id="reponse4">reponse 4</div>
+                <div>
+                    <span class="reponse-square square2"></span><div class="reponse" id="reponse2">reponse 2</div>
+                </div>
+                <div>
+                    <span class="reponse-square square3"></span><div class="reponse" id="reponse3">reponse 3</div>
+                </div>
+                <div>
+                    <span class="reponse-square square4"></span><div class="reponse" id="reponse4">reponse 4</div>
                 </div>
             </div>
         </div>
@@ -272,6 +287,8 @@ display: none;
                     break;
                     
                     case 'play':
+                        $howto.style.display = 'none';
+                        $instruction.style.display = 'none';
                         $questionWrapper.style.display = 'flex';
                     break;
                     
