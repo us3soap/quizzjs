@@ -70,17 +70,20 @@ router.get('/paramRoom/:tabParam', function(req, res) {
     console.log("nbUsersMax : " + tabParam.nbUsersMax);
     console.log("nbQuestions : " + tabParam.nbQuestions);
     console.log("timerQuestion : " + tabParam.timerQuestion);
-    
-    //récupération des questions saisies par l'utilisateur.
-    //TODO ajouter ces questions à "questionnaire"
     console.log("nbNouvellesQuestions : " + tabParam.nbNouvellesQuestions);
     console.log("NouvellesQuestions JSON : " + tabParam.nouvellesQuestions);
-    var tabNouvellesQuestions = JSON.parse(tabParam.nouvellesQuestions);
-    console.log("Question 1 : " + tabNouvellesQuestions.question1);
-    
+
+
     //Création d'une nouvelle room
     var token = room.newRoom();
-    questionnaire.loadQuestionnaire(questions, token);
+    //Si l'utilisateur a saisi des questions alors
+    //on remplace les questions par defaut par les siennes
+    if (tabParam.nbNouvellesQuestions > 0) {
+        var tabNouvellesQuestions = JSON.parse(tabParam.nouvellesQuestions);
+        questionnaire.loadQuestionnaire(tabNouvellesQuestions, token);
+    } else {
+        questionnaire.loadQuestionnaire(questions, token);
+    }
     room.getRoom(token).open();
     room.getRoom(token).setMinNbMembers(tabParam.nbUsersMax);
     room.getRoom(token).setMaxNbMembers(tabParam.nbUsersMax);

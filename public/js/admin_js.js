@@ -118,22 +118,28 @@ $(function() {
     
     //retourne le flux (String) a envoyer au server.js
     function recupFluxNouvellesQuestions() {
-        var flux = '{';
+        var flux = '{' +
+                        '"name" :  "Fichier de questions",' +
+                        '"version" : 0.1,' +
+                        '"token": "123456",' +
+                        '"questions" : [';
         
         for (var i = 1 ; i <= cptQuestion ; i++) {
             if (i > 1) {
                 flux += ',';
             }
-            flux += '"question' + i + '":"' + $("#question_" + i).val() + '"';
-            flux += ',"reponse1_' + i + '":"' + $("#reponse1_" + i).val() + '"';
-            flux += ',"reponse2_' + i + '":"' + $("#reponse2_" + i).val() + '"';
-            flux += ',"reponse3_' + i + '":"' + $("#reponse3_" + i).val() + '"';
-            flux += ',"reponse4_' + i + '":"' + $("#reponse4_" + i).val() + '"';
-            flux += ',"good' + i + '":"' + $("input[name=reponseQuestion_" + i + "]:checked").val() + '"';
-            flux += ',"explication' + i + '":"' + $("#explication_" + i).val() + '"';
+            flux += '{"id":' + (i-1);
+            flux += ',"question":"' + $("#question_" + i).val() + '"';
+            flux += ',"type": "question"';
+            flux += ',"reponse1":"' + $("#reponse1_" + i).val() + '"';
+            flux += ',"reponse2":"' + $("#reponse2_" + i).val() + '"';
+            flux += ',"reponse3":"' + $("#reponse3_" + i).val() + '"';
+            flux += ',"reponse4":"' + $("#reponse4_" + i).val() + '"';
+            flux += ',"good":"' + $("input[name=reponseQuestion_" + i + "]:checked").val() + '"';
+            flux += ',"explication":"' + $("#explication_" + i).val() + '"}';
         }
         
-        flux += "}";
+        flux += "]}";
         return flux ;
     }
 });
