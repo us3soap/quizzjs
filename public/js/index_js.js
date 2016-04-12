@@ -30,7 +30,8 @@ $(function() {
             socket.emit('recup-question', {room : token}, function (data) {
                 nbReponseRecu = 0;
                 
-                $("#tempsRestant").attr("class","");
+                $("#tempsRestant").attr("class",""); //arret 
+                
                 cptQuestion = cptQuestion+1;
                 $("#affichQuestion").html(data['question']);
                 $("#reponse1").html(data['reponse1']);
