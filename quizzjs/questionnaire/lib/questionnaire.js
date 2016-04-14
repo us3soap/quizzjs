@@ -74,7 +74,9 @@ Questionnaire.prototype.getFluxQuestionAleatoire = function(){
             reponse1: this.questions[numQuestionRandom].reponse1, 
             reponse2: this.questions[numQuestionRandom].reponse2, 
             reponse3: this.questions[numQuestionRandom].reponse3, 
-            reponse4: this.questions[numQuestionRandom].reponse4
+            reponse4: this.questions[numQuestionRandom].reponse4,
+            good: this.questions[numQuestionRandom].good,
+            explication: this.questions[numQuestionRandom].explication,
     };
     
 }

@@ -10,6 +10,8 @@ $(function() {
     var token = $("#token").val();
     var nbUsersMax = $("#nbUsersMax").val();
     var nbQuestions = $("#nbQuestions").val();
+    var bonneReponse = $("#good").val();
+    var explicationsReponse = $("#explication").val();
     var tempsParQuestion = $("#timerQuestion").val();;
     var nbReponseRecu = 0;
     
@@ -38,6 +40,10 @@ $(function() {
                 $("#reponse2").html(data['reponse2']);
                 $("#reponse3").html(data['reponse3']);
                 $("#reponse4").html(data['reponse4']);
+                
+                bonneReponse = data['good'];
+                explicationsReponse = data['explication'];
+                
                 $("#tempsRestant").html(tempsParQuestion);
                 displayInterface("play");
                 notify("Question n° " + cptQuestion, 1, "info");
@@ -180,13 +186,20 @@ $(function() {
         $("#classement").remove();
         $( ".user" ).each(function( index ) {
             $("#scoring").append(
-                "<div id=\"classement\" class=\"progress\">"
-                +   "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\""
-                +       $(this).find('.badge-display').html() / nbQuestions * 100
-                +       "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: "
-                +       $(this).find('.badge-display').html() / nbQuestions * 100
-                +       "%;\">"
-                +       $(this).find('.username').html()
+                "<div id=\"classement\">"
+                +   "<div>"
+                +       "<h3>La bonne réponse était : " + $("#" + bonneReponse).html() + "<h3>"
+                +       "<div>animate de la bonne réponse vers ici ?</div></br>"
+                +       "<h3>" + explicationsReponse + "</h3>"
+                +   "</div>"
+                +   "<div class=\"progress\">"
+                +       "<div class=\"progress progress-bar\" role=\"progressbar\" aria-valuenow=\""
+                +           $(this).find('.badge-display').html() / nbQuestions * 100
+                +          "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: "
+                +           $(this).find('.badge-display').html() / nbQuestions * 100
+                +           "%;\">"
+                +           $(this).find('.username').html()
+                +       "</div>"
                 +   "</div>"
                 + "</div>"
                 );
