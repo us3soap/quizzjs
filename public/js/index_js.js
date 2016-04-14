@@ -30,17 +30,18 @@ $(function() {
             
         } else {
             socket.emit('recup-question', {room : token}, function (data) {
-                nbReponseRecu = 0;
+                nbReponseRecu = 0; //reset du nombre de réponse reçu
                 
-                $("#tempsRestant").attr("class",""); //arret 
+                $("#tempsRestant").attr("class",""); //arret clignotement du timer
                 
                 cptQuestion = cptQuestion+1;
+                
+                //recupération des infos liées à la question.
                 $("#affichQuestion").html(data['question']);
                 $("#reponse1").html(data['reponse1']);
                 $("#reponse2").html(data['reponse2']);
                 $("#reponse3").html(data['reponse3']);
                 $("#reponse4").html(data['reponse4']);
-                
                 bonneReponse = data['good'];
                 explicationsReponse = data['explication'];
                 
@@ -53,6 +54,11 @@ $(function() {
         }
     }    
     
+    /**
+     * Methode permettant de créer un chrono, avec comme chrono le nombre de secondes saisi par l'utilisateur
+     * ou 10s par defaut.
+     * A 0 seconde, affichage du tableau des scores
+     **/
     function chrono(){
         var tmp = parseFloat($("#tempsRestant").html());
         if (tmp == 0) {
@@ -65,6 +71,7 @@ $(function() {
             }
         }
     }
+    
     /**
      * Fonction permettant de gerer les notifications sur l'écran.
      * 
@@ -180,7 +187,8 @@ $(function() {
     }
     
     /**
-     * Function gérant l'animation des scores.
+     * Function gérant l'animation des scores,
+     * affichage de la réponse et explication à la question précédente
      **/
     function showResultat(){
         $("#classement").remove();
