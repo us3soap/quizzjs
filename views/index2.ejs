@@ -137,11 +137,30 @@ display: none;
             display: inline-flex;
             vertical-align: middle;
         }
+        
+        
+        .canvas-wrapper {
+            width: 6em;
+            height: 6em;
+            position: relative;
+        }
+        .timelaps-wheel{
+            background-color: white;
+            width: 100%;
+            height:100%;
+            position:absolute;
+            border-radius: 50px;
+        }
+        #timelaps{position: absolute;}
     </style>
 </head>
 <body>
     <div class="content">
         <div class="players">
+            <div class="canvas-wrapper">
+                <div class="timelaps-wheel"></div>
+                <canvas id="timelaps" width="100%" height="100%">mince, pas compatible avec cette écran ...</canvas>
+            </div>
         </div>
         <div class="instruction">
             Scanne ce QR Code pour rejoindre la partie
@@ -210,8 +229,34 @@ display: none;
                 playerAvatars += '<div class="player"><div class="pseudo">attente</div></div>';
             }
            
-            $players.innerHTML = playerAvatars;
-           
+            $players.innerHTML = playerAvatars + $players.innerHTML;
+
+
+            // gestion du timer
+            var $timelapsWrapper = document.querySelector('.canvas-wrapper'),
+                $timelaps = document.querySelector('#timelaps'),
+                timelapsCtx = $timelaps.getContext("2d");
+        
+            var timelapsH = $timelapsWrapper.offsetHeight,
+                timelapsW = $timelapsWrapper.offsetWidth,
+                timelapsCenter = timelapsW / 2;
+
+            var r = timelapsW/2,
+                x = 0,
+                y = 0;
+                
+
+            var angle = -90;
+            //var totalTime = 10000; //ms
+            var totalTime = GLOBAL.timerQuestion * 1000; //ms
+            var tickInterval = 250;
+            var step = tickInterval * 360 / totalTime;
+            var tick = 0;
+            var nextStep = 0;
+            var interval;
+
+
+
             /**
             * Function permettant l'ajout d'un joueur.
             * @arg String token : la clé référençant l'utilisateur.
@@ -340,6 +385,38 @@ display: none;
                         //notify("Question n° " + cptQuestion, 1, "info");
                         
                         eventChrono = setInterval(chrono, 1000 ); //timer mise a jour du chrono.
+                        window.clearInterval(interval);
+                        
+                        timelapsCtx.strokeStyle = "rgb(106, 150, 241)";
+                        timelapsCtx.lineWidth = 1;
+                        timelapsCtx.beginPath();
+                        angle = -90;
+                        tick = 0;
+                        timelapsCtx.clearRect(0, 0, timelapsW, timelapsH);
+                        
+                        interval = window.setInterval(function () {
+                            nextStep = angle + step;
+                            
+                            while(angle < nextStep){
+                                x = r + r*Math.cos(angle*(Math.PI/180));
+                                y = r + r*Math.sin(angle*(Math.PI/180));
+                                
+                                timelapsCtx.moveTo(timelapsW/2, timelapsH/2);
+                                timelapsCtx.lineTo(x,y);
+                                timelapsCtx.stroke();
+                                angle++;
+                            }
+                            
+                            tick += tickInterval;
+                            if (tick >= totalTime) {
+                                console.log('stop tick ' + (tick/1000) + 's');
+                                window.clearInterval(interval);
+                                /*angle = -90;
+                                tick = 0;
+                                timelapsCtx.clearRect(0, 0, timelapsW, timelapsH);
+                                */
+                            }
+                        }, tickInterval);
                     });
                     
                     setTimeout (
