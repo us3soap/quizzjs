@@ -8,6 +8,7 @@ function Questionnaire(name, questions, version, token) {
 	this.token = token;
 	this.questions = questions;
 	this.version = version;
+	this.tabQuestionsPosees = [];
 }
 
 ///// Accesseurs
@@ -67,7 +68,10 @@ Questionnaire.prototype.setVersion = function(version) {
  */
 Questionnaire.prototype.getFluxQuestionAleatoire = function(){
     
-    var numQuestionRandom = Math.floor((Math.random() * this.questions.length) + 1) -1;
+    do {
+        var numQuestionRandom = Math.floor((Math.random() * this.questions.length) + 1) -1;
+    }while (this.tabQuestionsPosees.indexOf(numQuestionRandom) > -1);
+    this.tabQuestionsPosees.push(numQuestionRandom);
     
     return { idquestion: this.questions[numQuestionRandom].id, 
             question : this.questions[numQuestionRandom].question, 

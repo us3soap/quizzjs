@@ -188,30 +188,31 @@ $(function() {
     
     /**
      * Function gérant l'animation des scores,
-     * affichage de la réponse et explication à la question précédente
+     * affichage en plus de la réponse et explication à la question précédente
      **/
     function showResultat(){
         $("#classement").remove();
+        var divPartieStatic = "<div id=\"classement\">"
+                            +   "<div>"
+                            +       "<h3>La bonne réponse était : " + $("#" + bonneReponse).html() + "<h3>"
+                            +       "<div>animate de la bonne réponse vers ici ?</div></br>"
+                            +       "<h3>" + explicationsReponse + "</h3>"
+                            +   "</div>";
+        var divPartieDynamique = "";
         $( ".user" ).each(function( index ) {
-            $("#scoring").append(
-                "<div id=\"classement\">"
-                +   "<div>"
-                +       "<h3>La bonne réponse était : " + $("#" + bonneReponse).html() + "<h3>"
-                +       "<div>animate de la bonne réponse vers ici ?</div></br>"
-                +       "<h3>" + explicationsReponse + "</h3>"
-                +   "</div>"
-                +   "<div class=\"progress\">"
-                +       "<div class=\"progress progress-bar\" role=\"progressbar\" aria-valuenow=\""
-                +           $(this).find('.badge-display').html() / nbQuestions * 100
-                +          "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: "
-                +           $(this).find('.badge-display').html() / nbQuestions * 100
-                +           "%;\">"
-                +           $(this).find('.username').html()
-                +       "</div>"
-                +   "</div>"
-                + "</div>"
-                );
+            divPartieDynamique += "<div class=\"progress\">"
+                +                       "<div class=\"progress progress-bar\" role=\"progressbar\" aria-valuenow=\""
+                +                           $(this).find('.badge-display').html() / nbQuestions * 100
+                +                           "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: "
+                +                           $(this).find('.badge-display').html() / nbQuestions * 100
+                +                           "%;\">"
+                +                           $(this).find('.username').html()
+                +                       "</div>"
+                +                   "</div>";
         });
+        divPartieDynamique += "</div>";
+        
+        $("#scoring").append(divPartieStatic + divPartieDynamique);
         
     }
     
@@ -252,16 +253,20 @@ $(function() {
         nbReponseRecu++;
         
         //si tout le monde a repondu alors transition de 4 secondes et on passe à la question suivante.
-        if (nbUsersMax==nbReponseRecu && cptQuestion < nbQuestions) {
+        if (nbUsersMax==nbReponseRecu) {
             clearInterval(eventQuestion);
             clearInterval(eventChrono);
             displayInterface("score");
             
             //relance question dans 4 secondes (après le recap des scores)
-            setTimeout (function(){
-                myGame();
-                eventQuestion = setInterval(myGame, ((tempsParQuestion * 1000) + 4000 ) );
-            },4000);
+            if (cptQuestion < nbQuestions) {
+                setTimeout (function(){
+                    myGame();
+                    eventQuestion = setInterval(myGame, ((tempsParQuestion * 1000) + 4000 ) );
+                },4000);
+            } else {
+                
+            }
         }
     });
 });
