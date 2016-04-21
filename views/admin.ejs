@@ -4,6 +4,7 @@
 <head>
     <title>QuizzJS</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/jquery-ui.css">
     <link rel="stylesheet" href="/css/telephone.css">
 </head>
 
@@ -22,6 +23,7 @@
 								
 							<h3 class="title">Indiquer le nombre de questions ?</h3>
 							<input id="nbQuestions" class="usernameInput" type="text" />
+							<input id="slider" type="range" min="0" max="100" step="1" data-buffer="60" />
 							<br />
 							<br />
 								
@@ -57,6 +59,7 @@
     </ul>
     
     <script src="/js/jquery.min.js"></script>
+  	<script src="/js/jquery-ui.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/notify.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>

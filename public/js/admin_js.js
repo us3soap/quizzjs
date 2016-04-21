@@ -1,7 +1,7 @@
 $(function() {
 
     var cptQuestion = 0;
-
+    
     /** Events **/
     //Methode permettant de saisir seulement des nombres
     $("#nbUsersMax,#nbQuestions,#timerQuestion").keypress(function(event) {
