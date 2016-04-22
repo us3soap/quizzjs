@@ -508,6 +508,162 @@
             "reponse4": "1957",
             "good": "reponse3",
             "explication": "Lorem ipsum"
+        },
+        {
+            "id": 46,
+            "question": "Que mange un granivore?",
+            "type": "question",
+            "reponse1": "Des graisses",
+            "reponse2": "Des graines",
+            "reponse3": "Du lait",
+            "reponse4": "Des racines",
+            "good": "reponse2",
+            "explication": "Comme les oiseaux par exemple."
+        },
+        {
+            "id": 47,
+            "question": "Quel est le régime alimentaire de l'homme?",
+            "type": "question",
+            "reponse1": "Carnivore",
+            "reponse2": "Anthropophage",
+            "reponse3": "Ominivore",
+            "reponse4": "Mycophage",
+            "good": "reponse3",
+            "explication": "Une personne omnivore se nourrit indifféremment d'aliments divers."
+        },
+        {
+            "id": 48,
+            "question": "Comment s'appelle la femelle du Dindon?",
+            "type": "question",
+            "reponse1": "La dinde",
+            "reponse2": "La dindelette",
+            "reponse3": "La dindonne",
+            "reponse4": "La dindon",
+            "good": "reponse1",
+            "explication": ""
+        },
+        {
+            "id": 49,
+            "question": "Comment appelle-t-on la femelle du Merle?",
+            "type": "question",
+            "reponse1": "La merlesse",
+            "reponse2": "La merle",
+            "reponse3": "La merlotte",
+            "reponse4": "La merlette",
+            "good": "reponse1",
+            "explication": ""
+        },
+        {
+            "id": 50,
+            "question": "Comment appelle-t-on la femelle du Moineau?",
+            "type": "question",
+            "reponse1": "La moinelle",
+            "reponse2": "La moinette",
+            "reponse3": "La moinotte",
+            "reponse4": "La moineau",
+            "good": "reponse1",
+            "explication": ""
+        },
+        {
+            "id": 51,
+            "question": "Qui chante \"Le métèque\" ?",
+            "type": "question",
+            "reponse1": "Pierre Perret",
+            "reponse2": "Georges Moustaki",
+            "reponse3": "Jean Ferrat",
+            "reponse4": "Daniel Guichard",
+            "good": "reponse2",
+            "explication": ""
+        },
+        {
+            "id": 52,
+            "question": "Comment dit-on Bonjour en Japonais?",
+            "type": "question",
+            "reponse1": "Ni hao",
+            "reponse2": "Konnichi wa",
+            "reponse3": "Chào",
+            "reponse4": "Arigatō",
+            "good": "reponse2",
+            "explication": ""
+        },
+        {
+            "id": 53,
+            "question": "Comment dit-on bonjour en Hawaïen?",
+            "type": "question",
+            "reponse1": "Aloha",
+            "reponse2": "Jambo",
+            "reponse3": "Ia orana",
+            "reponse4": "mahalo",
+            "good": "reponse1",
+            "explication": ""
+        },
+        {
+            "id": 54,
+            "question": "Comment dit-on bonjour en suedois?",
+            "type": "question",
+            "reponse1": "Dobry den",
+            "reponse2": "Bog Djon",
+            "reponse3": "God dag",
+            "reponse4": "Ikea",
+            "good": "reponse3",
+            "explication": "On peut également dire Hej. Dobry den est le bonjour tchèque."
+        },
+        {
+            "id": 55,
+            "question": "Completer le verbe irrégulier : Mordre : To bite / Bit / (?)",
+            "type": "question",
+            "reponse1": "Bitted",
+            "reponse2": "Boght",
+            "reponse3": "Bight",
+            "reponse4": "Bitten",
+            "good": "reponse4",
+            "explication": ""
+        },
+        {
+            "id": 56,
+            "question": "Completer le verbe irrégulier : Apprendre : To learn – learnt - (?)",
+            "type": "question",
+            "reponse1": "Learned",
+            "reponse2": "Learnen",
+            "reponse3": "Learnt",
+            "reponse4": "learn",
+            "good": "reponse3",
+            "explication": ""
+        },
+        {
+            "id": 57,
+            "question": "Traduire la phrase suivante : \"I would like a lump of sugar\" ",
+            "type": "question",
+            "reponse1": "Je voudrais la boîte de sucre",
+            "reponse2": "Je voudrais un morceau de sucre",
+            "reponse3": "Je voudrais une pincée de sucre",
+            "reponse4": "Je voudrais une cuillerée de sucre",
+            "good": "reponse2",
+            "explication": ""
+        },
+        {
+            "id": 58,
+            "question": "Comment dit-on \"confiture\" en anglais? ",
+            "type": "question",
+            "reponse1": "Lam",
+            "reponse2": "Ham",
+            "reponse3": "Fam",
+            "reponse4": "Jam",
+            "good": "reponse4",
+            "explication": ""
         }
+        
+        
+
+
+
+
+
+
+
+Jam 
+
+
+
     ]
 }
