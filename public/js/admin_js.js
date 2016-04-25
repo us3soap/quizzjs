@@ -1,6 +1,13 @@
 $(function() {
 
     var cptQuestion = 0;
+    var url = $("#url").val();
+    var socket = io.connect('http://'+ GLOBAL.url);
+    
+    socket.emit('start-admin', {room : GLOBAL.token}, function (data) {
+        //utile pour cacher le QR CODE admin
+        //pour avoir qu'un seul administrateur.
+    });
     
     /** Events **/
     //Methode permettant de saisir seulement des nombres
@@ -28,7 +35,7 @@ $(function() {
             $.notify(messageErreur);
         }else{
             var fluxnouvellesQuestions = recupFluxNouvellesQuestions();
-            var parametres = {'nbUsersMax': nbUserSaisi, 'nbQuestions' : nbQuestionsSaisi, 'timerQuestion' : timerQuestion, 'nbNouvellesQuestions' : cptQuestion.toString(), 'nouvellesQuestions' : fluxnouvellesQuestions};
+            var parametres = {'room': GLOBAL.token, 'nbUsersMax': nbUserSaisi, 'nbQuestions' : nbQuestionsSaisi, 'timerQuestion' : timerQuestion, 'nbNouvellesQuestions' : cptQuestion.toString(), 'nouvellesQuestions' : fluxnouvellesQuestions};
             
             document.location="/paramRoom/" + JSON.stringify(parametres);
         }

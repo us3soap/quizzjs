@@ -30,7 +30,7 @@ router.get('/', function(req, res) {
     res.render('index.ejs', {url: req.headers.host, 
                             token: token,
                             nbUsers : room.getRoom(token).getMembers().length,
-                            nbUsersMax : room.getRoom(token).getMinNbMembers(),
+                            nbUsersMax : 0,
                             nbQuestions : 10,
                             timerQuestion : 10
     });
@@ -38,8 +38,8 @@ router.get('/', function(req, res) {
 
 
 /* Admin page */
-router.get('/admin', function(req, res) {
-    res.render('admin.ejs', {url: req.headers.host});
+router.get('/admin/:token', function(req, res) {
+    res.render('admin.ejs', {url: req.headers.host,room: req.params.token });
 });
 
 /* Access page */
@@ -73,28 +73,36 @@ router.get('/paramRoom/:tabParam', function(req, res) {
     console.log("nbNouvellesQuestions : " + tabParam.nbNouvellesQuestions);
     console.log("NouvellesQuestions JSON : " + tabParam.nouvellesQuestions);
 
-
-    //Création d'une nouvelle room
-    var token = room.newRoom();
     //Si l'utilisateur a saisi des questions alors
     //on remplace les questions par defaut par les siennes
     if (tabParam.nbNouvellesQuestions > 0) {
         var tabNouvellesQuestions = JSON.parse(tabParam.nouvellesQuestions);
-        questionnaire.loadQuestionnaire(tabNouvellesQuestions, token);
+        questionnaire.loadQuestionnaire(tabNouvellesQuestions, tabParam.room);
     } else {
-        questionnaire.loadQuestionnaire(questions, token);
+        questionnaire.loadQuestionnaire(questions, tabParam.room);
     }
-    room.getRoom(token).open();
-    room.getRoom(token).setMinNbMembers(tabParam.nbUsersMax);
-    room.getRoom(token).setMaxNbMembers(tabParam.nbUsersMax);
-     
-    res.render('index.ejs', {url: req.headers.host, 
+    room.getRoom(tabParam.room).open();
+    room.getRoom(tabParam.room).setMinNbMembers(tabParam.nbUsersMax);
+    room.getRoom(tabParam.room).setMaxNbMembers(tabParam.nbUsersMax);
+    
+    io.sockets.on('admon-OK', function (socket) {
+        socket.broadcast.emit('create-room', {
+            nbUsers : room.getRoom(tabParam.room).getMembers().length,
+            nbUsersMax : tabParam.nbUsersMax,
+            nbQuestions : tabParam.nbQuestions,
+            timerQuestion : tabParam.timerQuestion
+        });
+    });
+                                                          
+    res.render('user.ejs', {url: req.headers.host, room: tabParam.room});
+    
+    /*res.render('index.ejs', {url: req.headers.host, 
         token: token,
         nbUsers : room.getRoom(token).getMembers().length,
         nbUsersMax : tabParam.nbUsersMax,
         nbQuestions : tabParam.nbQuestions,
         timerQuestion : tabParam.timerQuestion
-    });
+    });*/
 });
 
 /*Génération du flux correspondant à l'image du QR Code*/
@@ -108,6 +116,16 @@ router.get('/new-room/:token', function(req, res) {
     console.log('qr-code affiché : '+ urlQr );
 });
 
+/*Génération du flux correspondant à l'image du QR Code*/
+router.get('/admin-room/:token', function(req, res) {
+    
+    //On affiche l'url du site
+    var urlQr = req.protocol+'://'+req.headers.host+'/admin/'+req.params.token ;
+    var code = qr.image(urlQr, { type: 'svg' });
+    res.type('svg');
+    code.pipe(res);
+    console.log('qr-code affiché : '+ urlQr );
+});
 
 
 /* Page reserve a un utilisateur */
@@ -198,6 +216,13 @@ io.sockets.on('connection', function (socket) {
         }
     });
     
+    //socket pour cacher le QR CODE admin et afficher page d'attente.
+    socket.on('start-admin', function () {
+        console.log('start-admin');
+        socket.broadcast.emit('token-admin-pris', {
+                
+        });
+    });
 });
 
 /** Serveur **/

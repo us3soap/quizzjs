@@ -214,14 +214,15 @@
             </div>
         </div>
         <div class="instruction">
-            Scanne ce QR Code pour rejoindre la partie
+            Scanne ce QR Code pour parametrer votre partie.
         </div>
         <div class="howto">
             <div class="picture">
                 <img src="img/hand-device.png">
             </div>
             <div class="qrcode">
-                <img class="qrcode-img" src="/new-room/<%=token%>"/>
+                <img class="qrcode-img" src="/admin-room/<%=token%>" />
+                <!--src="/new-room/<%=token%>"-->
             </div>
         </div>
         <div class="question-wrapper">
@@ -325,7 +326,7 @@
                     player = players[i];
                     if (!player.classList.contains('active')) {
                         player.classList.add('active');
-                        player.querySelector('.pseudo').innerHTML = username + '<span id="badge-' + token + '" style="display:block" class="badge badge-display">0</span>';
+                        player.querySelector('.pseudo').innerHTML = username + '<span id="badge-' + token + '" style="display:none" class="badge badge-display">0</span>';
                         player.id = token;
                         break;
                     }
@@ -365,6 +366,17 @@
                 
                 switch(view){
                     case 'wait':
+                    break;
+                    
+                    case 'parametrage':
+                        $instruction.innerHTML = "Salon en cours de parametrage, veuillez patienter.";
+                        $howto.style.display = 'none';
+                    break;
+                    
+                    case 'join':
+                        $instruction.innerHTML = "Scanne ce QR Code pour rejoindre la partie.";
+                        $howto.style.display = 'flex';
+                        $howto.querySelector('.qrcode-img').attr('src','/new-room/' + GLOBAL.token);
                     break;
                     
                     case 'transition':
@@ -542,7 +554,18 @@
                             
                         }
                     }
+                })
+                .on('token-admin-pris', function(data) { 
+                    displayInterface("parametrage");
+                })
+                .on('create-room', function(data) { 
+                    GLOBAL.nbUsersMax = data['nbUsersMax'];
+                    GLOBAL.nbQuestions = data['nbQuestions'];
+                    GLOBAL.timerQuestion = data['timerQuestion'];
+                    
+                    displayInterface("join");
                 });
+                
         }());
     </script>
 </body>
