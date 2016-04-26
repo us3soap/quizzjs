@@ -1,71 +1,572 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <title>QuizzJS</title>
-        <link rel="stylesheet" href="/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/css/screen.css">
-    </head>
-    <body>
-        <div class="container-fluid">
-            <input type="hidden" id="url" value="<%=url%>" />
-            <input type="hidden" id="token" value="<%=token%>" />
-            <input type="hidden" id="nbUsersMax" value="<%=nbUsersMax%>" />
-            <input type="hidden" id="nbQuestions" value="<%=nbQuestions%>" />
-            <input type="hidden" id="timerQuestion" value="<%=timerQuestion%>" />
-            
-            <div class="page-header">
-                <h1>QuizzJS <small>Scannez pour commencer...</small></h1>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div id="listeUser" class="row">
-                        <div class="col-md-12">
-                            <h3>Liste des participants <span id="quota" class="label label-primary"> <%=nbUsers%> / <%=nbUsersMax%></span></h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div id="qr-code" class="col-md-12" style="text-align:center;">
-                        <img width="600px" src="/new-room/<%=token%>"/>
-                    </div>
-                    <div id="question" class="col-md-12" style="text-align:center; display: none;">
-                        <h3 id="affichQuestion">La question ?</h3>
-                        <div class="row">
-                            <div id="reponse1" class="col-md-6 btn btn-success"></div>
-                            <div id="reponse2" class="col-md-6 btn btn-info"></div>
-                            <div id="reponse3" class="col-md-6 btn btn-warning"></div>
-                            <div id="reponse4" class="col-md-6 btn btn-danger"></div>
-                        </div>
-                        <div id="timer" class="col-md-offset-5 col-lg-2">
-                            <h3 id="tempsRestant"></h3>
-                        </div>
-                    </div>
-                    <div id="scoring" class="col-md-12" style="text-align:center; display: none;">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div id="listeUser" class="row">
-                        <div class="col-md-12">
-                            <h3>Règle du jeu</h3>
-                        </div>
-                        <div class="col-md-12">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam molestie, magna id convallis pretium, lectus leo condimentum nisl, sit amet interdum massa mi ut nisi. Nullam sed sollicitudin mi, vitae blandit lorem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi elementum malesuada sem a ultricies. Mauris mollis at nunc id dignissim. Ut rhoncus lorem vitae porta mattis. Praesent tincidunt dapibus tellus quis porttitor. Etiam ut ligula vel lacus vulputate molestie. Sed erat leo, ultrices id consequat in, pretium quis turpis. Suspendisse ut erat quis metus tincidunt sollicitudin ornare et ipsum.
-                            
-                            Praesent sit amet accumsan nulla. Integer a augue in neque molestie hendrerit nec vel est. Donec in lacus vestibulum, varius neque id, scelerisque elit. Praesent tincidunt nulla bibendum ante rutrum consectetur. Nam augue diam, euismod eget accumsan sit amet, tempor ac enim. Curabitur dapibus, urna quis finibus pulvinar, erat diam sagittis lectus, vitae viverra augue nulla ac mi. Curabitur id porttitor sem. Suspendisse aliquam sed metus vitae fermentum.
-                            
-                        </div>
-                    </div>
-                    
-                </div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Quizzjs</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body{
+            margin:0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
 
-            </div>
+        .content{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            background-color: #6699ff;
+        }
 
-        </div>
-        <script src="/js/jquery.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/js/notify.min.js"></script>
-        <script src="/js/index_js.js"></script>
+        .players{
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 1%;
+            min-height: 125px;
+        }
+
+        .player{
+            height: 100px;
+            width: 140px;
+            background-image: url(img/player.png);
+            background-repeat: no-repeat;
+            background-position: top;
+            position: relative;
+        }
+
+        .player .pseudo{
+            position: absolute;
+            bottom: -28px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: Verdana, Arial, sans-serif;
+            color: #bfbfbf;
+            font-size: 1.6em;
+        }
+
+        .player.active{background-position: bottom;}
+        .player.active .pseudo{color: #fff;}
+
+        .instruction{
+            color: #FFF;
+            text-align: center;
+            font-size: 2em;
+            font-family: Verdana, Ariel, sans-serif;
+        }
+        .howto{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+
+        .howto .picture{
+            height: 33%;
+            width: 25%;
+            max-width: 250px;
+        }
+
+        .howto .picture img{
+            width: 90%;
+        }
+
+        .howto .qrcode{
+            max-width: 350px;
+            width: 33%;
+            height: 33%;
+        }
+
+        .howto .qrcode .qrcode-img{
+            width: 90%;
+            background-color: #fff;
+        }
         
-    </body>
+        .question-wrapper{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            align-items: center;    
+            display: none;            
+        }
+        
+        .question{
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            color: #fff;
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 2em;
+            text-align: center;
+            padding : 0 10px;
+        }
+        
+        .reponses{
+            display: flex;
+            flex-grow: 2;
+            flex-direction: column;
+            width: 50%;
+            justify-content: space-around;
+            padding: 0 0 2em 2em;
+            
+        }
+                
+        .reponse-square{
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            margin-right: 1em;
+            vertical-align: middle;    
+        }
+        
+        .square1{background-color: #69B854;}
+        .square2{background-color: #6AC0E0;}
+        .square3{background-color: #EBAD41;}
+        .square4{background-color: #D1534C;}
+        
+        .reponse{
+            color: #fff;
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 1.4em;
+            display: inline-flex;
+            vertical-align: middle;
+        }
+        
+        
+        .canvas-wrapper {
+            width: 6em;
+            height: 6em;
+            position: relative;
+        }
+        .timelaps-wheel{
+            background-color: white;
+            width: 100%;
+            height:100%;
+            position:absolute;
+            border-radius: 50px;
+        }
+        #timelaps{position: absolute;}
+        .badge{
+            display:inline-block;
+            min-width:10px;
+            padding:3px 7px;
+            font-size:12px;
+            font-weight:bold;
+            color:#fff;
+            line-height:1;
+            vertical-align:baseline;
+            white-space:nowrap;
+            text-align:center;
+            background-color:#777;
+            border-radius:10px
+        }
+        .badge-display{
+            float: right;
+            font-size: 24px;
+            padding: 5px 10px;
+            margin-top: 1%;
+        }
+        .progress{
+            overflow:hidden;
+            height:20px;
+            margin-bottom:20px;
+            background-color:#f5f5f5;
+            border-radius:4px;
+            -webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow:inset 0 1px 2px rgba(0,0,0,0.1)
+        }
+        .progress-bar{
+            float:left;
+            width:0%;
+            height:100%;
+            font-size:12px;
+            line-height:20px;
+            color:#fff;
+            text-align:center;
+            background-color:#337ab7;
+            -webkit-box-shadow:inset 0 -1px 0 rgba(0,0,0,0.15);
+            box-shadow:inset 0 -1px 0 rgba(0,0,0,0.15);
+            -webkit-transition:width .6s ease;
+            -o-transition:width .6s ease;
+            transition:width .6s ease
+        }
+        .scoring{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            align-items: center;    
+            display: none;   
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="players">
+            <div class="canvas-wrapper">
+                <div class="timelaps-wheel"></div>
+                <canvas id="timelaps" width="100%" height="100%">mince, pas compatible avec cette écran ...</canvas>
+            </div>
+        </div>
+        <div class="instruction">
+            Scanne ce QR Code pour parametrer votre partie.
+        </div>
+        <div class="howto">
+            <div class="picture">
+                <img src="img/hand-device.png">
+            </div>
+            <div class="qrcode">
+                <img class="qrcode-img" src="/admin-room/<%=token%>" />
+                <!--src="/new-room/<%=token%>"-->
+            </div>
+        </div>
+        <div class="question-wrapper">
+            <div class="question">
+                <div>Dans la trilogie du Seigneur des Anneaux, combien d'aventuriers composent la Communauté de l'Anneau ?</div>
+            </div>
+            <div class="reponses">
+                <div>
+                    <span class="reponse-square square1"></span><div class="reponse" id="reponse1">reponse dazazhj dzakhldza 1</div>
+                </div>
+                <div>
+                    <span class="reponse-square square2"></span><div class="reponse" id="reponse2">reponse 2</div>
+                </div>
+                <div>
+                    <span class="reponse-square square3"></span><div class="reponse" id="reponse3">reponse 3</div>
+                </div>
+                <div>
+                    <span class="reponse-square square4"></span><div class="reponse" id="reponse4">reponse 4</div>
+                </div>
+            </div>    
+        </div>
+        <div class="scoring">
+        </div>
+    </div>
+    
+    <script>
+        var GLOBAL = {
+            url: '<%= url %>',
+            token: '<%= token %>',
+            nbUsersMax: <%= nbUsersMax %>,
+            nbQuestions : <%= nbQuestions %>,
+            timerQuestion: <%= timerQuestion %>
+        };
+    </script>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        (function () {
+            var $players = document.querySelector('.players'),
+                $timelaps = $players.querySelector('.canvas-wrapper'),
+                $instruction = document.querySelector('.instruction'),
+                $howto = document.querySelector('.howto'),
+                $questionWrapper = document.querySelector('.question-wrapper'),
+                $question = $questionWrapper.querySelector('.question'),
+                $reponse1 = $questionWrapper.querySelector('#reponse1'),
+                $reponse2 = $questionWrapper.querySelector('#reponse2'),
+                $reponse3 = $questionWrapper.querySelector('#reponse3'),
+                $reponse4 = $questionWrapper.querySelector('#reponse4'),
+                $scoring = document.querySelector('.scoring');
+            
+            var cptQuestion = 0,
+                eventQuestion = null,
+                eventChrono = null,
+                nbReponseRecu = 0,
+                bonneReponse = null,
+                explicationsReponse = null,
+                tempsDeTransition = 6000;
+            
+            var socket = io.connect('http://'+ GLOBAL.url);
+           
+            // ajout des emplacements des joueurs
+            var playerAvatars = '';
+            for( var i = 0; i < GLOBAL.nbUsersMax; i++) {
+                playerAvatars += '<div class="player"><div class="pseudo">attente</div></div>';
+            }
+           
+            $players.innerHTML = playerAvatars + $players.innerHTML;
+
+
+            // gestion du timer
+            var $timelapsWrapper = document.querySelector('.canvas-wrapper'),
+                $timelaps = document.querySelector('#timelaps'),
+                timelapsCtx = $timelaps.getContext("2d");
+        
+            var timelapsH = $timelapsWrapper.offsetHeight,
+                timelapsW = $timelapsWrapper.offsetWidth,
+                timelapsCenter = timelapsW / 2;
+
+            var r = timelapsW/2,
+                x = 0,
+                y = 0;
+                
+            var angle = -90;
+            var totalTime = GLOBAL.timerQuestion * 1000; //ms
+            var tickInterval = 250;
+            var step = tickInterval * 360 / totalTime;
+            var tick = 0;
+            var nextStep = 0;
+            var interval;
+
+
+
+            /**
+            * Function permettant l'ajout d'un joueur.
+            * @arg String token : la clé référençant l'utilisateur.
+            * @arg String username : le nom d'utilisateur.
+            **/
+            function addParticipants(token, username){
+                var players = $players.querySelectorAll('.player');
+                for(var i = 0, l = players.length, player; i < l; i++) {
+                    player = players[i];
+                    if (!player.classList.contains('active')) {
+                        player.classList.add('active');
+                        player.querySelector('.pseudo').innerHTML = username + '<span id="badge-' + token + '" style="display:none" class="badge badge-display">0</span>';
+                        player.id = token;
+                        break;
+                    }
+                }
+            }
+            
+            /**
+            * Function permettant la suppression d'un joueur.
+            * @arg String token : la clé référençant l'utilisateur.
+            * @arg String username : le nom d'utilisateur.
+            **/
+            function removeParticipant(token, username){
+                var player = $players.querySelector('#' + token);
+                player.classList.remove('active');
+                player.id = '';
+                player.querySelector('.pseudo').innerHTML = 'attente';
+            }
+            
+            /**
+            * Function permettant la gestion du quota de joueur.
+            * @arg int nbUsersActuels : le nombre d'utilisateur connecté.
+            **/
+            function gererUsersMax(nbUsersActuels){
+                if(GLOBAL.nbUsersMax == nbUsersActuels){
+                    console.log('nb joueurs atteint');
+                }else{
+                    console.log('manque encore des joueurs');
+                }
+            }
+
+            /**
+            * Function permettant la gestion de la vue à afficher.
+            * @arg String la vue à atteindre [wait -> transition -> play -> score]
+            **/
+            function displayInterface(view){
+                console.log('displayInterface, view = ' + view);
+                
+                switch(view){
+                    case 'wait':
+                    break;
+                    
+                    case 'parametrage':
+                        $instruction.innerHTML = "Salon en cours de parametrage, veuillez patienter.";
+                        $howto.style.display = 'none';
+                    break;
+                    
+                    case 'join':
+                        $instruction.innerHTML = "Scanne ce QR Code pour rejoindre la partie.";
+                        $howto.style.display = 'flex';
+                        $howto.querySelector('.qrcode-img').attr('src','/new-room/' + GLOBAL.token);
+                    break;
+                    
+                    case 'transition':
+                        $howto.style.display = 'none';
+                        $instruction.innerHTML = "Tout le monde est la. Préparez vous !";
+                    break;
+                    
+                    case 'play':
+                        $howto.style.display = 'none';
+                        $instruction.style.display = 'none';
+                        $timelaps.style.display = 'flex';
+                        $questionWrapper.style.display = 'flex';
+                        $scoring.style.display = 'none';
+                    break;
+                    
+                    case 'score':
+                        $questionWrapper.style.display = 'none';
+                        $timelaps.style.display = 'none';
+                        $scoring.style.display = 'flex';
+                        showResultat();
+                    break;
+                    
+                    default:
+                        console.log('Erreur, la vue "' + view + '" n\'est pas connue');
+                }
+            }
+     
+            /**
+             * Function gérant l'animation des scores,
+             * affichage en plus de la réponse et explication à la question précédente
+             **/
+            function showResultat(){
+                var divPartieStatic = '<div class="question">'
+                                    +       'La bonne réponse était : ' + bonneReponse + '</br></br>'
+                                    +       'animate de la bonne réponse vers ici ?</br></br>'
+                                    +       explicationsReponse
+                                    + '</div>'
+                                    + '<div class="reponses">';
+                var divPartieDynamique = "";
+                
+                var players = $players.querySelectorAll('.player');
+                for(var i = 0, l = players.length, player; i < l; i++) {
+                    player = players[i];
+                    divPartieDynamique += '<div class="progress">'
+                        +                       '<div class="progress progress-bar" role="progressbar" aria-valuenow="'
+                        +                           player.querySelector('.badge').innerHTML / GLOBAL.nbQuestions * 100
+                        +                           '" aria-valuemin="0" aria-valuemax="100" style="width: '
+                        +                           player.querySelector('.badge').innerHTML / GLOBAL.nbQuestions * 100
+                        +                           '%;">'
+                        +                           player.querySelector('.pseudo').innerHTML
+                        +                       '</div>'
+                        +                   '</div>';
+                }
+                
+                $scoring.innerHTML = divPartieStatic + divPartieDynamique + '</div>';
+                
+            }
+    
+     
+            function chrono(){
+                console.log('chrono');
+                // var tmp = parseFloat($("#tempsRestant").html());
+                // $("#tempsRestant").html(tmp-1);
+            }
+            
+            
+            /** Functions permettant de comptabiliser et recupérer les questions
+            * + gestion du chrono
+            **/
+            //cycle de vie de la question.            
+            function myGame() {
+                
+                if (cptQuestion == GLOBAL.nbQuestions) {
+                    clearInterval(eventQuestion);
+                    clearInterval(eventChrono);
+                    
+                    //Affichage des scores.
+                    displayInterface("score");
+                } else {
+                    socket.emit('recup-question', {room : GLOBAL.token}, function (data) {
+                        nbReponseRecu = 0;
+                        clearInterval(eventChrono);
+                        cptQuestion = cptQuestion + 1;
+        
+                        $question.innerHTML = data['question'];
+                        $reponse1.innerHTML = data['reponse1'];
+                        $reponse2.innerHTML = data['reponse2'];
+                        $reponse3.innerHTML = data['reponse3'];
+                        $reponse4.innerHTML = data['reponse4'];
+                        bonneReponse = data['good'];
+                        explicationsReponse = data['explication'];
+                        
+                        displayInterface("play");
+                        
+                        eventChrono = setInterval(chrono, 1000 ); //timer mise a jour du chrono.
+                        window.clearInterval(interval);
+                        
+                        timelapsCtx.strokeStyle = "rgb(106, 150, 241)";
+                        timelapsCtx.lineWidth = 1;
+                        timelapsCtx.beginPath();
+                        angle = -90;
+                        tick = 0;
+                        timelapsCtx.clearRect(0, 0, timelapsW, timelapsH);
+                        
+                        interval = window.setInterval(function () {
+                            nextStep = angle + step;
+                            
+                            while(angle < nextStep){
+                                x = r + r*Math.cos(angle*(Math.PI/180));
+                                y = r + r*Math.sin(angle*(Math.PI/180));
+                                
+                                timelapsCtx.moveTo(timelapsW/2, timelapsH/2);
+                                timelapsCtx.lineTo(x,y);
+                                timelapsCtx.stroke();
+                                angle++;
+                            }
+                            
+                            tick += tickInterval;
+                            if (tick >= totalTime) {
+                                console.log('stop tick ' + (tick/1000) + 's');
+                                window.clearInterval(interval);
+                                displayInterface("score");
+                            }
+                        }, tickInterval);
+                    });
+                }
+            }  
+            
+            // gestion du socket
+            socket
+                .on('new-user-' + GLOBAL.token, function(data) { 
+                    addParticipants(data['usertoken'], data['user']);
+                    gererUsersMax(data['nbUsers']);
+                    
+                })
+                .on('user-left-' + GLOBAL.token, function(data) {
+                    removeParticipant(data['usertoken'], data['username']);
+                    gererUsersMax(data['nbUsers']);
+                })
+                .on('start-party-room-' + GLOBAL.token, function(user) {
+                    
+                    displayInterface("transition");
+                    
+                    setTimeout (function(){
+                        socket.emit('start', {room : GLOBAL.token}, function (data) {
+                            
+                            //Je lance ma fonction en même temps que l'event
+                            //car la première itération de mon event se fait au bon de 10 sec.
+                            myGame();
+                            //ici, une question durera xx secondes, paramétré par l'utilisateur, 10 secondes par défaut.
+                            eventQuestion = setInterval(myGame, ((GLOBAL.timerQuestion * 1000) + tempsDeTransition) );
+                        });
+                    }, 5000);
+                })
+                .on('maj-party-users-' + GLOBAL.token, function(data) {
+                    $players.querySelector('#badge-' + data['usertoken']).innerHTML = data["score"];
+
+                    console.log('maj-party-users');
+                    console.log(data);
+                    
+                    nbReponseRecu++;
+                    //si tout le monde a repondu alors transition de 4 secondes et on passe à la question suivante.
+                    if (GLOBAL.nbUsersMax==nbReponseRecu) {
+                        clearInterval(eventQuestion);
+                        clearInterval(eventChrono);
+                        displayInterface("score");
+                        
+                        //relance question dans 6 secondes (après le recap des scores)
+                        if (cptQuestion < GLOBAL.nbQuestions) {
+                            setTimeout (function(){
+                                myGame();
+                                eventQuestion = setInterval(myGame, ((GLOBAL.timerQuestion * 1000) + tempsDeTransition ) );
+                            },tempsDeTransition);
+                        } else {
+                            
+                        }
+                    }
+                })
+                .on('token-admin-pris', function(data) { 
+                    displayInterface("parametrage");
+                })
+                .on('create-room', function(data) { 
+                    GLOBAL.nbUsersMax = data['nbUsersMax'];
+                    GLOBAL.nbQuestions = data['nbQuestions'];
+                    GLOBAL.timerQuestion = data['timerQuestion'];
+                    
+                    displayInterface("join");
+                });
+                
+        }());
+    </script>
+</body>
 </html>
