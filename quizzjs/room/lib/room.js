@@ -10,7 +10,8 @@ function Room() {
 	this.members = [];
 	this.maxNbMembers = 30;
 	this.minNbMembers = 0;
-	this.openState = false;
+	this.openStatus = false;
+	this.readyStatus = false;
 }
 
 ///// Indicateurs
@@ -20,7 +21,7 @@ function Room() {
  * @return boolean true si la salle est ouverte, false si elle est fermée.
  */
 Room.prototype.isOpen = function() {
-	return this.openState;
+	return this.openStatus;
 }
 
 /*
@@ -28,8 +29,18 @@ Room.prototype.isOpen = function() {
  * @return boolean true si la salle est fermée, false si elle est ouverte.
  */
 Room.prototype.isClosed = function() {
-	return !this.openState;
+	return !this.openStatus;
 }
+
+/*
+ * Indique si la salle est paramétrée
+ * @return boolean true si la salle est prête et configurée, false si elle doit être mise en place.
+ */
+Room.prototype.isReady = function() {
+	return this.readyStatus;
+}
+
+
 
 /*
  * Indique si la salle a atteinte sa capacité maximale.
@@ -145,7 +156,7 @@ Room.prototype.close = function() {
  * @return boolean true si le membre est ajouté, false sinon.
  */
 Room.prototype.memberJoin = function() {
-	var res;	
+	var res;
 	if(res = (!this.isFull() && this.isOpen()))
 	{
 		var member = new Member();
@@ -167,7 +178,7 @@ Room.prototype.memberLeave = function(memberToken) {
 		this.members.splice(index, 1);
 	else
 		throw "Le membre n'est pas dans cette salle.";
-		
+
 	return index;
 }
 
@@ -182,7 +193,7 @@ Room.prototype.indexMember = function(memberToken) {
 		if(this.members[i].getToken() == memberToken)
 			return i;
 	}
-	
+
 	return -1;
 }
 
