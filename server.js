@@ -29,14 +29,7 @@ router.get('/', function(req, res) {
 
     res.render('index.ejs', {url: req.protocol+'://'+req.headers.host,
                             token: token,
-<<<<<<< HEAD
                             ready2play: myRoom.isReady()
-=======
-                            nbUsers : room.getRoom(token).getMembers().length,
-                            nbUsersMax : 0,
-                            nbQuestions : 10,
-                            timerQuestion : 10
->>>>>>> prob01
     });
 });
 
@@ -48,7 +41,6 @@ router.get('/', function(req, res) {
 router.get('/access-room/:token', function(req, res) {
     var myRoom = room.getRoom(req.params.token);
 
-<<<<<<< HEAD
     if(myRoom != false) {
       //On affiche l'url du site
       var urlQr = req.protocol+'://'+req.headers.host+'/room/'+req.params.token;
@@ -57,11 +49,6 @@ router.get('/access-room/:token', function(req, res) {
       code.pipe(res);
       console.log('qr-code affiché : '+ urlQr );
     }
-=======
-/* Admin page */
-router.get('/admin/:token', function(req, res) {
-    res.render('admin.ejs', {url: req.headers.host,room: req.params.token });
->>>>>>> prob01
 });
 
 /** Génération du flux correspondant à l'image du QR Code pour rejoindre une partie paramétrée
@@ -159,86 +146,6 @@ router.get('/room/:token', function(req, res) {
         });
     }
 });
-
-/* creation d'une room avec les paramètres */
-/** @deprecated **/
-/*router.get('/paramRoom/:tabParam', function(req, res) {
-    console.log("tabParam : "+ req.params.tabParam);
-    var tabParam = JSON.parse(req.params.tabParam);
-    console.log("nbUsersMax : " + tabParam.nbUsersMax);
-    console.log("nbQuestions : " + tabParam.nbQuestions);
-    console.log("timerQuestion : " + tabParam.timerQuestion);
-    console.log("nbNouvellesQuestions : " + tabParam.nbNouvellesQuestions);
-    console.log("NouvellesQuestions JSON : " + tabParam.nouvellesQuestions);
-
-    //Si l'utilisateur a saisi des questions alors
-    //on remplace les questions par defaut par les siennes
-    if (tabParam.nbNouvellesQuestions > 0) {
-        var tabNouvellesQuestions = JSON.parse(tabParam.nouvellesQuestions);
-        questionnaire.loadQuestionnaire(tabNouvellesQuestions, tabParam.room);
-    } else {
-        questionnaire.loadQuestionnaire(questions, tabParam.room);
-    }
-<<<<<<< HEAD
-    room.getRoom(token).open();
-    room.getRoom(token).setMinNbMembers(tabParam.nbUsersMax);
-    room.getRoom(token).setMaxNbMembers(tabParam.nbUsersMax);
-
-    res.render('index.ejs', {url: req.headers.host,
-=======
-    room.getRoom(tabParam.room).open();
-    room.getRoom(tabParam.room).setMinNbMembers(tabParam.nbUsersMax);
-    room.getRoom(tabParam.room).setMaxNbMembers(tabParam.nbUsersMax);
-    
-    io.sockets.on('admon-OK', function (socket) {
-        socket.broadcast.emit('create-room', {
-            nbUsers : room.getRoom(tabParam.room).getMembers().length,
-            nbUsersMax : tabParam.nbUsersMax,
-            nbQuestions : tabParam.nbQuestions,
-            timerQuestion : tabParam.timerQuestion
-        });
-    });
-                                                          
-    res.render('user.ejs', {url: req.headers.host, room: tabParam.room});
-    
-    /*res.render('index.ejs', {url: req.headers.host, 
->>>>>>> prob01
-        token: token,
-        nbUsers : room.getRoom(token).getMembers().length,
-        nbUsersMax : tabParam.nbUsersMax,
-        nbQuestions : tabParam.nbQuestions,
-        timerQuestion : tabParam.timerQuestion
-<<<<<<< HEAD
-    });
-});*/
-=======
-    });*/
-});
-
-/*Génération du flux correspondant à l'image du QR Code*/
-router.get('/new-room/:token', function(req, res) {
-    
-    //On affiche l'url du site
-    var urlQr = req.protocol+'://'+req.headers.host+'/room/'+req.params.token;
-    var code = qr.image(urlQr, { type: 'svg' });
-    res.type('svg');
-    code.pipe(res);
-    console.log('qr-code affiché : '+ urlQr );
-});
->>>>>>> prob01
-
-/*Génération du flux correspondant à l'image du QR Code*/
-router.get('/admin-room/:token', function(req, res) {
-    
-    //On affiche l'url du site
-    var urlQr = req.protocol+'://'+req.headers.host+'/admin/'+req.params.token ;
-    var code = qr.image(urlQr, { type: 'svg' });
-    res.type('svg');
-    code.pipe(res);
-    console.log('qr-code affiché : '+ urlQr );
-});
-
-
 /** Socket **/
 
 // Quand un client se connecte, on le note dans la console
@@ -307,18 +214,6 @@ io.sockets.on('connection', function (socket) {
             });
         }
     });
-<<<<<<< HEAD
-
-=======
-    
-    //socket pour cacher le QR CODE admin et afficher page d'attente.
-    socket.on('start-admin', function () {
-        console.log('start-admin');
-        socket.broadcast.emit('token-admin-pris', {
-                
-        });
-    });
->>>>>>> prob01
 });
 
 /* Access page */
