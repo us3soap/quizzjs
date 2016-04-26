@@ -10,6 +10,8 @@ function Room() {
 	this.members = [];
 	this.maxNbMembers = 30;
 	this.minNbMembers = 0;
+	this.nbQuestions = 1;
+	this.timerQuestion = 1;
 	this.openStatus = false;
 	this.readyStatus = false;
 }
@@ -111,6 +113,22 @@ Room.prototype.getMinNbMembers = function() {
 }
 
 /*
+ * Retourne le nombre de questions à poser.
+ * @return integer.
+ */
+Room.prototype.getNbQuestions = function() {
+	return this.nbQuestions;
+}
+
+/*
+ * Retourne le temps pour chaque questions à poser.
+ * @return integer.
+ */
+Room.prototype.getTimerQuestion = function() {
+	return this.timerQuestion;
+}
+
+/*
  * Valorise le nombre maximum de membres autorisés dans cette salle
  * @param integer
  */
@@ -132,6 +150,28 @@ Room.prototype.setMinNbMembers = function(minNb) {
 		this.minNbMembers = minNb;
 }
 
+/*
+ * Valorise le nombre de questions posées dans cette salle
+ * @param integer
+ */
+Room.prototype.setNbQuestions = function(nb) {
+	if(nb < 1)
+		throw "Le nombre de question doit être supérieur à 1.";
+	else
+		this.nbQuestions = nb;
+}
+
+/*
+ * Valorise le temps pour chaque questions à poser.
+ * @param integer
+ */
+Room.prototype.setTimerQuestion = function(nb) {
+	if(nb < 1)
+		throw "Le temps pour chaque question doit être supérieur à 1.";
+	else
+		this.timerQuestion = nb;
+}
+
 /////
 
 ///// Méthodes
@@ -148,6 +188,20 @@ Room.prototype.open = function() {
  */
 Room.prototype.close = function() {
 	this.openState = false;
+}
+
+/*
+ * Permet de spécifier que la salle est paramétrée.
+ */
+Room.prototype.setReady = function() {
+	this.readyStatus = true;
+}
+
+/*
+* Permet de spécifier que la salle est à paramétrer.
+ */
+Room.prototype.setWaiting = function() {
+	this.readyStatus = false;
 }
 
 /*
