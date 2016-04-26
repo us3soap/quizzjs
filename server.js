@@ -177,6 +177,23 @@ io.sockets.on('connection', function (socket) {
         fn({userToken:userToken});
     });
 
+     // Socket permettant l'administration de la salle.
+        socket.on('param-room', function (data, fn) {
+          if(room.getRoom(data["room"]) != false){
+            room.getRoom(data["room"]).setReady();
+            //--Parametrage
+            room.getRoom(data["room"]).setMaxNbMembers(data["maxNbMembers"]);
+            room.getRoom(data["room"]).setNbQuestions(data["nbQuestions"]);
+            room.getRoom(data["room"]).setTimerQuestion(data["timerQuestion"]X);
+            //--Load questions
+            questionnaire.loadQuestionnaire(questions.questions, data["room"]);
+            fn({url: req.protocol+'://'+req.headers.host+"/room/"+data["room"]});
+          }else{
+            fn(false);
+          }
+
+        });
+
     // Socket permettant le lancement de la partie.
     socket.on('start', function (data, fn) {
         console.log('Debut de la party : '+data["room"]);
@@ -185,7 +202,7 @@ io.sockets.on('connection', function (socket) {
         fn(true);
     });
 
-    //socket d'écoute pour renvoyer une question aléa aux clients (index + user).
+    // Socket d'écoute pour renvoyer une question aléa aux clients (index + user).
     socket.on('recup-question', function (data, fn) {
         var fluxQuestion = questionnaire.getQuestionnaire(data["room"]).getFluxQuestionAleatoire();
         socket.broadcast.emit('start-party-users-'+data["room"], fluxQuestion);
@@ -201,6 +218,10 @@ io.sockets.on('connection', function (socket) {
                                                                    });
         fn(true);
     });
+
+    // Socket de relance de la salle
+
+    // Socket fermeture de salle
 
     //socket de deconnexion d'un joueur.
     socket.on('disconnect', function () {
