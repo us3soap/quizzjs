@@ -80,7 +80,7 @@ router.get('/admin/:token', function(req, res) {
     var myRoom = room.getRoom(req.params.token);
     res.render('admin.ejs', {url: req.headers.host});
 
-    if(var myRoom != false) {
+    if(myRoom != false) {
         if(! room.getRoom(req.params.token).isReady()){
             console.log("Welcome to room : ["+req.params.token+"]");
             myRoom.setName("Room : ["+req.params.token+"]");
