@@ -184,7 +184,7 @@ io.sockets.on('connection', function (socket) {
             //--Parametrage
             room.getRoom(data["room"]).setMaxNbMembers(data["maxNbMembers"]);
             room.getRoom(data["room"]).setNbQuestions(data["nbQuestions"]);
-            room.getRoom(data["room"]).setTimerQuestion(data["timerQuestion"]X);
+            room.getRoom(data["room"]).setTimerQuestion(data["timerQuestion"]);
             //--Load questions
             questionnaire.loadQuestionnaire(questions.questions, data["room"]);
             fn({url: req.protocol+'://'+req.headers.host+"/room/"+data["room"]});
