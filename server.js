@@ -25,7 +25,8 @@ router.get('/', function(req, res) {
 
     //Création d'une nouvelle room
     var token = room.newRoom();
-    var myRoom = room.getRoom(token).open();
+    var myRoom = room.getRoom(token);
+    myRoom.open();
 
     res.render('index.ejs', {url: req.protocol+'://'+req.headers.host,
                             token: token,
@@ -78,14 +79,14 @@ router.get('/admin-room/:token', function(req, res) {
 router.get('/admin/:token', function(req, res) {
 
     var myRoom = room.getRoom(req.params.token);
-    res.render('admin.ejs', {url: req.headers.host});
+    //res.render('admin.ejs', {url: req.headers.host});
 
     if(myRoom != false) {
         if(! room.getRoom(req.params.token).isReady()){
             console.log("Welcome to room : ["+req.params.token+"]");
             myRoom.setName("Room : ["+req.params.token+"]");
             res.render('admin.ejs', {url: req.protocol+'://'+req.headers.host,
-                                    room: req.params.token,
+                                    token: req.params.token,
                                     error: null
           });
         }else{
@@ -177,22 +178,22 @@ io.sockets.on('connection', function (socket) {
         fn({userToken:userToken});
     });
 
-     // Socket permettant l'administration de la salle.
-        socket.on('param-room', function (data, fn) {
-          if(room.getRoom(data["room"]) != false){
-            room.getRoom(data["room"]).setReady();
-            //--Parametrage
-            room.getRoom(data["room"]).setMaxNbMembers(data["maxNbMembers"]);
-            room.getRoom(data["room"]).setNbQuestions(data["nbQuestions"]);
-            room.getRoom(data["room"]).setTimerQuestion(data["timerQuestion"]);
-            //--Load questions
-            questionnaire.loadQuestionnaire(questions.questions, data["room"]);
-            fn({url: req.protocol+'://'+req.headers.host+"/room/"+data["room"]});
-          }else{
-            fn(false);
-          }
+    // Socket permettant l'administration de la salle.
+    socket.on('param-room', function (data, fn) {
+      if(room.getRoom(data["room"]) != false){
+        room.getRoom(data["room"]).setReady();
+        //--Parametrage
+        room.getRoom(data["room"]).setMaxNbMembers(data["maxNbMembers"]);
+        room.getRoom(data["room"]).setNbQuestions(data["nbQuestions"]);
+        room.getRoom(data["room"]).setTimerQuestion(data["timerQuestion"]);
+        //--Load questions
+        questionnaire.loadQuestionnaire(questions.questions, data["room"]);
+        fn({url: "/room/"+data["room"]});
+      }else{
+        fn(false);
+      }
 
-        });
+    });
 
     // Socket permettant le lancement de la partie.
     socket.on('start', function (data, fn) {
@@ -237,28 +238,6 @@ io.sockets.on('connection', function (socket) {
     });
 });
 
-/* Access page */
-/** @deprecated **/
-/*router.get('/access', function(req, res) {
-    res.render('access.ejs', {room : true});
-});*/
-
-/* Room page. */
-/** @deprecated **/
-/*router.get('/direct/:token', function(req, res) {
-    console.log("token : "+ req.params.token);
-    if(req.params.token != null){
-        if(room.getRoom(req.params.token).isOpen()){
-            res.render('index.ejs', {url: req.headers.host,
-                                    token: req.params.token,
-                                    nbUsers : room.getRoom(req.params.token).getMembers().length,
-                                    nbUsersMax : room.getRoom(req.params.token).getMinNbMembers(),
-                                    nbQuestions : 10,
-                                    timerQuestion : 10
-            });
-        }
-    }
-});*/
 
 /** Serveur **/
 server.listen(process.env.PORT, process.env.IP, function(){
