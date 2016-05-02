@@ -30,7 +30,6 @@ $(function() {
         }else{
             var fluxnouvellesQuestions = recupFluxNouvellesQuestions();
             var parametres = {'room': GLOBAL.token, 'nbUsersMax': nbUserSaisi, 'nbQuestions' : nbQuestionsSaisi, 'timerQuestion' : timerQuestion, 'nbNouvellesQuestions' : cptQuestion.toString(), 'nouvellesQuestions' : fluxnouvellesQuestions};
-            $.notify("test1");
             socket.emit('param-room', parametres , function (data) {
                 if (data["url"] != null){
                     document.location=data["url"];

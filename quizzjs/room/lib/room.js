@@ -180,14 +180,14 @@ Room.prototype.setTimerQuestion = function(nb) {
  * Ouvre la salle.
  */
 Room.prototype.open = function() {
-	this.openState = true;
+	this.openStatus = true;
 }
 
 /*
  * Ferme la salle.
  */
 Room.prototype.close = function() {
-	this.openState = false;
+	this.openStatus = false;
 }
 
 /*

@@ -2,7 +2,7 @@ $(function() {
     
     /** Variable **/
     var url = $("#url").val();
-    var socket = io.connect('http://'+ url);
+    var socket = io.connect(GLOBAL.url);
     var token = $("#token").val();
     var pseudo = "";
     var userToken = "";

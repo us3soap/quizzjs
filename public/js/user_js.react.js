@@ -28,7 +28,7 @@
         */
         componentDidMount: function () {
             var that = this,
-                _socket = io.connect('http://' + this.props.url);
+                _socket = io.connect(this.props.url);
 
             this.setState({ socket: _socket });
 
