@@ -277,18 +277,9 @@
                 nbReponseRecu = 0,
                 bonneReponse = null,
                 explicationsReponse = null,
-                tempsDeTransition = 6000,
-                interval = null;
-                
+                tempsDeTransition = 6000;
+            
             var socket = io.connect(GLOBAL.url);
-
-            /**
-             * Fonction permettant de créer le timer
-             **/
-            function createTimer() {
-                
-                
-            }
 
             /**
             * Function permettant l'ajout d'un joueur.
@@ -385,8 +376,8 @@
              **/
             function showResultat(){
                 var divPartieStatic = '<div class="question">'
-                                    +       'La bonne réponse était : ' + $questionWrapper.querySelector('#'+bonneReponse).innerHTML + '</br></br>'
-                                    +       '</br></br>'
+                                    +       'La bonne réponse était : ' + bonneReponse + '</br></br>'
+                                    +       'animate de la bonne réponse vers ici ?</br></br>'
                                     +       explicationsReponse
                                     + '</div>'
                                     + '<div class="reponses">';
@@ -409,6 +400,14 @@
                 $scoring.innerHTML = divPartieStatic + divPartieDynamique + '</div>';
                 
             }
+    
+     
+            function chrono(){
+                console.log('chrono');
+                // var tmp = parseFloat($("#tempsRestant").html());
+                // $("#tempsRestant").html(tmp-1);
+            }
+            
             
             /** Functions permettant de comptabiliser et recupérer les questions
             * + gestion du chrono
@@ -425,6 +424,7 @@
                 } else {
                     socket.emit('recup-question', {room : GLOBAL.token}, function (data) {
                         nbReponseRecu = 0;
+                        clearInterval(eventChrono);
                         cptQuestion = cptQuestion + 1;
         
                         $question.innerHTML = data['question'];
@@ -437,6 +437,7 @@
                         
                         displayInterface("play");
                         
+                        eventChrono = setInterval(chrono, 1000 ); //timer mise a jour du chrono.
                         window.clearInterval(interval);
                         
                         // gestion du timer
@@ -458,6 +459,7 @@
                         var step = tickInterval * 360 / totalTime;
                         var tick = 0;
                         var nextStep = 0;
+                        var interval;
                         
                         timelapsCtx.strokeStyle = "rgb(106, 150, 241)";
                         timelapsCtx.lineWidth = 1;
@@ -538,6 +540,7 @@
                     //si tout le monde a repondu alors transition de 4 secondes et on passe à la question suivante.
                     if (GLOBAL.nbUsersMax==nbReponseRecu) {
                         clearInterval(eventQuestion);
+                        clearInterval(eventChrono);
                         displayInterface("score");
                         
                         //relance question dans 6 secondes (après le recap des scores)
@@ -561,7 +564,6 @@
                     
                     displayInterface("join");
                     createPlayers();
-                    createTimer();
                 })
                 
         }());

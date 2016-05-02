@@ -184,12 +184,12 @@ io.sockets.on('connection', function (socket) {
         room.getRoom(data["room"]).setReady();
         room.getRoom(data["room"]).open();
         //--Parametrage
-        room.getRoom(data["room"]).setNbQuestions(data["nbQuestions"]);
         room.getRoom(data["room"]).setMaxNbMembers(data["nbUsersMax"]);
         room.getRoom(data["room"]).setTimerQuestion(data["timerQuestion"]);
         
         //--Load questions si l'utilisateur en a saisi
         if (data["nbNouvellesQuestions"] > 0) {
+            room.getRoom(data["room"]).setNbQuestions(data["nbQuestions"]);
             questionnaire.loadQuestionnaire(JSON.parse(data["nouvellesQuestions"]), data["room"]);
         } else {
             questionnaire.loadQuestionnaire(questions, data["room"]);
