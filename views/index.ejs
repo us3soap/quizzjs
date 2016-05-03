@@ -230,16 +230,16 @@
                 <div>Dans la trilogie du Seigneur des Anneaux, combien d'aventuriers composent la Communauté de l'Anneau ?</div>
             </div>
             <div class="reponses">
-                <div>
-                    <span class="reponse-square square1"></span><div class="reponse" id="reponse1">reponse dazazhj dzakhldza 1</div>
+                <div id="divreponse1">
+                    <span class="reponse-square square1"></span><div class="reponse" id="reponse1">reponse 1</div>
                 </div>
-                <div>
+                <div id="divreponse2">
                     <span class="reponse-square square2"></span><div class="reponse" id="reponse2">reponse 2</div>
                 </div>
-                <div>
+                <div id="divreponse3">
                     <span class="reponse-square square3"></span><div class="reponse" id="reponse3">reponse 3</div>
                 </div>
-                <div>
+                <div id="divreponse4">
                     <span class="reponse-square square4"></span><div class="reponse" id="reponse4">reponse 4</div>
                 </div>
             </div>    
@@ -260,7 +260,7 @@
     <script>
         (function () {
             var $players = document.querySelector('.players'),
-                $timelaps = $players.querySelector('.canvas-wrapper'),
+                $canvas = $players.querySelector('.canvas-wrapper'),
                 $instruction = document.querySelector('.instruction'),
                 $howto = document.querySelector('.howto'),
                 $questionWrapper = document.querySelector('.question-wrapper'),
@@ -269,16 +269,20 @@
                 $reponse2 = $questionWrapper.querySelector('#reponse2'),
                 $reponse3 = $questionWrapper.querySelector('#reponse3'),
                 $reponse4 = $questionWrapper.querySelector('#reponse4'),
+                $divReponse1 = $questionWrapper.querySelector('#divreponse1'),
+                $divReponse2 = $questionWrapper.querySelector('#divreponse2'),
+                $divReponse3 = $questionWrapper.querySelector('#divreponse3'),
+                $divReponse4 = $questionWrapper.querySelector('#divreponse4'),
                 $scoring = document.querySelector('.scoring');
             
             var cptQuestion = 0,
                 eventQuestion = null,
-                eventChrono = null,
                 nbReponseRecu = 0,
                 bonneReponse = null,
                 explicationsReponse = null,
-                tempsDeTransition = 6000;
-            
+                tempsDeTransition = 6000,
+                interval = null;
+                
             var socket = io.connect(GLOBAL.url);
 
             /**
@@ -353,14 +357,17 @@
                     case 'play':
                         $howto.style.display = 'none';
                         $instruction.style.display = 'none';
-                        $timelaps.style.display = 'flex';
+                        $canvas.style.display = 'flex';
                         $questionWrapper.style.display = 'flex';
+                        $divReponse1.style.display = 'flex';
+                        $divReponse2.style.display = 'flex';
+                        $divReponse3.style.display = 'flex';
+                        $divReponse4.style.display = 'flex';
                         $scoring.style.display = 'none';
                     break;
                     
                     case 'score':
-                        $questionWrapper.style.display = 'none';
-                        $timelaps.style.display = 'none';
+                        $canvas.style.display = 'none';
                         $scoring.style.display = 'flex';
                         showResultat();
                     break;
@@ -376,8 +383,6 @@
              **/
             function showResultat(){
                 var divPartieStatic = '<div class="question">'
-                                    +       'La bonne réponse était : ' + bonneReponse + '</br></br>'
-                                    +       'animate de la bonne réponse vers ici ?</br></br>'
                                     +       explicationsReponse
                                     + '</div>'
                                     + '<div class="reponses">';
@@ -399,13 +404,23 @@
                 
                 $scoring.innerHTML = divPartieStatic + divPartieDynamique + '</div>';
                 
-            }
-    
-     
-            function chrono(){
-                console.log('chrono');
-                // var tmp = parseFloat($("#tempsRestant").html());
-                // $("#tempsRestant").html(tmp-1);
+                if (bonneReponse == "reponse1") {
+                    $divReponse2.style.display = 'none';
+                    $divReponse3.style.display = 'none';
+                    $divReponse4.style.display = 'none';
+                } else if (bonneReponse == "reponse2") {
+                    $divReponse1.style.display = 'none';
+                    $divReponse3.style.display = 'none';
+                    $divReponse4.style.display = 'none';
+                } else if (bonneReponse == "reponse3") {
+                    $divReponse2.style.display = 'none';
+                    $divReponse1.style.display = 'none';
+                    $divReponse4.style.display = 'none';
+                } else {
+                    $divReponse2.style.display = 'none';
+                    $divReponse3.style.display = 'none';
+                    $divReponse1.style.display = 'none';
+                }
             }
             
             
@@ -417,14 +432,12 @@
                 
                 if (cptQuestion == GLOBAL.nbQuestions) {
                     clearInterval(eventQuestion);
-                    clearInterval(eventChrono);
                     
                     //Affichage des scores.
                     displayInterface("score");
                 } else {
                     socket.emit('recup-question', {room : GLOBAL.token}, function (data) {
                         nbReponseRecu = 0;
-                        clearInterval(eventChrono);
                         cptQuestion = cptQuestion + 1;
         
                         $question.innerHTML = data['question'];
@@ -437,7 +450,6 @@
                         
                         displayInterface("play");
                         
-                        eventChrono = setInterval(chrono, 1000 ); //timer mise a jour du chrono.
                         window.clearInterval(interval);
                         
                         // gestion du timer
@@ -459,7 +471,6 @@
                         var step = tickInterval * 360 / totalTime;
                         var tick = 0;
                         var nextStep = 0;
-                        var interval;
                         
                         timelapsCtx.strokeStyle = "rgb(106, 150, 241)";
                         timelapsCtx.lineWidth = 1;
@@ -539,8 +550,8 @@
                     nbReponseRecu++;
                     //si tout le monde a repondu alors transition de 4 secondes et on passe à la question suivante.
                     if (GLOBAL.nbUsersMax==nbReponseRecu) {
-                        clearInterval(eventQuestion);
-                        clearInterval(eventChrono);
+                        window.clearInterval(eventQuestion);
+                        window.clearInterval(interval);
                         displayInterface("score");
                         
                         //relance question dans 6 secondes (après le recap des scores)
