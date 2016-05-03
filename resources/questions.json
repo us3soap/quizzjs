@@ -228,7 +228,7 @@
             "question": "Qui a dit \"Tout ce que je sais, c’est que je ne sais rien\" ?",
             "type": "question",
             "reponse1": "Confucius",
-            "reponse2": "Loana de Secret story",
+            "reponse2": "Loana de Loft story",
             "reponse3": "Socrate",
             "reponse4": "Voltaire",
             "good": "reponse3",
@@ -650,6 +650,83 @@
             "reponse3": "Fam",
             "reponse4": "Jam",
             "good": "reponse4",
+            "explication": ""
+        },
+        {
+            "id": 59,
+            "question": "Un nuage peut contenir jusqu’à :",
+            "type": "question",
+            "reponse1": "4 tonnes d'eau",
+            "reponse2": "40 tonnes d'eau",
+            "reponse3": "400 tonnes d'eau",
+            "reponse4": "4000 tonnes d'eau",
+            "good": "reponse4",
+            "explication": ""
+        },
+        {
+            "id": 60,
+            "question": "La différence entre un ouragan et un cyclone tient à :",
+            "type": "question",
+            "reponse1": "La vitesse du vent",
+            "reponse2": "Sa localisation",
+            "reponse3": "L'importance des dégâts",
+            "reponse4": "Sa taille",
+            "good": "reponse2",
+            "explication": ""
+        },
+        {
+            "id": 61,
+            "question": "Les marées sont dues à l’attraction :",
+            "type": "question",
+            "reponse1": "Du Soleil sur la Terre",
+            "reponse2": "De la Lune et du Soleil sur la Terre",
+            "reponse3": "De la Lune sur le Soleil",
+            "reponse4": "De la Terre sur le Soleil",
+            "good": "reponse3",
+            "explication": ""
+        },
+        {
+            "id": 62,
+            "question": "L’odeur que dégagent les fleurs leur sert à :",
+            "type": "question",
+            "reponse1": "Éloigner leurs ennemis",
+            "reponse2": "Se faire remarquer des insectes pollinisateurs",
+            "reponse3": "A communiquer",
+            "reponse4": "Rien : juste à nous faire plaisir",
+            "good": "reponse2",
+            "explication": ""
+        },
+        {
+            "id": 63,
+            "question": "On estime le pourcentage de trèfles à quatre feuilles à :",
+            "type": "question",
+            "reponse1": "1 pour 1 000",
+            "reponse2": "1 pour 10 000",
+            "reponse3": "1 pour 100 000",
+            "reponse4": "1 pour 1 000 000",
+            "good": "reponse1",
+            "explication": ""
+        },
+        {
+            "id": 64,
+            "question": "À l’automne, les feuilles tombent parce que :",
+            "type": "question",
+            "reponse1": "Elles manquent de lumière",
+            "reponse2": "Elles s’adaptent au froid hivernal",
+            "reponse3": "L’attraction de la terre est plus forte",
+            "reponse4": "Elles manquent de chaleur",
+            "good": "reponse1",
+            "explication": ""
+        },
+        {
+            "id": 65,
+            "question": "La France compte :",
+            "type": "question",
+            "reponse1": "3 500 km de côtes",
+            "reponse2": "5 500 km de côtes",
+            "reponse3": "7 500 km de côtes",
+            "reponse4": "9 500 km de côtes",
+            "good": "reponse2",
             "explication": ""
         }
     ]
