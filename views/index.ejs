@@ -203,6 +203,60 @@
             align-items: center;    
             display: none;   
         }
+        .removed {
+            -webkit-animation: disapear 1s;
+            -webkit-animation-fill-mode: forwards; 
+            animation: disapear 1s;
+            animation-fill-mode: forwards;
+        }
+        @-webkit-keyframes disapear{
+            50% {
+                -webkit-transform: translateX(-5%);
+                transform: translateX(-5%);
+            }
+            100% {
+                -webkit-transform: translateX(200%);
+                transform: translateX(200%); 
+            }    
+        }
+
+        @keyframes disapear{
+            50% {
+                -webkit-transform: translateX(-5%);
+                transform: translateX(-5%);
+            }
+            100% {
+                -webkit-transform: translateX(200%);
+                transform: translateX(200%); 
+            }    
+        }
+        .adding {
+            -webkit-animation: apear 1s;
+            -webkit-animation-fill-mode: forwards; 
+            animation: apear 1s;
+            animation-fill-mode: forwards;
+        }
+        @-webkit-keyframes apear{
+            10% {
+                -webkit-transform: translateX(200%);
+                transform: translateX(200%);
+            }
+            80% {
+                -webkit-transform: translateX(-5%);
+                transform: translateX(-5%); 
+            }    
+        }
+
+        @keyframes apear{
+            10% {
+                -webkit-transform: translateX(200%);
+                transform: translateX(200%);
+            }
+            80% {
+                -webkit-transform: translateX(-5%);
+                transform: translateX(-5%); 
+            }    
+        }
     </style>
 </head>
 <body>
@@ -359,17 +413,14 @@
                         $instruction.style.display = 'none';
                         $canvas.style.display = 'flex';
                         $questionWrapper.style.display = 'flex';
-                        $divReponse1.style.display = 'flex';
-                        $divReponse2.style.display = 'flex';
-                        $divReponse3.style.display = 'flex';
-                        $divReponse4.style.display = 'flex';
+                        modifierClassDivReponse("adding","");
                         $scoring.style.display = 'none';
                     break;
                     
                     case 'score':
                         $canvas.style.display = 'none';
-                        $scoring.style.display = 'flex';
                         showResultat();
+                        setTimeout (function(){$scoring.style.display = 'flex';},3000);
                     break;
                     
                     default:
@@ -404,26 +455,52 @@
                 
                 $scoring.innerHTML = divPartieStatic + divPartieDynamique + '</div>';
                 
-                if (bonneReponse == "reponse1") {
-                    $divReponse2.style.display = 'none';
-                    $divReponse3.style.display = 'none';
-                    $divReponse4.style.display = 'none';
-                } else if (bonneReponse == "reponse2") {
-                    $divReponse1.style.display = 'none';
-                    $divReponse3.style.display = 'none';
-                    $divReponse4.style.display = 'none';
-                } else if (bonneReponse == "reponse3") {
-                    $divReponse2.style.display = 'none';
-                    $divReponse1.style.display = 'none';
-                    $divReponse4.style.display = 'none';
-                } else {
-                    $divReponse2.style.display = 'none';
-                    $divReponse3.style.display = 'none';
-                    $divReponse1.style.display = 'none';
-                }
+                modifierClassDivReponse("removed",bonneReponse);
             }
             
-            
+            /**
+             * Function gérant l'animation des réponses
+             **/
+            function modifierClassDivReponse(nomClass,bonneReponse){
+                /*$divReponse1.className = "";
+                $divReponse2.className = "";
+                $divReponse3.className = "";
+                $divReponse4.className = "";*/
+                
+                if (bonneReponse == "reponse1") {
+                    $divReponse2.className = "";
+                    $divReponse2.classList.add(nomClass);
+                    setTimeout (function(){$divReponse3.className = "";$divReponse3.classList.add(nomClass);}, 500);
+                    setTimeout (function(){$divReponse4.className = "";$divReponse4.classList.add(nomClass);}, 1000);
+                } else if (bonneReponse == "reponse2") {
+                    $divReponse1.className = "";
+                    $divReponse1.classList.add(nomClass);
+                    setTimeout (function(){$divReponse3.className = "";$divReponse3.classList.add(nomClass);}, 500);
+                    setTimeout (function(){$divReponse4.className = "";$divReponse4.classList.add(nomClass);}, 1000);
+                } else if (bonneReponse == "reponse3") {
+                    $divReponse1.className = "";
+                    $divReponse1.classList.add(nomClass);
+                    setTimeout (function(){$divReponse2.className = "";$divReponse2.classList.add(nomClass);}, 500);
+                    setTimeout (function(){$divReponse4.className = "";$divReponse4.classList.add(nomClass);}, 1000);
+                } else if (bonneReponse == "reponse4") {
+                    $divReponse1.className = "";
+                    $divReponse1.classList.add(nomClass);
+                    setTimeout (function(){$divReponse2.className = "";$divReponse2.classList.add(nomClass);}, 500);
+                    setTimeout (function(){$divReponse3.className = "";$divReponse3.classList.add(nomClass);}, 1000);
+                } else {
+                    $divReponse1.style.display="none";
+                    $divReponse2.style.display="none";
+                    $divReponse3.style.display="none";
+                    $divReponse4.style.display="none";
+                    $divReponse1.className = "";
+                    $divReponse1.classList.add(nomClass);
+                    setTimeout (function(){$divReponse2.className = "";$divReponse2.classList.add(nomClass);}, 500);
+                    setTimeout (function(){$divReponse3.className = "";$divReponse3.classList.add(nomClass);}, 1000);
+                    setTimeout (function(){$divReponse4.className = "";$divReponse4.classList.add(nomClass);}, 1500);
+                }
+            }
+                 
+                 
             /** Functions permettant de comptabiliser et recupérer les questions
             * + gestion du chrono
             **/
