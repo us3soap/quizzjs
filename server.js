@@ -28,7 +28,7 @@ router.get('/', function(req, res) {
     var myRoom = room.getRoom(token);
     myRoom.open();
 
-    res.render('index.ejs', {url: req.protocol+'://'+req.headers.host,
+    res.render('index.ejs', {url: req.headers.host,
                             token: token,
                             ready2play: myRoom.isReady()
     });
@@ -62,7 +62,7 @@ router.get('/admin-room/:token', function(req, res) {
 
   if(myRoom != false) {
     //On affiche l'url du site
-    var urlQr = req.protocol+'://'+req.headers.host+'/admin/'+req.params.token;
+    var urlQr = req.headers.host+'/admin/'+req.params.token;
     var code = qr.image(urlQr, { type: 'svg' });
     res.type('svg');
     code.pipe(res);
@@ -85,7 +85,7 @@ router.get('/admin/:token', function(req, res) {
         if(! room.getRoom(req.params.token).isReady()){
             console.log("Welcome to room : ["+req.params.token+"]");
             myRoom.setName("Room : ["+req.params.token+"]");
-            res.render('admin.ejs', {url: req.protocol+'://'+req.headers.host,
+            res.render('admin.ejs', {url: req.headers.host,
                                     token: req.params.token,
                                     error: null
           });
@@ -120,7 +120,7 @@ router.get('/room/:token', function(req, res) {
             if(room.getRoom(req.params.token).isReady()){
               console.log("Welcome to room : ["+req.params.token+"]");
               room.getRoom(req.params.token).setName("Room : ["+req.params.token+"]");
-              res.render('user.ejs', {url: req.protocol+'://'+req.headers.host,
+              res.render('user.ejs', {url: req.headers.host,
                                     room: req.params.token,
                                     error: false
               });
