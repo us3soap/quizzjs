@@ -203,6 +203,9 @@
             align-items: center;    
             display: none;   
         }
+        .cacher{
+            display:none;
+        }
         .removed {
             -webkit-animation: disapear 1s;
             -webkit-animation-fill-mode: forwards; 
@@ -284,16 +287,16 @@
                 <div>Dans la trilogie du Seigneur des Anneaux, combien d'aventuriers composent la Communauté de l'Anneau ?</div>
             </div>
             <div class="reponses">
-                <div id="divreponse1">
+                <div id="divreponse1" class="cacher">
                     <span class="reponse-square square1"></span><div class="reponse" id="reponse1">reponse 1</div>
                 </div>
-                <div id="divreponse2">
+                <div id="divreponse2" class="cacher">
                     <span class="reponse-square square2"></span><div class="reponse" id="reponse2">reponse 2</div>
                 </div>
-                <div id="divreponse3">
+                <div id="divreponse3" class="cacher">
                     <span class="reponse-square square3"></span><div class="reponse" id="reponse3">reponse 3</div>
                 </div>
-                <div id="divreponse4">
+                <div id="divreponse4" class="cacher">
                     <span class="reponse-square square4"></span><div class="reponse" id="reponse4">reponse 4</div>
                 </div>
             </div>    
@@ -462,10 +465,6 @@
              * Function gérant l'animation des réponses
              **/
             function modifierClassDivReponse(nomClass,bonneReponse){
-                /*$divReponse1.className = "";
-                $divReponse2.className = "";
-                $divReponse3.className = "";
-                $divReponse4.className = "";*/
                 
                 if (bonneReponse == "reponse1") {
                     $divReponse2.className = "";
@@ -488,10 +487,6 @@
                     setTimeout (function(){$divReponse2.className = "";$divReponse2.classList.add(nomClass);}, 500);
                     setTimeout (function(){$divReponse3.className = "";$divReponse3.classList.add(nomClass);}, 1000);
                 } else {
-                    $divReponse1.style.display="none";
-                    $divReponse2.style.display="none";
-                    $divReponse3.style.display="none";
-                    $divReponse4.style.display="none";
                     $divReponse1.className = "";
                     $divReponse1.classList.add(nomClass);
                     setTimeout (function(){$divReponse2.className = "";$divReponse2.classList.add(nomClass);}, 500);
