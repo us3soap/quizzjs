@@ -169,10 +169,10 @@
             float: right;
             font-size: 24px;
             padding: 5px 10px;
-            margin-top: 1%;
+            margin-top: -7px;
+            margin-right: -33px;
         }
         .progress{
-            overflow:hidden;
             height:20px;
             margin-bottom:20px;
             background-color:#f5f5f5;
@@ -279,25 +279,24 @@
             </div>
             <div class="qrcode">
                 <img class="qrcode-img" src="/admin-room/<%=token%>" />
-                <!--src="/new-room/<%=token%>"-->
             </div>
         </div>
         <div class="question-wrapper">
             <div class="question">
-                <div>Dans la trilogie du Seigneur des Anneaux, combien d'aventuriers composent la Communauté de l'Anneau ?</div>
+                <div></div>
             </div>
             <div class="reponses">
                 <div id="divreponse1" class="cacher">
-                    <span class="reponse-square square1"></span><div class="reponse" id="reponse1">reponse 1</div>
+                    <span class="reponse-square square1"></span><div class="reponse" id="reponse1"></div>
                 </div>
                 <div id="divreponse2" class="cacher">
-                    <span class="reponse-square square2"></span><div class="reponse" id="reponse2">reponse 2</div>
+                    <span class="reponse-square square2"></span><div class="reponse" id="reponse2"></div>
                 </div>
                 <div id="divreponse3" class="cacher">
-                    <span class="reponse-square square3"></span><div class="reponse" id="reponse3">reponse 3</div>
+                    <span class="reponse-square square3"></span><div class="reponse" id="reponse3"></div>
                 </div>
                 <div id="divreponse4" class="cacher">
-                    <span class="reponse-square square4"></span><div class="reponse" id="reponse4">reponse 4</div>
+                    <span class="reponse-square square4"></span><div class="reponse" id="reponse4"></div>
                 </div>
             </div>    
         </div>
@@ -353,7 +352,7 @@
                     player = players[i];
                     if (!player.classList.contains('active')) {
                         player.classList.add('active');
-                        player.querySelector('.pseudo').innerHTML = username + '<span id="badge-' + token + '" style="display:none" class="badge badge-display">0</span>';
+                        player.querySelector('.pseudo').innerHTML = username + '<span id="badge-' + token + '" class="badge badge-display">0</span>';
                         player.id = token;
                         break;
                     }
@@ -415,7 +414,7 @@
                         $howto.style.display = 'none';
                         $instruction.style.display = 'none';
                         $canvas.style.display = 'flex';
-                        $questionWrapper.style.display = 'flex';
+                        $questionWrapper.style.display = 'inline-flex';
                         modifierClassDivReponse("adding","");
                         $scoring.style.display = 'none';
                     break;
@@ -624,7 +623,7 @@
                     console.log(data);
                     
                     nbReponseRecu++;
-                    //si tout le monde a repondu alors transition de 4 secondes et on passe à la question suivante.
+                    //si tout le monde a repondu alors transition et on passe à la question suivante.
                     if (GLOBAL.nbUsersMax==nbReponseRecu) {
                         window.clearInterval(eventQuestion);
                         window.clearInterval(interval);
