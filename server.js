@@ -185,6 +185,7 @@ io.sockets.on('connection', function (socket) {
         room.getRoom(data["room"]).open();
         //--Parametrage
         room.getRoom(data["room"]).setMaxNbMembers(data["nbUsersMax"]);
+        room.getRoom(data["room"]).setMinNbMembers(data["nbUsersMax"]);
         room.getRoom(data["room"]).setTimerQuestion(data["timerQuestion"]);
         
         //--Load questions si l'utilisateur en a saisi

@@ -31,7 +31,7 @@
         }
 
         .player{
-            height: 100px;
+            height: 105px;
             width: 140px;
             background-image: url(img/player.png);
             background-repeat: no-repeat;
@@ -48,9 +48,11 @@
             font-family: Verdana, Arial, sans-serif;
             color: #bfbfbf;
             font-size: 1.6em;
+            overflow: hidden;
         }
 
-        .player.active{background-position: bottom;}
+        .player.active{background-position: center;}
+        .player.gagnant{background-position: bottom;}
         .player.active .pseudo{color: #fff;}
 
         .instruction{
@@ -170,7 +172,7 @@
             font-size: 24px;
             padding: 5px 10px;
             margin-top: -7px;
-            margin-right: -33px;
+            margin-right: -37px;
         }
         .progress{
             height:20px;
@@ -414,7 +416,7 @@
                         $howto.style.display = 'none';
                         $instruction.style.display = 'none';
                         $canvas.style.display = 'flex';
-                        $questionWrapper.style.display = 'inline-flex';
+                        $questionWrapper.style.display = 'flex';
                         modifierClassDivReponse("adding","");
                         $scoring.style.display = 'none';
                     break;
@@ -422,7 +424,7 @@
                     case 'score':
                         $canvas.style.display = 'none';
                         showResultat();
-                        setTimeout (function(){$scoring.style.display = 'flex';},3000);
+                        setTimeout (function(){$scoring.style.display = 'flex';imageMeilleurJoueur();},3000);
                     break;
                     
                     default:
@@ -459,6 +461,32 @@
                 
                 modifierClassDivReponse("removed",bonneReponse);
             }
+            
+            /**
+             * Function permettant de gerer l'image des joueurs en fonction de son score
+             **/
+             function imageMeilleurJoueur() {
+                var players = $players.querySelectorAll('.player');
+                var meilleurScore = 0;
+                for(var i = 0, l = players.length, player; i < l; i++) {
+                    player = players[i];
+                    if (player.querySelector('.badge-display').innerHTML > meilleurScore) {
+                        meilleurScore = player.querySelector('.badge-display').innerHTML;
+                    }
+                }
+                for(var i = 0, l = players.length, player; i < l; i++) {
+                    player = players[i];
+                    if (player.querySelector('.badge-display').innerHTML == meilleurScore) {
+                        player.className = "";
+                        player.classList.add('player');
+                        player.classList.add('gagnant');
+                    } else {
+                        player.className = "";
+                        player.classList.add('player');
+                        player.classList.add('active');
+                    }
+                }
+             }
             
             /**
              * Function gérant l'animation des réponses
