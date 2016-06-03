@@ -1,686 +1,74 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Quizzjs</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        html, body{
-            margin:0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .content{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            background-color: #6699ff;
-        }
-
-        .players{
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            margin-top: 1%;
-            min-height: 125px;
-        }
-
-        .player{
-            height: 105px;
-            width: 140px;
-            background-image: url(img/player.png);
-            background-repeat: no-repeat;
-            background-position: top;
-            position: relative;
-        }
-
-        .player .pseudo{
-            position: absolute;
-            bottom: -28px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            font-family: Verdana, Arial, sans-serif;
-            color: #bfbfbf;
-            font-size: 1.6em;
-            overflow: hidden;
-        }
-
-        .player.active{background-position: center;}
-        .player.gagnant{background-position: bottom;}
-        .player.active .pseudo{color: #fff;}
-
-        .instruction{
-            color: #FFF;
-            text-align: center;
-            font-size: 2em;
-            font-family: Verdana, Ariel, sans-serif;
-        }
-        .howto{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-        }
-
-        .howto .picture{
-            height: 33%;
-            width: 25%;
-            max-width: 250px;
-        }
-
-        .howto .picture img{
-            width: 90%;
-        }
-
-        .howto .qrcode{
-            max-width: 350px;
-            width: 33%;
-            height: 33%;
-        }
-
-        .howto .qrcode .qrcode-img{
-            width: 90%;
-            background-color: #fff;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <title>Quizzjs</title>
+        <link rel="stylesheet" href="/css/index.css">
+    </head>
+    <body>
         
-        .question-wrapper{
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-            align-items: center;    
-            display: none;            
-        }
-        
-        .question{
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            color: #fff;
-            font-family: Verdana, Arial, sans-serif;
-            font-size: 2em;
-            text-align: center;
-            padding : 0 10px;
-        }
-        
-        .reponses{
-            display: flex;
-            flex-grow: 2;
-            flex-direction: column;
-            width: 50%;
-            justify-content: space-around;
-            padding: 0 0 2em 2em;
+        <div class="content">
             
-        }
-                
-        .reponse-square{
-            width: 30px;
-            height: 30px;
-            display: inline-block;
-            margin-right: 1em;
-            vertical-align: middle;    
-        }
-        
-        .square1{background-color: #69B854;}
-        .square2{background-color: #6AC0E0;}
-        .square3{background-color: #EBAD41;}
-        .square4{background-color: #D1534C;}
-        
-        .reponse{
-            color: #fff;
-            font-family: Verdana, Arial, sans-serif;
-            font-size: 1.4em;
-            display: inline-flex;
-            vertical-align: middle;
-        }
-        
-        
-        .canvas-wrapper {
-            width: 6em;
-            height: 6em;
-            position: relative;
-        }
-        .timelaps-wheel{
-            background-color: white;
-            width: 100%;
-            height:100%;
-            position:absolute;
-            border-radius: 50px;
-        }
-        #timelaps{position: absolute;}
-        .badge{
-            display:inline-block;
-            min-width:10px;
-            padding:3px 7px;
-            font-size:12px;
-            font-weight:bold;
-            color:#fff;
-            line-height:1;
-            vertical-align:baseline;
-            white-space:nowrap;
-            text-align:center;
-            background-color:#777;
-            border-radius:10px
-        }
-        .badge-display{
-            float: right;
-            font-size: 24px;
-            padding: 5px 10px;
-            margin-top: -7px;
-            margin-right: -37px;
-        }
-        .progress{
-            height:20px;
-            margin-bottom:20px;
-            background-color:#f5f5f5;
-            border-radius:4px;
-            -webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);
-            box-shadow:inset 0 1px 2px rgba(0,0,0,0.1)
-        }
-        .progress-bar{
-            float:left;
-            width:0%;
-            height:100%;
-            font-size:12px;
-            line-height:20px;
-            color:#fff;
-            text-align:center;
-            background-color:#337ab7;
-            -webkit-box-shadow:inset 0 -1px 0 rgba(0,0,0,0.15);
-            box-shadow:inset 0 -1px 0 rgba(0,0,0,0.15);
-            -webkit-transition:width .6s ease;
-            -o-transition:width .6s ease;
-            transition:width .6s ease
-        }
-        .scoring{
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            height: 100%;
-            align-items: center;    
-            display: none;   
-        }
-        .cacher{
-            display:none;
-        }
-        .removed {
-            -webkit-animation: disapear 1s;
-            -webkit-animation-fill-mode: forwards; 
-            animation: disapear 1s;
-            animation-fill-mode: forwards;
-        }
-        @-webkit-keyframes disapear{
-            50% {
-                -webkit-transform: translateX(-5%);
-                transform: translateX(-5%);
-            }
-            100% {
-                -webkit-transform: translateX(200%);
-                transform: translateX(200%); 
-            }    
-        }
-
-        @keyframes disapear{
-            50% {
-                -webkit-transform: translateX(-5%);
-                transform: translateX(-5%);
-            }
-            100% {
-                -webkit-transform: translateX(200%);
-                transform: translateX(200%); 
-            }    
-        }
-        .adding {
-            -webkit-animation: apear 1s;
-            -webkit-animation-fill-mode: forwards; 
-            animation: apear 1s;
-            animation-fill-mode: forwards;
-        }
-        @-webkit-keyframes apear{
-            10% {
-                -webkit-transform: translateX(200%);
-                transform: translateX(200%);
-            }
-            80% {
-                -webkit-transform: translateX(-5%);
-                transform: translateX(-5%); 
-            }    
-        }
-
-        @keyframes apear{
-            10% {
-                -webkit-transform: translateX(200%);
-                transform: translateX(200%);
-            }
-            80% {
-                -webkit-transform: translateX(-5%);
-                transform: translateX(-5%); 
-            }    
-        }
-    </style>
-</head>
-<body>
-    <div class="content">
-        <div class="players">
-            <div class="canvas-wrapper">
-                <div class="timelaps-wheel"></div>
-                <canvas id="timelaps" width="100%" height="100%">mince, pas compatible avec cette écran ...</canvas>
-            </div>
-        </div>
-        <div class="instruction">
-            Scanne ce QR Code pour parametrer votre partie.
-        </div>
-        <div class="howto">
-            <div class="picture">
-                <img src="img/hand-device.png">
-            </div>
-            <div class="qrcode">
-                <img class="qrcode-img" src="/admin-room/<%=token%>" />
-            </div>
-        </div>
-        <div class="question-wrapper">
-            <div class="question">
-                <div></div>
-            </div>
-            <div class="reponses">
-                <div id="divreponse1" class="cacher">
-                    <span class="reponse-square square1"></span><div class="reponse" id="reponse1"></div>
+            
+            <div class="players">
+                <div class="canvas-wrapper">
+                    <div class="timelaps-wheel"></div>
+                    <canvas id="timelaps" width="100%" height="100%">mince, pas compatible avec cette écran ...</canvas>
                 </div>
-                <div id="divreponse2" class="cacher">
-                    <span class="reponse-square square2"></span><div class="reponse" id="reponse2"></div>
+            </div>
+            
+            
+            <div class="instruction">
+                Scanne ce QR Code pour parametrer votre partie.
+            </div>
+            
+            
+            <div class="howto">
+                <div class="picture">
+                    <img src="img/hand-device.png">
                 </div>
-                <div id="divreponse3" class="cacher">
-                    <span class="reponse-square square3"></span><div class="reponse" id="reponse3"></div>
+                <div class="qrcode">
+                    <img class="qrcode-img" src="/admin-room/<%=token%>" />
                 </div>
-                <div id="divreponse4" class="cacher">
-                    <span class="reponse-square square4"></span><div class="reponse" id="reponse4"></div>
+            </div>
+            
+            
+            <div class="question-wrapper">
+                <div class="question">
+                    <div></div>
                 </div>
-            </div>    
+                <div class="reponses">
+                    <div id="divreponse1" class="cacher">
+                        <span class="reponse-square square1"></span><div class="reponse" id="reponse1"></div>
+                    </div>
+                    <div id="divreponse2" class="cacher">
+                        <span class="reponse-square square2"></span><div class="reponse" id="reponse2"></div>
+                    </div>
+                    <div id="divreponse3" class="cacher">
+                        <span class="reponse-square square3"></span><div class="reponse" id="reponse3"></div>
+                    </div>
+                    <div id="divreponse4" class="cacher">
+                        <span class="reponse-square square4"></span><div class="reponse" id="reponse4"></div>
+                    </div>
+                </div>    
+            </div>
+            
+            
+            <div class="scoring"></div>
+            
+            
         </div>
-        <div class="scoring">
-        </div>
-    </div>
-    
-    <script>
-        var GLOBAL = {
-            url: '<%= url %>',
-            token: '<%= token %>',
-            ready2play: <%= ready2play %>
-        };
-    </script>
-    
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        (function () {
-            var $players = document.querySelector('.players'),
-                $canvas = $players.querySelector('.canvas-wrapper'),
-                $instruction = document.querySelector('.instruction'),
-                $howto = document.querySelector('.howto'),
-                $questionWrapper = document.querySelector('.question-wrapper'),
-                $question = $questionWrapper.querySelector('.question'),
-                $reponse1 = $questionWrapper.querySelector('#reponse1'),
-                $reponse2 = $questionWrapper.querySelector('#reponse2'),
-                $reponse3 = $questionWrapper.querySelector('#reponse3'),
-                $reponse4 = $questionWrapper.querySelector('#reponse4'),
-                $divReponse1 = $questionWrapper.querySelector('#divreponse1'),
-                $divReponse2 = $questionWrapper.querySelector('#divreponse2'),
-                $divReponse3 = $questionWrapper.querySelector('#divreponse3'),
-                $divReponse4 = $questionWrapper.querySelector('#divreponse4'),
-                $scoring = document.querySelector('.scoring');
-            
-            var cptQuestion = 0,
-                eventQuestion = null,
-                nbReponseRecu = 0,
-                bonneReponse = null,
-                explicationsReponse = null,
-                tempsDeTransition = 6000,
-                interval = null;
-                
-            var socket = io.connect(GLOBAL.url);
-
-            /**
-            * Function permettant l'ajout d'un joueur.
-            * @arg String token : la clé référençant l'utilisateur.
-            * @arg String username : le nom d'utilisateur.
-            **/
-            function addParticipants(token, username){
-                var players = $players.querySelectorAll('.player');
-                for(var i = 0, l = players.length, player; i < l; i++) {
-                    player = players[i];
-                    if (!player.classList.contains('active')) {
-                        player.classList.add('active');
-                        player.querySelector('.pseudo').innerHTML = username + '<span id="badge-' + token + '" class="badge badge-display">0</span>';
-                        player.id = token;
-                        break;
-                    }
-                }
-            }
-            
-            /**
-            * Function permettant la suppression d'un joueur.
-            * @arg String token : la clé référençant l'utilisateur.
-            * @arg String username : le nom d'utilisateur.
-            **/
-            function removeParticipant(token, username){
-                var player = $players.querySelector('#' + token);
-                player.classList.remove('active');
-                player.id = '';
-                player.querySelector('.pseudo').innerHTML = 'attente';
-            }
-            
-            /**
-            * Function permettant la gestion du quota de joueur.
-            * @arg int nbUsersActuels : le nombre d'utilisateur connecté.
-            **/
-            function gererUsersMax(nbUsersActuels){
-                if(GLOBAL.nbUsersMax == nbUsersActuels){
-                    console.log('nb joueurs atteint');
-                }else{
-                    console.log('manque encore des joueurs');
-                }
-            }
-
-            /**
-            * Function permettant la gestion de la vue à afficher.
-            * @arg String la vue à atteindre [wait -> transition -> play -> score]
-            **/
-            function displayInterface(view){
-                console.log('displayInterface, view = ' + view);
-                
-                switch(view){
-                    case 'wait':
-                    break;
-                    
-                    case 'parametrage':
-                        $instruction.innerHTML = "Salon en cours de parametrage, veuillez patienter.";
-                        $howto.style.display = 'none';
-                    break;
-                    
-                    case 'join':
-                        $instruction.innerHTML = "Scanne ce QR Code pour rejoindre la partie.";
-                        $howto.style.display = 'flex';
-                        $howto.querySelector('.qrcode-img').src = '/access-room/' + GLOBAL.token;
-                    break;
-                    
-                    case 'transition':
-                        $howto.style.display = 'none';
-                        $instruction.innerHTML = "Tout le monde est la. Préparez vous !";
-                    break;
-                    
-                    case 'play':
-                        $howto.style.display = 'none';
-                        $instruction.style.display = 'none';
-                        $canvas.style.display = 'flex';
-                        $questionWrapper.style.display = 'flex';
-                        modifierClassDivReponse("adding","");
-                        $scoring.style.display = 'none';
-                    break;
-                    
-                    case 'score':
-                        $canvas.style.display = 'none';
-                        showResultat();
-                        setTimeout (function(){$scoring.style.display = 'flex';imageMeilleurJoueur();},3000);
-                    break;
-                    
-                    default:
-                        console.log('Erreur, la vue "' + view + '" n\'est pas connue');
-                }
-            }
-     
-            /**
-             * Function gérant l'animation des scores,
-             * affichage en plus de la réponse et explication à la question précédente
-             **/
-            function showResultat(){
-                var divPartieStatic = '<div class="question">'
-                                    +       explicationsReponse
-                                    + '</div>'
-                                    + '<div class="reponses">';
-                var divPartieDynamique = "";
-                
-                var players = $players.querySelectorAll('.player');
-                for(var i = 0, l = players.length, player; i < l; i++) {
-                    player = players[i];
-                    divPartieDynamique += '<div class="progress">'
-                        +                       '<div class="progress progress-bar" role="progressbar" aria-valuenow="'
-                        +                           player.querySelector('.badge').innerHTML / GLOBAL.nbQuestions * 100
-                        +                           '" aria-valuemin="0" aria-valuemax="100" style="width: '
-                        +                           player.querySelector('.badge').innerHTML / GLOBAL.nbQuestions * 100
-                        +                           '%;">'
-                        +                           player.querySelector('.pseudo').innerHTML
-                        +                       '</div>'
-                        +                   '</div>';
-                }
-                
-                $scoring.innerHTML = divPartieStatic + divPartieDynamique + '</div>';
-                
-                modifierClassDivReponse("removed",bonneReponse);
-            }
-            
-            /**
-             * Function permettant de gerer l'image des joueurs en fonction de son score
-             **/
-             function imageMeilleurJoueur() {
-                var players = $players.querySelectorAll('.player');
-                var meilleurScore = 0;
-                for(var i = 0, l = players.length, player; i < l; i++) {
-                    player = players[i];
-                    if (player.querySelector('.badge-display').innerHTML > meilleurScore) {
-                        meilleurScore = player.querySelector('.badge-display').innerHTML;
-                    }
-                }
-                for(var i = 0, l = players.length, player; i < l; i++) {
-                    player = players[i];
-                    if (player.querySelector('.badge-display').innerHTML == meilleurScore) {
-                        player.className = "";
-                        player.classList.add('player');
-                        player.classList.add('gagnant');
-                    } else {
-                        player.className = "";
-                        player.classList.add('player');
-                        player.classList.add('active');
-                    }
-                }
-             }
-            
-            /**
-             * Function gérant l'animation des réponses
-             **/
-            function modifierClassDivReponse(nomClass,bonneReponse){
-                
-                if (bonneReponse == "reponse1") {
-                    $divReponse2.className = "";
-                    $divReponse2.classList.add(nomClass);
-                    setTimeout (function(){$divReponse3.className = "";$divReponse3.classList.add(nomClass);}, 500);
-                    setTimeout (function(){$divReponse4.className = "";$divReponse4.classList.add(nomClass);}, 1000);
-                } else if (bonneReponse == "reponse2") {
-                    $divReponse1.className = "";
-                    $divReponse1.classList.add(nomClass);
-                    setTimeout (function(){$divReponse3.className = "";$divReponse3.classList.add(nomClass);}, 500);
-                    setTimeout (function(){$divReponse4.className = "";$divReponse4.classList.add(nomClass);}, 1000);
-                } else if (bonneReponse == "reponse3") {
-                    $divReponse1.className = "";
-                    $divReponse1.classList.add(nomClass);
-                    setTimeout (function(){$divReponse2.className = "";$divReponse2.classList.add(nomClass);}, 500);
-                    setTimeout (function(){$divReponse4.className = "";$divReponse4.classList.add(nomClass);}, 1000);
-                } else if (bonneReponse == "reponse4") {
-                    $divReponse1.className = "";
-                    $divReponse1.classList.add(nomClass);
-                    setTimeout (function(){$divReponse2.className = "";$divReponse2.classList.add(nomClass);}, 500);
-                    setTimeout (function(){$divReponse3.className = "";$divReponse3.classList.add(nomClass);}, 1000);
-                } else {
-                    $divReponse1.className = "cacher";
-                    $divReponse2.className = "cacher";
-                    $divReponse3.className = "cacher";
-                    $divReponse4.className = "cacher";
-                    $divReponse1.className = "";
-                    $divReponse1.classList.add(nomClass);
-                    setTimeout (function(){$divReponse2.className = "";$divReponse2.classList.add(nomClass);}, 500);
-                    setTimeout (function(){$divReponse3.className = "";$divReponse3.classList.add(nomClass);}, 1000);
-                    setTimeout (function(){$divReponse4.className = "";$divReponse4.classList.add(nomClass);}, 1500);
-                }
-            }
-                 
-                 
-            /** Functions permettant de comptabiliser et recupérer les questions
-            * + gestion du chrono
-            **/
-            //cycle de vie de la question.            
-            function myGame() {
-                
-                if (cptQuestion == GLOBAL.nbQuestions) {
-                    clearInterval(eventQuestion);
-                    
-                    //Affichage des scores.
-                    displayInterface("score");
-                } else {
-                    socket.emit('recup-question', {room : GLOBAL.token}, function (data) {
-                        nbReponseRecu = 0;
-                        cptQuestion = cptQuestion + 1;
         
-                        $question.innerHTML = data['question'];
-                        $reponse1.innerHTML = data['reponse1'];
-                        $reponse2.innerHTML = data['reponse2'];
-                        $reponse3.innerHTML = data['reponse3'];
-                        $reponse4.innerHTML = data['reponse4'];
-                        bonneReponse = data['good'];
-                        explicationsReponse = data['explication'];
-                        
-                        displayInterface("play");
-                        
-                        window.clearInterval(interval);
-                        
-                        // gestion du timer
-                        var $timelapsWrapper = document.querySelector('.canvas-wrapper'),
-                            $timelaps = document.querySelector('#timelaps'),
-                            timelapsCtx = $timelaps.getContext("2d");
-                    
-                        var timelapsH = $timelapsWrapper.offsetHeight,
-                            timelapsW = $timelapsWrapper.offsetWidth,
-                            timelapsCenter = timelapsW / 2;
-            
-                        var r = timelapsW/2,
-                            x = 0,
-                            y = 0;
-                            
-                        var angle = -90;
-                        var totalTime = GLOBAL.timerQuestion * 1000; //ms
-                        var tickInterval = 250;
-                        var step = tickInterval * 360 / totalTime;
-                        var tick = 0;
-                        var nextStep = 0;
-                        
-                        timelapsCtx.strokeStyle = "rgb(106, 150, 241)";
-                        timelapsCtx.lineWidth = 1;
-                        timelapsCtx.beginPath();
-                        angle = -90;
-                        tick = 0;
-                        timelapsCtx.clearRect(0, 0, timelapsW, timelapsH);
-                        
-                        interval = window.setInterval(function () {
-                            nextStep = angle + step;
-                            
-                            while(angle < nextStep){
-                                x = r + r*Math.cos(angle*(Math.PI/180));
-                                y = r + r*Math.sin(angle*(Math.PI/180));
-                                
-                                timelapsCtx.moveTo(timelapsW/2, timelapsH/2);
-                                timelapsCtx.lineTo(x,y);
-                                timelapsCtx.stroke();
-                                angle++;
-                            }
-                            
-                            tick += tickInterval;
-                            if (tick >= totalTime) {
-                                console.log('stop tick ' + (tick/1000) + 's');
-                                window.clearInterval(interval);
-                                displayInterface("score");
-                            }
-                        }, tickInterval);
-                    });
-                }
-            }  
-            
-            /**
-             * Fonction permettant de créer les emplacements des joueurs
-             */
-            function createPlayers() {
-                var playerAvatars = '';
-                for( var i = 0; i < GLOBAL.nbUsersMax; i++) {
-                    playerAvatars += '<div class="player"><div class="pseudo">attente</div></div>';
-                }
-               
-                $players.innerHTML = playerAvatars + $players.innerHTML;
-            }
-            
-            // gestion du socket
-            socket
-                .on('new-user-' + GLOBAL.token, function(data) { 
-                    addParticipants(data['usertoken'], data['user']);
-                    gererUsersMax(data['nbUsers']);
-                    
-                })
-                .on('user-left-' + GLOBAL.token, function(data) {
-                    removeParticipant(data['usertoken'], data['username']);
-                    gererUsersMax(data['nbUsers']);
-                })
-                .on('start-party-room-' + GLOBAL.token, function(user) {
-                    
-                    displayInterface("transition");
-                    
-                    setTimeout (function(){
-                        socket.emit('start', {room : GLOBAL.token}, function (data) {
-                            
-                            //Je lance ma fonction en même temps que l'event
-                            //car la première itération de mon event se fait au bon de 10 sec.
-                            myGame();
-                            //ici, une question durera xx secondes, paramétré par l'utilisateur, 10 secondes par défaut.
-                            eventQuestion = setInterval(myGame, ((GLOBAL.timerQuestion * 1000) + tempsDeTransition) );
-                        });
-                    }, 5000);
-                })
-                .on('maj-party-users-' + GLOBAL.token, function(data) {
-                    $players.querySelector('#badge-' + data['usertoken']).innerHTML = data["score"];
-
-                    console.log('maj-party-users');
-                    console.log(data);
-                    
-                    nbReponseRecu++;
-                    //si tout le monde a repondu alors transition et on passe à la question suivante.
-                    if (GLOBAL.nbUsersMax==nbReponseRecu) {
-                        window.clearInterval(eventQuestion);
-                        window.clearInterval(interval);
-                        displayInterface("score");
-                        
-                        //relance question dans 6 secondes (après le recap des scores)
-                        if (cptQuestion < GLOBAL.nbQuestions) {
-                            setTimeout (function(){
-                                myGame();
-                                eventQuestion = setInterval(myGame, ((GLOBAL.timerQuestion * 1000) + tempsDeTransition ) );
-                            },tempsDeTransition);
-                        } else {
-                            
-                        }
-                    }
-                })
-                .on('token-admin-pris', function(data) { 
-                    displayInterface("parametrage");
-                })
-                .on('create-room-' + GLOBAL.token, function(data) { 
-                    GLOBAL.nbUsersMax = data['nbUsersMax'];
-                    GLOBAL.nbQuestions = data['nbQuestions'];
-                    GLOBAL.timerQuestion = data['timerQuestion'];
-                    
-                    displayInterface("join");
-                    createPlayers();
-                })
-                
-        }());
-    </script>
-</body>
+        <script>
+            var GLOBAL = {
+                url: '<%= url %>',
+                token: '<%= token %>',
+                ready2play: <%= ready2play %>
+            };
+        </script>
+        
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/index_js.react.js"></script>
+        
+    </body>
 </html>
