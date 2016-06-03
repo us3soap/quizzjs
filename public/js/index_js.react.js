@@ -124,15 +124,15 @@
         var divPartieStatic = '<div class="question">'
                             +       explicationsReponse
                             + '</div>'
-                            + '<div class="reponses">';
+                            + '<div class="scores">';
         var divPartieDynamique = "";
         
         var players = $players.querySelectorAll('.player');
         for(var i = 0, l = players.length, player; i < l; i++) {
             player = players[i];
             
-            divPartieDynamique +=   player.querySelector('#name-' + player.id).innerHTML
-                               +    '<progress id="progress-' + player.id + '" value="1" min="0" max="100">0%</progress></br>';
+            divPartieDynamique +=   '<progress id="progress-' + player.id + '" value="1" min="0" max="100">0%</progress>'
+                               +    player.querySelector('#name-' + player.id).innerHTML + '</br>';
         }
         
         $scoring.innerHTML = divPartieStatic + divPartieDynamique + '</div>';
@@ -151,7 +151,7 @@
             var valAncien = $scoring.querySelector('#progress-' + player.id).value
             var valCible = player.querySelector('.badge').innerHTML / GLOBAL.nbQuestions * 100;
             if(valAncien<=valCible){
-                var newVal = valAncien*1+0.3;
+                var newVal = valAncien*1+0.35;
                 var txt = Math.floor(newVal)+'%';      
                 $scoring.querySelector('#progress-' + player.id).value = newVal;
             }

@@ -116,6 +116,14 @@ html, body{
     justify-content: space-around;
     padding: 0 0 2em 2em;
 }
+
+.scores{
+    flex-grow: 2;
+    flex-direction: column;
+    width: 50%;
+    justify-content: space-around;
+    padding: 0 0 2em 2em;
+}
         
 .reponse-square{
     width: 30px;
