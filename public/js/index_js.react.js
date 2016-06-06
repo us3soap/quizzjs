@@ -15,14 +15,15 @@
         $divReponse4 = $questionWrapper.querySelector('#divreponse4'),
         $scoring = document.querySelector('.scoring');
     
-    var cptQuestion = 0,
-        eventQuestion = null,
-        nbReponseRecu = 0,
-        bonneReponse = null,
-        explicationsReponse = null,
-        tempsDeTransition = 6000,
-        interval = null,
-        eventMAJScore = null;
+    var cptQuestion = 0,                //compteur de questions posées
+        nbReponseRecu = 0,              //nb de réponses utilisateurs pour savoir si tout le monde à repondu et si on passe à la suivante
+        bonneReponse = null,            //contient l'id de la bonne réponse
+        explicationsReponse = null,     //valeur du champ explication lié à la question
+        tempsDeTransition = 6000,       //en ms
+        interval = null,                //evenement pour l'avancement du chrono
+        eventMAJScore = null,           //evenement pour la progression des scores
+        eventQuestion = null,           //evenement question 
+        vitesseProgressionScore = 0.35; //valeur que prend la progressBar à chaque tick
         
     var socket = io.connect(GLOBAL.url);
 
@@ -108,6 +109,7 @@
             case 'score':
                 $canvas.style.display = 'none';
                 modifierClassDivReponse("removed",bonneReponse);
+                $scoring.querySelector("#$scoring").innerHTML = explicationsReponse;
                 setTimeout (function(){$scoring.style.display = 'flex';imageMeilleurJoueur();eventMAJScore = setInterval(modifValues,40);},3000);
             break;
             
@@ -121,10 +123,8 @@
      * affichage en plus de la réponse et explication à la question précédente
      **/
     function showResultat(){
-        var divPartieStatic = '<div class="question">'
-                            +       explicationsReponse
-                            + '</div>'
-                            + '<div class="scores">';
+        var divPartieStatic = '<div class="question" id="explicationReponse"></div>'
+                            + '<div class="scores">';   //div qui sera fermé en fin de methode
         var divPartieDynamique = "";
         
         var players = $players.querySelectorAll('.player');
@@ -144,7 +144,7 @@
      * Fonction qui gere la progression des scores de tous les joueurs.
      **/
     function modifValues(){
-        console.log("tick eventMajScore");
+        
         var players = $players.querySelectorAll('.player');
         for(var i = 0, l = players.length, player; i < l; i++) {
             player = players[i];

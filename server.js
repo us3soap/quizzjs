@@ -15,6 +15,16 @@ var questions = require('./resources/questions.json');
 
 /** Gestion des routes **/
 
+/************************************************************************************************
+ *                                    MODE DEBUG
+ ************************************************************************************************
+ * Log info : le nieau de log est paramétrable au niveau de node_modules/socket.io/lib/manager.js
+ * ligne 74 : log level : 3 = error warn info debug
+ *                        2 = error warn info
+ *                        1 = error warn
+ *                        0 = error
+ **/
+
 /** Home page.
 *   Cette page permet de diffuser le QRcode pour paramétrage du questionnaire
 *   @return url : l'url sur laquelle est diffusée les évènements

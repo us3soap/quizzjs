@@ -750,8 +750,28 @@
             "reponse4": "Pablo Picasso",
             "good": "reponse4",
             "explication": ""
+        },
+        {
+            "id": 68,
+            "question": "Le Sri Lanka est",
+            "type": "question",
+            "reponse1": "une province montagneuse située près du Tibet",
+            "reponse2": "un petit état d'Afrique du Sud",
+            "reponse3": "une grande île située au sud-est de l'Inde",
+            "reponse4": "une région de Chine",
+            "good": "reponse3",
+            "explication": ""
+        },
+        {
+            "id": 69,
+            "question": "Géographiquement, La France est à l'antipode",
+            "type": "question",
+            "reponse1": "de l'Afrique du sud",
+            "reponse2": "du Japon",
+            "reponse3": "de la Nouvelle Zélande",
+            "reponse4": "de l'Amérique du sud",
+            "good": "reponse3",
+            "explication": ""
         }
-        
-        
     ]
 }
