@@ -728,6 +728,30 @@
             "reponse4": "9 500 km de côtes",
             "good": "reponse2",
             "explication": ""
+        },
+        {
+            "id": 66,
+            "question": "Combien de fois la France a-t-elle organisé les Jeux Olympiques d'hiver ?",
+            "type": "question",
+            "reponse1": "2",
+            "reponse2": "3",
+            "reponse3": "4",
+            "reponse4": "5",
+            "good": "reponse2",
+            "explication": ""
+        },
+        {
+            "id": 67,
+            "question": "Quel peintre a inventé le cubisme ?",
+            "type": "question",
+            "reponse1": "Jean Renoir",
+            "reponse2": "Georges Cubitus",
+            "reponse3": "Salvator Dali",
+            "reponse4": "Pablo Picasso",
+            "good": "reponse4",
+            "explication": ""
         }
+        
+        
     ]
 }
