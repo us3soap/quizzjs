@@ -109,14 +109,36 @@
             case 'score':
                 $canvas.style.display = 'none';
                 modifierClassDivReponse("removed",bonneReponse);
-                $scoring.querySelector("#$scoring").innerHTML = explicationsReponse;
+                $scoring.querySelector("#explicationReponse").innerHTML = explicationsReponse;
                 setTimeout (function(){$scoring.style.display = 'flex';imageMeilleurJoueur();eventMAJScore = setInterval(modifValues,40);},3000);
+                //setTimeout (function(){$scoring.style.display = 'flex';imageMeilleurJoueur();modifValues()},3000);
             break;
             
             default:
                 console.log('Erreur, la vue "' + view + '" n\'est pas connue');
         }
     }
+/*
+$(function() {
+		
+	$('.progressbar').each(function(){
+		var t = $(this),
+			dataperc = t.attr('data-perc'),
+			barperc = Math.round(dataperc*5.56);
+		t.find('.bar').animate({width:barperc}, dataperc*25);
+		t.find('.label').append('<div class="perc"></div>');
+		
+		function perc() {
+			var length = t.find('.bar').css('width'),
+				perc = Math.round(parseInt(length)/5.56),
+				labelpos = (parseInt(length)-2);
+			t.find('.label').css('left', labelpos);
+			t.find('.perc').text(perc+'%');
+		}
+		perc();
+		setInterval(perc, 0); 
+	});
+});*/
 
     /**
      * Function gérant l'animation des scores,
@@ -131,8 +153,12 @@
         for(var i = 0, l = players.length, player; i < l; i++) {
             player = players[i];
             
-            divPartieDynamique +=   '<progress id="progress-' + player.id + '" value="1" min="0" max="100">0%</progress>'
-                               +    player.querySelector('#name-' + player.id).innerHTML + '</br>';
+            divPartieDynamique +=   '<div id="progress-' + player.id + '" class="progressbar" data-perc="40">'
+	                           +        '<div class="bar color' + (i+1) + '" width="0"><span></span></div>'
+	                           +        '<div class="label"><span></span><div class="perc"></div></div>'
+                               +    '</div>';
+            /*divPartieDynamique +=   '<progress id="progress-' + player.id + '" value="1" min="0" max="100">0%</progress>'
+                               +    player.querySelector('#name-' + player.id).innerHTML + '</br>';*/
         }
         
         $scoring.innerHTML = divPartieStatic + divPartieDynamique + '</div>';
@@ -145,17 +171,45 @@
      **/
     function modifValues(){
         
+        console.log('tick modifValues');
         var players = $players.querySelectorAll('.player');
         for(var i = 0, l = players.length, player; i < l; i++) {
             player = players[i];
+            var t = $scoring.querySelector('#progress-' + player.id),
+            dataperc = player.querySelector('.badge').innerHTML / GLOBAL.nbQuestions * 100,
+    		barperc = Math.round(dataperc*5.56);
+    		
+    		var valAncien = t.querySelector('.bar').getAttribute('width');
+    		
+    		console.log(valAncien);
+    		
+    		if(valAncien<=barperc){
+    		    var valNew = (parseInt(valAncien) + 5);
+    		    t.querySelector('.bar').setAttribute( 'width', valNew);
+    		    t.querySelector('.bar').setAttribute( 'style' , 'width:' + (valNew) + 'px');
+    		    
+        		var length = valNew,
+        			perc = Math.round(parseInt(length)/5.56),
+        			labelpos = (parseInt(length)-2);
+        			
+        			t.querySelector('.label').setAttribute( 'style', 'left :' + labelpos + 'px');
+        			t.querySelector('.perc').innerHTML = player.querySelector('#name-' + player.id).innerHTML + " : " + perc+'%';
+    		}
+        }
+	
+	    /*
+        var players = $players.querySelectorAll('.player');
+        for(var i = 0, l = players.length, player; i < l; i++) {
+            player = players[i];
+            
             var valAncien = $scoring.querySelector('#progress-' + player.id).value
             var valCible = player.querySelector('.badge').innerHTML / GLOBAL.nbQuestions * 100;
             if(valAncien<=valCible){
-                var newVal = valAncien*1+0.35;
+                var newVal = valAncien*1+vitesseProgressionScore;
                 var txt = Math.floor(newVal)+'%';      
                 $scoring.querySelector('#progress-' + player.id).value = newVal;
             }
-        }
+        }*/
     }
     
     /**
@@ -372,7 +426,7 @@
                         eventQuestion = setInterval(myGame, ((GLOBAL.timerQuestion * 1000) + tempsDeTransition ) );
                     },tempsDeTransition);
                 } else {
-                    
+                    setTimeout (function(){clearInterval(eventMAJScore);},6000);
                 }
             }
         })
