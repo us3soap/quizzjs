@@ -6,57 +6,106 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/jquery-ui.css">
     <link rel="stylesheet" href="/css/telephone.css">
+        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 
 <body>
-	<ul id="admin" class="pages">
-        <li id="li-nbUsersMax" class="login page">
-			<div class="form" style="top : 25%">
-				<div>
-					<div class="row">
-						<div class="col-lg-6">
-							
-							<h3 class="title">Indiquer le nombre d'utilisateurs ?</h3>
-							<input id="nbUsersMax" class="usernameInput" type="text" value="1"/>
-							<br />
-							<br />
+	<div class="content">
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="#">
+		        <p> Paramétrage de votre partie </p>
+		      </a>
+		    </div>
+		  </div>
+		</nav>
+		
+		<h4>Nombre d'utilisateurs</h4>
+		
+		<select id="nbUsersMax" class="form-control">
+		  <option>1</option>
+		  <option>2</option>
+		  <option>3</option>
+		  <option>4</option>
+		</select>
+		
+		<h4>Nombre de questions</h4>
+		
+		<select id="nbQuestions" class="form-control">
+		  <option>5</option>
+		  <option>10</option>
+		  <option>15</option>
+		  <option>20</option>
+		</select>
+		
+		<h4>Temps de réponse autorisé</h4>
+		
+		<select id="timerQuestion" class="form-control">
+		  <option>15</option>
+		  <option>30</option>
+		  <option>45</option>
+		  <option>60</option>
+		</select>
+		
+		<div class="panel panel-default" style="margin-top:30px;">
+  			<div class="panel-body" style="text-align: center;">
+    			<button id="createRoom" type="button" class="btn btn-primary">Créer le salon</button>
+  			</div>
+		</div>
+		
+		
+	<!--	<ul id="admin" class="pages">
+	        <li id="li-nbUsersMax" class="login page">
+				<div class="form" style="top : 25%">
+					<div>
+						<div class="row">
+							<div class="col-lg-6">
 								
-							<h3 class="title">Indiquer le nombre de questions ?</h3>
-							<input id="nbQuestions" class="usernameInput" type="text" value="5"/>
-							<input id="slider" type="range" min="0" max="100" step="1" data-buffer="60" />
-							<br />
-							<br />
+								<h3 class="title">Indiquer le nombre d'utilisateurs ?</h3>
+								<input id="nbUsersMax" class="usernameInput" type="text" value="1"/>
+								<br />
+								<br />
+									
+								<h3 class="title">Indiquer le nombre de questions ?</h3>
+								<input id="nbQuestions" class="usernameInput" type="text" value="5"/>
+								<input id="slider" type="range" min="0" max="100" step="1" data-buffer="60" />
+								<br />
+								<br />
+									
+								<h3 class="title">Indiquer le temps de réponse autorisé ?</h3>
+								<input id="timerQuestion" class="usernameInput" type="text" value="5"/>
+								<br />
+								<br />
 								
-							<h3 class="title">Indiquer le temps de réponse autorisé ?</h3>
-							<input id="timerQuestion" class="usernameInput" type="text" value="5"/>
-							<br />
-							<br />
-							
-						</div>
-						<div class="col-lg-6">
-							
-							<div id="ajoutQuestion">
-								<button id="createQuestion" type="button" class="btn btn-primary">Ajouter une question</button>
-								<button id="deleteQuestion" type="button" class="btn btn-primary" style="display:none">Supprimer dernière question</button>
 							</div>
-							
+							<div class="col-lg-6">
+								
+								<div id="ajoutQuestion">
+									<button id="createQuestion" type="button" class="btn btn-primary">Ajouter une question</button>
+									<button id="deleteQuestion" type="button" class="btn btn-primary" style="display:none">Supprimer dernière question</button>
+								</div>
+								
+							</div>
 						</div>
 					</div>
-				</div>
+						
+					<button id="createRoom" type="button" class="btn btn-primary">Créer le salon</button>
 					
-				<button id="createRoom" type="button" class="btn btn-primary">Créer le salon</button>
-				
-          	</div>
-        </li>
-    		
-        <li id="li-wait" class="login page" style="display: none;">
-          	<div class="form">
-            	<h3 id="info-header"class="title"></h3>
-            	<div id="info-content"></div>
-            	<div id="info-debug"></div>
-          	</div>
-        </li>
-    </ul>
+	          	</div>
+	        </li>
+	    		
+	        <li id="li-wait" class="login page" style="display: none;">
+	          	<div class="form">
+	            	<h3 id="info-header"class="title"></h3>
+	            	<div id="info-content"></div>
+	            	<div id="info-debug"></div>
+	          	</div>
+	        </li>
+	    </ul>!-->
+	  </div>
     
     <script src="/js/jquery.min.js"></script>
   	<script src="/js/jquery-ui.min.js"></script>
