@@ -183,33 +183,19 @@ $(function() {
     		
     		console.log(valAncien);
     		
-    		if(valAncien<=barperc){
+    		if(valAncien<barperc){
     		    var valNew = (parseInt(valAncien) + 5);
     		    t.querySelector('.bar').setAttribute( 'width', valNew);
     		    t.querySelector('.bar').setAttribute( 'style' , 'width:' + (valNew) + 'px');
     		    
         		var length = valNew,
-        			perc = Math.round(parseInt(length)/5.56),
+        			perc = Math.trunc(parseInt(length)/5.56),
         			labelpos = (parseInt(length)-2);
         			
         			t.querySelector('.label').setAttribute( 'style', 'left :' + labelpos + 'px');
         			t.querySelector('.perc').innerHTML = player.querySelector('#name-' + player.id).innerHTML + " : " + perc+'%';
     		}
         }
-	
-	    /*
-        var players = $players.querySelectorAll('.player');
-        for(var i = 0, l = players.length, player; i < l; i++) {
-            player = players[i];
-            
-            var valAncien = $scoring.querySelector('#progress-' + player.id).value
-            var valCible = player.querySelector('.badge').innerHTML / GLOBAL.nbQuestions * 100;
-            if(valAncien<=valCible){
-                var newVal = valAncien*1+vitesseProgressionScore;
-                var txt = Math.floor(newVal)+'%';      
-                $scoring.querySelector('#progress-' + player.id).value = newVal;
-            }
-        }*/
     }
     
     /**
