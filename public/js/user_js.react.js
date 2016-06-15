@@ -34,14 +34,12 @@
             this.setState({ socket: _socket });
 
             _socket.on('start-party-users-' + this.props.token, function (data) {
-                console.log('1this.props.token = ' + that.props.token); 
                 that.setState({ question: data });
                 that.setState({ partyStarted: true });
                 that.setState({ partyReload: false });
             });
             
             _socket.on('reload-party-', function (data) {
-                console.log('2this.props.token = ' + that.props.token); 
                 console.log('user.ejs : reload-party-token reçu'); 
                 that.setState({ partyStarted: false });
                 that.setState({ partyReload: true });
@@ -294,31 +292,11 @@
         reloadSameParty: function () {
             var that = this;
             this.props.socket.emit('reloadParty', { displayAdmin: false, pseudo: this.state.pseudo, room: this.props.token }, function (data) {
-                /*var _userToken = data['userToken'];
-
-                if (_userToken != false) {
-                    that.props.loginHandler(_userToken, that.state.pseudo);
-
-                    that.setState({ msgDebug: _userToken });
-                    that.setState({ alreadyLogged: true });
-                } else {
-                    that.setState({ msgInfo: "Désolé, la partie n'est pas accessible." });
-                }*/
             });
         },
         reloadAdmin: function () {
             var that = this;
             this.props.socket.emit('reloadParty', { displayAdmin: true, pseudo: this.state.pseudo, room: this.props.token }, function (data) {
-                /*var _userToken = data['userToken'];
-
-                if (_userToken != false) {
-                    that.props.loginHandler(_userToken, that.state.pseudo);
-
-                    that.setState({ msgDebug: _userToken });
-                    that.setState({ alreadyLogged: true });
-                } else {
-                    that.setState({ msgInfo: "Désolé, la partie n'est pas accessible." });
-                }*/
             });
         },
         render: function () {

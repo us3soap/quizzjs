@@ -256,6 +256,12 @@
         if (cptQuestion == GLOBAL.nbQuestions) {
             clearInterval(eventQuestion);
             displayInterface("score");
+            setTimeout (function(){
+                clearInterval(eventMAJScore);
+            },6000);
+            setTimeout (function(){
+                socket.emit('display-reload-party', {room : GLOBAL.token}, function (data) {});
+            },3000);
         } else {
             socket.emit('recup-question', {room : GLOBAL.token}, function (data) {
                 nbReponseRecu = 0;
@@ -395,7 +401,10 @@
                     setTimeout (function(){
                         clearInterval(eventMAJScore);
                     },6000);
-                    socket.emit('display-reload-party', {room : GLOBAL.token}, function (data) {});
+                    setTimeout (function(){
+                        socket.emit('display-reload-party', {room : GLOBAL.token}, function (data) {});
+                    },3000);
+                    
                 }
             }
         })
