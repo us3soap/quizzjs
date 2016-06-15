@@ -190,30 +190,29 @@ io.sockets.on('connection', function (socket) {
 
     // Socket permettant l'administration de la salle.
     socket.on('param-room', function (data, fn) {
-      if(room.getRoom(data["room"]) != false){
-        room.getRoom(data["room"]).setReady();
-        room.getRoom(data["room"]).open();
-        //--Parametrage
-        room.getRoom(data["room"]).setMaxNbMembers(data["nbUsersMax"]);
-        room.getRoom(data["room"]).setMinNbMembers(data["nbUsersMax"]);
-        room.getRoom(data["room"]).setTimerQuestion(data["timerQuestion"]);
-        
-        //--Load questions si l'utilisateur en a saisi
-        if (data["nbNouvellesQuestions"] > 0) {
-            room.getRoom(data["room"]).setNbQuestions(data["nbQuestions"]);
-            questionnaire.loadQuestionnaire(JSON.parse(data["nouvellesQuestions"]), data["room"]);
-        } else {
-            questionnaire.loadQuestionnaire(questions, data["room"]);
+        if(room.getRoom(data["room"]) != false){
+            room.getRoom(data["room"]).setReady();
+            room.getRoom(data["room"]).open();
+            //--Parametrage
+            room.getRoom(data["room"]).setMaxNbMembers(data["nbUsersMax"]);
+            room.getRoom(data["room"]).setMinNbMembers(data["nbUsersMax"]);
+            room.getRoom(data["room"]).setTimerQuestion(data["timerQuestion"]);
+            
+            //--Load questions si l'utilisateur en a saisi
+            if (data["nbNouvellesQuestions"] > 0) {
+                room.getRoom(data["room"]).setNbQuestions(data["nbQuestions"]);
+                questionnaire.loadQuestionnaire(JSON.parse(data["nouvellesQuestions"]), data["room"]);
+            } else {
+                questionnaire.loadQuestionnaire(questions, data["room"]);
+            }
+            socket.broadcast.emit('create-room-'+data["room"], {nbUsersMax : data["nbUsersMax"],
+                                                                    nbQuestions : data["nbQuestions"],
+                                                                    timerQuestion : data["timerQuestion"]});
+                                                                    
+            fn({url: "/room/"+data["room"]});
+        }else{
+            fn(false);
         }
-        socket.broadcast.emit('create-room-'+data["room"], {nbUsersMax : data["nbUsersMax"],
-                                                                nbQuestions : data["nbQuestions"],
-                                                                timerQuestion : data["timerQuestion"]});
-                                                                
-        fn({url: "/room/"+data["room"]});
-      }else{
-        fn(false);
-      }
-
     });
 
     // Socket permettant le lancement de la partie.
@@ -232,19 +231,35 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('recolte-reponse', function (data, fn) {
+        var point = 0;
         if(questionnaire.getQuestionnaire(socket.room).checkResponse(data["id"], data["reponse"])){
-            socket.score++;
+            point = 1;
         }
-        socket.broadcast.emit('maj-party-users-'+socket.room, {score : socket.score,
-                                                                   usertoken : socket.token
-                                                                   });
+        socket.broadcast.emit('maj-party-users-'+socket.room, {nbPoint : point, usertoken : socket.token});
         fn(true);
     });
 
-    // Socket de relance de la salle
-
-    // Socket fermeture de salle
-
+    //demander l'affichage des boutons reload sur User.ejs
+    socket.on('display-reload-party', function (data, fn) {
+        console.log("serveur.js : fin de partie : affichage des boutons 'reload' pour la room " + socket.room);
+        socket.broadcast.emit('reload-party-');
+        fn(true);
+    });
+    
+    //reinitialiser la partie.
+    socket.on('reloadParty', function (data, fn) {
+        console.log("serveur.js : reinit de la room " + socket.room);
+        console.log("displayAdmin = " + data["displayAdmin"]);
+        
+        questionnaire.getQuestionnaire(socket.room).reinitialiserQuestionsPosees();
+        if (data["displayAdmin"]){
+            
+        } else {
+            socket.broadcast.emit('start-party-room-'+socket.room);
+        }
+        fn(true);
+    });
+    
     //socket de deconnexion d'un joueur.
     socket.on('disconnect', function () {
         if(room.getRoom(socket.room) != false){

@@ -92,4 +92,11 @@ Questionnaire.prototype.checkResponse = function(idQuestion, reponse){
     return this.questions[idQuestion].good == reponse;
 }
 
+/*
+ *Methode permettant de reinitialiser le tableau des questions déjà posées (pour le reload d'une partie).
+ */
+Questionnaire.prototype.reinitialiserQuestionsPosees = function(){
+    this.tabQuestionsPosees = [];
+}
+
 exports.Questionnaire = Questionnaire;

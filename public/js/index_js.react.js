@@ -23,7 +23,7 @@
         interval = null,                //evenement pour l'avancement du chrono
         eventMAJScore = null,           //evenement pour la progression des scores
         eventQuestion = null,           //evenement question 
-        vitesseProgressionScore = 0.35; //valeur que prend la progressBar à chaque tick
+        vitesseProgressionScore = 5;    //valeur que prend la progressBar à chaque tick (nb pixel par 40ms)
         
     var socket = io.connect(GLOBAL.url);
 
@@ -34,7 +34,7 @@
     **/
     function addParticipants(token, username){
         var players = $players.querySelectorAll('.player');
-        for(var i = 0, l = players.length, player; i < l; i++) {
+        for (var i = 0, l = players.length, player; i < l; i++) {
             player = players[i];
             if (!player.classList.contains('active')) {
                 player.classList.add('active');
@@ -62,9 +62,9 @@
     * @arg int nbUsersActuels : le nombre d'utilisateur connecté.
     **/
     function gererUsersMax(nbUsersActuels){
-        if(GLOBAL.nbUsersMax == nbUsersActuels){
+        if (GLOBAL.nbUsersMax == nbUsersActuels) {
             console.log('nb joueurs atteint');
-        }else{
+        } else {
             console.log('manque encore des joueurs');
         }
     }
@@ -76,7 +76,7 @@
     function displayInterface(view){
         console.log('displayInterface, view = ' + view);
         
-        switch(view){
+        switch (view) {
             case 'wait':
             break;
             
@@ -92,8 +92,11 @@
             break;
             
             case 'transition':
-                $howto.style.display = 'none';
+                $instruction.style.display = 'flex';
                 $instruction.innerHTML = "Tout le monde est la. Préparez vous !";
+                $questionWrapper.style.display = 'none';
+                $howto.style.display = 'none';
+                $scoring.style.display = 'none';
             break;
             
             case 'play':
@@ -111,38 +114,16 @@
                 modifierClassDivReponse("removed",bonneReponse);
                 $scoring.querySelector("#explicationReponse").innerHTML = explicationsReponse;
                 setTimeout (function(){$scoring.style.display = 'flex';imageMeilleurJoueur();eventMAJScore = setInterval(modifValues,40);},3000);
-                //setTimeout (function(){$scoring.style.display = 'flex';imageMeilleurJoueur();modifValues()},3000);
             break;
             
             default:
                 console.log('Erreur, la vue "' + view + '" n\'est pas connue');
         }
     }
-/*
-$(function() {
-		
-	$('.progressbar').each(function(){
-		var t = $(this),
-			dataperc = t.attr('data-perc'),
-			barperc = Math.round(dataperc*5.56);
-		t.find('.bar').animate({width:barperc}, dataperc*25);
-		t.find('.label').append('<div class="perc"></div>');
-		
-		function perc() {
-			var length = t.find('.bar').css('width'),
-				perc = Math.round(parseInt(length)/5.56),
-				labelpos = (parseInt(length)-2);
-			t.find('.label').css('left', labelpos);
-			t.find('.perc').text(perc+'%');
-		}
-		perc();
-		setInterval(perc, 0); 
-	});
-});*/
+
 
     /**
-     * Function gérant l'animation des scores,
-     * affichage en plus de la réponse et explication à la question précédente
+     * Création de la 'frame' des scores.
      **/
     function showResultat(){
         var divPartieStatic = '<div class="question" id="explicationReponse"></div>'
@@ -150,30 +131,26 @@ $(function() {
         var divPartieDynamique = "";
         
         var players = $players.querySelectorAll('.player');
-        for(var i = 0, l = players.length, player; i < l; i++) {
+        for (var i = 0, l = players.length, player; i < l; i++) {
             player = players[i];
+            player.querySelector('.badge').innerHTML = 0;
             
             divPartieDynamique +=   '<div id="progress-' + player.id + '" class="progressbar" data-perc="40">'
 	                           +        '<div class="bar color' + (i+1) + '" width="0"><span></span></div>'
 	                           +        '<div class="label"><span></span><div class="perc"></div></div>'
                                +    '</div>';
-            /*divPartieDynamique +=   '<progress id="progress-' + player.id + '" value="1" min="0" max="100">0%</progress>'
-                               +    player.querySelector('#name-' + player.id).innerHTML + '</br>';*/
         }
         
         $scoring.innerHTML = divPartieStatic + divPartieDynamique + '</div>';
-        
-        
     }
     
     /**
-     * Fonction qui gere la progression des scores de tous les joueurs.
+     * Fonction qui gere la progression des scores de tous les joueurs à la fin d'une question.
      **/
     function modifValues(){
         
-        console.log('tick modifValues');
         var players = $players.querySelectorAll('.player');
-        for(var i = 0, l = players.length, player; i < l; i++) {
+        for (var i = 0, l = players.length, player; i < l; i++) {
             player = players[i];
             var t = $scoring.querySelector('#progress-' + player.id),
             dataperc = player.querySelector('.badge').innerHTML / GLOBAL.nbQuestions * 100,
@@ -181,19 +158,23 @@ $(function() {
     		
     		var valAncien = t.querySelector('.bar').getAttribute('width');
     		
-    		console.log(valAncien);
-    		
-    		if(valAncien<barperc){
-    		    var valNew = (parseInt(valAncien) + 5);
-    		    t.querySelector('.bar').setAttribute( 'width', valNew);
-    		    t.querySelector('.bar').setAttribute( 'style' , 'width:' + (valNew) + 'px');
-    		    
-        		var length = valNew,
-        			perc = Math.trunc(parseInt(length)/5.56),
-        			labelpos = (parseInt(length)-2);
-        			
-        			t.querySelector('.label').setAttribute( 'style', 'left :' + labelpos + 'px');
-        			t.querySelector('.perc').innerHTML = player.querySelector('#name-' + player.id).innerHTML + " : " + perc+'%';
+    		//TODO refaire la condition pour virer l'exception 
+    		// !! Exception si le user n'a pas eu de bonnes réponses encore, on lui met 0%
+    		if (player.querySelector('.badge').innerHTML == 0) {
+    		    t.querySelector('.perc').innerHTML = player.querySelector('#name-' + player.id).innerHTML + ' : 0%';
+    		} else {
+        		if (valAncien<barperc) {
+        		    var valNew = (parseInt(valAncien) + vitesseProgressionScore);
+        		    t.querySelector('.bar').setAttribute( 'width', valNew);
+        		    t.querySelector('.bar').setAttribute( 'style' , 'width:' + (valNew) + 'px');
+        		    
+            		var length = valNew,
+            			perc = Math.trunc(parseInt(length)/5.56),
+            			labelpos = (parseInt(length)-2);
+            			
+            		t.querySelector('.label').setAttribute( 'style', 'left :' + labelpos + 'px');
+            		t.querySelector('.perc').innerHTML = player.querySelector('#name-' + player.id).innerHTML + " : " + perc+'%';
+        		}
     		}
         }
     }
@@ -204,13 +185,13 @@ $(function() {
      function imageMeilleurJoueur() {
         var players = $players.querySelectorAll('.player');
         var meilleurScore = 0;
-        for(var i = 0, l = players.length, player; i < l; i++) {
+        for (var i = 0, l = players.length, player; i < l; i++) {
             player = players[i];
             if (player.querySelector('.badge-display').innerHTML > meilleurScore) {
                 meilleurScore = player.querySelector('.badge-display').innerHTML;
             }
         }
-        for(var i = 0, l = players.length, player; i < l; i++) {
+        for (var i = 0, l = players.length, player; i < l; i++) {
             player = players[i];
             if (player.querySelector('.badge-display').innerHTML == meilleurScore) {
                 player.className = "";
@@ -231,6 +212,7 @@ $(function() {
      **/
     function modifierClassDivReponse(nomClass,bonneReponse){
         
+        //TODO voir si on peut faire plus propre .....
         if (bonneReponse == "reponse1") {
             $divReponse2.className = "";
             $divReponse2.classList.add(nomClass);
@@ -269,13 +251,10 @@ $(function() {
      * Functions permettant de comptabiliser et recupérer les questions
      * + création du chrono
      **/
-    //cycle de vie de la question.            
     function myGame() {
         
         if (cptQuestion == GLOBAL.nbQuestions) {
             clearInterval(eventQuestion);
-            
-            //Affichage des scores.
             displayInterface("score");
         } else {
             socket.emit('recup-question', {room : GLOBAL.token}, function (data) {
@@ -351,15 +330,15 @@ $(function() {
      */
     function createPlayers() {
         var playerAvatars = '';
-        for( var i = 0; i < GLOBAL.nbUsersMax; i++) {
+        for ( var i = 0; i < GLOBAL.nbUsersMax; i++) {
             playerAvatars += '<div class="player"><div class="pseudo">attente</div></div>';
         }
-       
         $players.innerHTML = playerAvatars + $players.innerHTML;
     }
     
     // gestion du socket
     socket
+    
         //socket ajout d'un joueur dans le salon
         .on('new-user-' + GLOBAL.token, function(data) { 
             addParticipants(data['usertoken'], data['user']);
@@ -381,7 +360,8 @@ $(function() {
             
             setTimeout (function(){
                 socket.emit('start', {room : GLOBAL.token}, function (data) {
-                    
+                    console.log("start OK");
+                    cptQuestion = 0;
                     //Je lance ma fonction en même temps que l'event
                     //car la première itération de mon event se fait au bon de 10 sec.
                     myGame();
@@ -393,7 +373,7 @@ $(function() {
         
         //socket mise a jour score après reponse d'un utilisateur
         .on('maj-party-users-' + GLOBAL.token, function(data) {
-            $players.querySelector('#badge-' + data['usertoken']).innerHTML = data["score"];
+            $players.querySelector('#badge-' + data['usertoken']).innerHTML = parseInt($players.querySelector('#badge-' + data['usertoken']).innerHTML) + data['nbPoint'];
             
             console.log('maj-party-users');
             console.log(data);
@@ -412,7 +392,10 @@ $(function() {
                         eventQuestion = setInterval(myGame, ((GLOBAL.timerQuestion * 1000) + tempsDeTransition ) );
                     },tempsDeTransition);
                 } else {
-                    setTimeout (function(){clearInterval(eventMAJScore);},6000);
+                    setTimeout (function(){
+                        clearInterval(eventMAJScore);
+                    },6000);
+                    socket.emit('display-reload-party', {room : GLOBAL.token}, function (data) {});
                 }
             }
         })

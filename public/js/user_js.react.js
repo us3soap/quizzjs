@@ -18,6 +18,7 @@
             return {
                 socket: null,
                 partyStarted: false,
+                partyReload: false,
                 userToken: '',
                 pseudo: '',
                 question: {}
@@ -33,8 +34,18 @@
             this.setState({ socket: _socket });
 
             _socket.on('start-party-users-' + this.props.token, function (data) {
+                console.log('1this.props.token = ' + that.props.token); 
                 that.setState({ question: data });
                 that.setState({ partyStarted: true });
+                that.setState({ partyReload: false });
+            });
+            
+            _socket.on('reload-party-', function (data) {
+                console.log('2this.props.token = ' + that.props.token); 
+                console.log('user.ejs : reload-party-token reçu'); 
+                that.setState({ partyStarted: false });
+                that.setState({ partyReload: true });
+                
             });
         },
         /**
@@ -54,6 +65,11 @@
                     userToken: this.state.userToken,
                     pseudo: this.state.pseudo,
                     question: this.state.question });
+            } else if (this.state.partyReload) {
+                return React.createElement(UserReloadPartiView, {
+                    socket: this.state.socket,
+                    userToken: this.state.userToken,
+                    pseudo: this.state.pseudo });
             } else {
                 return React.createElement(UserLoginView, {
                     socket: this.state.socket,
@@ -187,7 +203,6 @@
             this.setState({ showRecapReponse: true });
 
             this.props.socket.emit('recolte-reponse', {
-                token: this.props.userToken,
                 reponse: 'reponse' + btnNo,
                 id: this.props.question.idquestion
             }, function (data) {
@@ -261,6 +276,72 @@
             );
         }
     });
+    
+    /**
+     * formulaire de relance partie
+     */
+    var UserReloadPartiView = React.createClass({
+        displayName: 'UserReloadPartiView',
 
+        getInitialState: function () {
+            return {
+                alreadyLogged: false,
+                pseudo: '',
+                msgInfo: '',
+                msgDebug: ''
+            };
+        },
+        reloadSameParty: function () {
+            var that = this;
+            this.props.socket.emit('reloadParty', { displayAdmin: false, pseudo: this.state.pseudo, room: this.props.token }, function (data) {
+                /*var _userToken = data['userToken'];
+
+                if (_userToken != false) {
+                    that.props.loginHandler(_userToken, that.state.pseudo);
+
+                    that.setState({ msgDebug: _userToken });
+                    that.setState({ alreadyLogged: true });
+                } else {
+                    that.setState({ msgInfo: "Désolé, la partie n'est pas accessible." });
+                }*/
+            });
+        },
+        reloadAdmin: function () {
+            var that = this;
+            this.props.socket.emit('reloadParty', { displayAdmin: true, pseudo: this.state.pseudo, room: this.props.token }, function (data) {
+                /*var _userToken = data['userToken'];
+
+                if (_userToken != false) {
+                    that.props.loginHandler(_userToken, that.state.pseudo);
+
+                    that.setState({ msgDebug: _userToken });
+                    that.setState({ alreadyLogged: true });
+                } else {
+                    that.setState({ msgInfo: "Désolé, la partie n'est pas accessible." });
+                }*/
+            });
+        },
+        render: function () {
+            return React.createElement(
+                'div',
+                { className: 'login-wrapper' },
+                React.createElement(
+                    'div',
+                    { className: 'login-form' },
+                    React.createElement(
+                        'button',
+                        { onClick: this.reloadSameParty },
+                        'Voulez vous relancer une partie identique ?'
+                    ),
+                    React.createElement(
+                        'button',
+                        { onClick: this.reloadAdmin },
+                        'Voulez vous relancer une partie avec des paramètres différents ?'
+                    )
+                )
+            );
+        }
+    });
+    
     ReactDOM.render(React.createElement(UserView, { url: GLOBAL.url, token: GLOBAL.token }), document.querySelector('#user-view'));
 })();
