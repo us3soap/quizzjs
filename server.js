@@ -250,14 +250,16 @@ io.sockets.on('connection', function (socket) {
     socket.on('reloadParty', function (data, fn) {
         console.log("serveur.js : reinit de la room " + socket.room);
         console.log("displayAdmin = " + data["displayAdmin"]);
-        
+        //Dans tous les cas on reinitialise le questionnaire.
         questionnaire.getQuestionnaire(socket.room).reinitialiserQuestionsPosees();
-        if (data["displayAdmin"]){
-            
-        } else {
+        
+        if (data["displayAdmin"]){ //On affiche l'admin pour parametrer une nouvelle partie.
+            room.getRoom(socket.room).setWaiting();
+            socket.broadcast.emit('reloading-room-'+socket.room);
+        } else {                   //On relance directement une partie sans rien changer.
             socket.broadcast.emit('start-party-room-'+socket.room);
         }
-        fn(true);
+        fn({room:socket.room});
     });
     
     //socket de deconnexion d'un joueur.

@@ -81,8 +81,11 @@
             break;
             
             case 'parametrage':
+                $instruction.style.display = 'flex';
                 $instruction.innerHTML = "Salon en cours de parametrage, veuillez patienter.";
+                $questionWrapper.style.display = 'none';
                 $howto.style.display = 'none';
+                $scoring.style.display = 'none';
             break;
             
             case 'join':
@@ -335,6 +338,14 @@
      * après que l'admin a selectionné le nb de joueurs.
      */
     function createPlayers() {
+        //reinit de la liste des joueurs (util pour le reload d'une partie avec des paramètres différents.)
+        //TODO faire mieux .....
+        $players.innerHTML = '<div class="canvas-wrapper">'
+                           +    '<div class="timelaps-wheel"></div>'
+                           +    '<canvas id="timelaps" width="100%" height="100%">mince, pas compatible avec cette écran ...</canvas>'
+                           + '</div>';
+        //$players.removeChild($players. getElementsByClassName('player').);
+
         var playerAvatars = '';
         for ( var i = 0; i < GLOBAL.nbUsersMax; i++) {
             playerAvatars += '<div class="player"><div class="pseudo">attente</div></div>';
@@ -349,7 +360,6 @@
         .on('new-user-' + GLOBAL.token, function(data) { 
             addParticipants(data['usertoken'], data['user']);
             gererUsersMax(data['nbUsers']);
-            
         })
         
         //socket suppression d'un joueur (suite deconnexion)
@@ -407,6 +417,10 @@
                     
                 }
             }
+        })
+        
+        .on('reloading-room-' + GLOBAL.token, function(data) {
+            displayInterface("parametrage");
         })
         
         //socket création d'une partie avec les params que l'utilisateur a saisi.

@@ -297,6 +297,7 @@
         reloadAdmin: function () {
             var that = this;
             this.props.socket.emit('reloadParty', { displayAdmin: true, pseudo: this.state.pseudo, room: this.props.token }, function (data) {
+                document.location = "/admin/" + data['room'];
             });
         },
         render: function () {
@@ -314,7 +315,7 @@
                     React.createElement(
                         'button',
                         { onClick: this.reloadAdmin },
-                        'Voulez vous relancer une partie avec des paramètres différents ?'
+                        'Voulez vous relancer une partie avec des paramètres différents ? SOON !!!!'
                     )
                 )
             );
